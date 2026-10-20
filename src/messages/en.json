@@ -1,9 +1,11 @@
 {
   "meta": {
     "siteName": "Kalimera",
-    "tagline": "Web & Mobile Studio",
-    "defaultTitle": "Kalimera — Web & mobile development studio",
-    "defaultDescription": "Independent web and mobile development studio. Marketing sites, e-commerce, web applications and iOS/Android apps — designed and built in-house."
+    "tagline": "Web platforms & B2B SaaS",
+    "defaultTitle": "Kalimera — B2B web platform and SaaS development",
+    "defaultDescription": "Development studio. We design and code business platforms, B2B marketplaces and bespoke websites. 100% code, no WordPress, no Shopify. Belgium, Luxembourg, Switzerland, France.",
+    "ogHeadline": "We code business platforms, not templates.",
+    "ogSubline": "B2B marketplaces, subscription SaaS and bespoke websites. Next.js and TypeScript, end to end."
   },
   "nav": {
     "services": "Services",
@@ -19,52 +21,51 @@
   },
   "home": {
     "hero": {
-      "chip": "Websites · Web apps · Mobile",
+      "chip": "Platforms · SaaS · Bespoke sites",
       "greek": "Καλημέρα — “good morning”, in Greek",
       "line1": "We design,",
-      "line2": "we build,",
+      "line2": "we code,",
       "line3": "we ship.",
-      "description": "Web and mobile development studio. Marketing sites, custom web applications and iOS/Android apps — design and code by the same team, no templates, no outsourcing.",
+      "description": "A development studio specialising in business platforms: B2B marketplaces, subscription SaaS products and bespoke websites. Everything is coded — no theme, no page builder, no outsourcing.",
       "primary": "Start a project",
       "secondary": "See our work",
-      "proofTitle": "{count}+ projects shipped",
-      "proofSubtitle": "{score} average Lighthouse score"
+      "proofTitle": "{count} projects in production",
+      "proofSubtitle": "including {count} B2B platforms with accounts and subscriptions"
     },
     "studio": {
       "chip": "The studio",
       "titleTop": "Not an agency.",
       "titleBottom": "A team that codes.",
-      "description": "You talk directly to the people designing and building your project. No middle manager, no offshore subcontracting.",
-      "card1Title": "Custom-built, never templated",
-      "card1Body": "Every project is built for your actual needs. Clean, documented, version-controlled code — the repository is yours from day one.",
-      "card2Title": "Design and dev, one team",
-      "card2Body": "The mockups are made by the people who build them. Zero gap between the Figma file and the live site.",
-      "card3Title": "Obsessive about performance",
-      "card3Body": "Core Web Vitals in the green, accessibility and technical SEO handled by design — not patched after launch.",
+      "description": "You talk directly to the people designing and building your product. No middle-manager, no offshore outsourcing.",
+      "card1Title": "100% code, zero proprietary platform",
+      "card1Body": "No WordPress, no Shopify, no page builder. Your product is written in TypeScript, documented and version-controlled — the repository is yours from day one, and you are locked in to nobody.",
+      "card2Title": "Products, not brochures",
+      "card2Body": "User accounts, recurring subscriptions, messaging, gated access, payments: we have shipped five platforms running with real paying customers behind them.",
+      "card3Title": "Regulated sectors",
+      "card3Body": "Insurance broking, accountancy firms, real estate, financial recruitment. We know the data confidentiality, role-based access and domain constraints these professions carry.",
       "card4Title": "Multilingual by default",
-      "card4Body": "FR · EN · ES. Internationalisation is part of the architecture, not a plugin bolted on six months later.",
-      "statProjectsCaption": "Websites and apps shipped since 2014.",
-      "statScoreCaption": "Average Lighthouse score across our production releases."
+      "card4Body": "FR · EN · ES. Internationalisation is built into the architecture, not bolted on as a plugin six months later — essential in Belgium, Luxembourg and Switzerland.",
+      "statProjectsCaption": "Projects designed, built and shipped to production.",
+      "statScoreCaption": "B2B platforms in production, with accounts and subscriptions."
     },
     "services": {
       "chip": "Our services",
-      "titleTop": "From marketing site",
-      "titleBottom": "to mobile app.",
-      "all": "All services"
+      "titleTop": "From the bespoke site",
+      "titleBottom": "to the business platform.",
+      "all": "All our services"
     },
     "work": {
       "chip": "Work",
       "titleTop": "What we've",
-      "titleBottom": "put live.",
-      "all": "Full portfolio",
-      "empty": "The first projects are coming very soon."
+      "titleBottom": "shipped.",
+      "all": "All our work",
+      "empty": "Our work is coming very soon."
     },
     "stats": {
-      "projects": "Projects shipped",
-      "lighthouse": "Average Lighthouse score",
-      "leadTime": "Typical website lead time",
-      "experience": "Years of experience",
-      "weeks": "wks"
+      "projects": "Projects in production",
+      "platforms": "B2B platforms shipped",
+      "countries": "Countries we have shipped in",
+      "locales": "Languages handled by default"
     },
     "process": {
       "chip": "Method",
@@ -84,7 +85,9 @@
       "step4Body": "Testing, redirects, back-office training, then maintenance and monthly improvements.",
       "step4Duration": "ongoing"
     },
-    "testimonial": { "chip": "Testimonial" },
+    "testimonial": {
+      "chip": "Testimonial"
+    },
     "journal": {
       "chip": "Journal",
       "titleTop": "What we're",
@@ -96,20 +99,20 @@
       "chip": "Let's talk",
       "titleTop": "Got a project?",
       "titleBottom": "Say hello.",
-      "description": "Tell us what you need: within 48 hours you get technical feedback and an estimate of budget and timeline. No strings.",
-      "secondary": "Book a 30-min call"
+      "description": "Tell us what you need: within 48 hours you get technical feedback plus a budget and timeline estimate. No commitment.",
+      "secondary": "Book a 30-minute call"
     }
   },
   "services": {
     "title": "Services",
-    "intro": "From a marketing site to a mobile app, one team designs and builds your project.",
+    "intro": "From the bespoke site to the B2B marketplace, one team designs and builds your project. Code only.",
     "related": "Projects delivered with this service",
     "otherServices": "Our other services",
     "backToAll": "All services"
   },
   "work": {
     "title": "Work",
-    "intro": "A selection of the websites, stores and applications we have put live.",
+    "intro": "The platforms, stores and sites we have designed, built and shipped to production.",
     "filterAll": "All",
     "kind": {
       "WEBSITE": "Marketing site",
@@ -139,7 +142,7 @@
   },
   "studio": {
     "title": "The studio",
-    "intro": "A small team of designer-developers, based between Athens, Paris and Dubai."
+    "intro": "A small team of designer-developers, based in Aix-en-Provence and active in Belgium, Luxembourg, Switzerland and France."
   },
   "contact": {
     "title": "Let's talk about your project",
@@ -153,12 +156,13 @@
     "subject": "Project type",
     "subjectPlaceholder": "Choose a project type",
     "subjects": {
-      "website": "Marketing website",
-      "ecommerce": "E-commerce",
-      "webapp": "Web application",
-      "mobile": "Mobile application",
+      "platform": "Business platform / B2B marketplace",
+      "saas": "Subscription SaaS product",
+      "webapp": "Bespoke web application",
+      "website": "Bespoke website",
+      "ecommerce": "Bespoke e-commerce",
       "design": "UX / UI design",
-      "maintenance": "Maintenance & performance",
+      "maintenance": "Managed hosting & performance",
       "other": "Something else"
     },
     "budget": "Budget range",
@@ -167,7 +171,8 @@
       "under10": "Under €10,000",
       "10to25": "€10,000 – €25,000",
       "25to50": "€25,000 – €50,000",
-      "over50": "Over €50,000",
+      "50to100": "€50,000 – €100,000",
+      "over100": "Over €100,000",
       "unknown": "Not sure yet"
     },
     "message": "Your project in a few lines",
@@ -193,7 +198,7 @@
     }
   },
   "footer": {
-    "about": "Independent web and mobile development studio. Websites, applications and apps — designed and built in-house.",
+    "about": "Independent development studio. Business platforms, SaaS and bespoke sites — designed and coded in-house, with no WordPress or Shopify.",
     "servicesTitle": "Services",
     "studioTitle": "Studio",
     "contactTitle": "Contact",
@@ -216,5 +221,12 @@
     "title": "Something went wrong",
     "description": "An error occurred on our side. Please try again in a moment.",
     "retry": "Try again"
+  },
+  "consent": {
+    "title": "Analytics",
+    "body": "We use Google Analytics to understand how our site is used. No cookie is set before you agree.",
+    "privacyLink": "Our privacy policy",
+    "accept": "Accept",
+    "refuse": "Decline"
   }
 }

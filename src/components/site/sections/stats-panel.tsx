@@ -7,13 +7,14 @@ import { siteConfig } from "@/lib/site";
 
 export async function StatsPanel() {
   const t = await getTranslations("home.stats");
-  const { projects, lighthouse, leadTimeWeeks, experienceYears } = siteConfig.stats;
+  const { projects, platforms, countries, locales } = siteConfig.stats;
 
+  // Quatre chiffres, tous vérifiables dans le portfolio : aucun score déclaratif.
   const stats = [
-    { value: projects, suffix: "+", label: t("projects") },
-    { value: lighthouse, suffix: "/100", label: t("lighthouse") },
-    { value: leadTimeWeeks, suffix: ` ${t("weeks")}`, label: t("leadTime") },
-    { value: experienceYears, suffix: "", label: t("experience") },
+    { value: projects, suffix: "", label: t("projects") },
+    { value: platforms, suffix: "", label: t("platforms") },
+    { value: countries, suffix: "", label: t("countries") },
+    { value: locales, suffix: "", label: t("locales") },
   ];
 
   return (

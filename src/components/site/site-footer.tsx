@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import type { Locale as DbLocale } from "@/generated/prisma/enums";
 import { getServices } from "@/lib/content";
+import { ContactLink } from "@/components/site/contact-link";
 import { siteConfig } from "@/lib/site";
 
 export async function SiteFooter({ dbLocale }: { dbLocale: DbLocale }) {
@@ -83,20 +84,22 @@ export async function SiteFooter({ dbLocale }: { dbLocale: DbLocale }) {
             </h2>
             <ul className="grid gap-2.5">
               <li>
-                <a
+                <ContactLink
+                  kind="email"
                   href={`mailto:${siteConfig.email}`}
                   className="text-[0.9375rem] text-[var(--ink-65)] transition-colors hover:text-ink"
                 >
                   {siteConfig.email}
-                </a>
+                </ContactLink>
               </li>
               <li>
-                <a
+                <ContactLink
+                  kind="phone"
                   href={`tel:${siteConfig.phoneHref}`}
                   className="text-[0.9375rem] text-[var(--ink-65)] transition-colors hover:text-ink"
                 >
                   {siteConfig.phone}
-                </a>
+                </ContactLink>
               </li>
               <li>
                 <a

@@ -1,9 +1,11 @@
 {
   "meta": {
     "siteName": "Kalimera",
-    "tagline": "Studio Web & Mobile",
-    "defaultTitle": "Kalimera — Studio de développement web & mobile",
-    "defaultDescription": "Studio indépendant de développement web et mobile. Sites vitrines, e-commerce, applications web et apps iOS/Android — conçus et codés en interne."
+    "tagline": "Plateformes web & SaaS B2B",
+    "defaultTitle": "Kalimera — Développement de plateformes web et SaaS B2B",
+    "defaultDescription": "Studio de développement. Nous concevons et codons des plateformes métier, des marketplaces B2B et des sites sur mesure. 100 % code, sans WordPress ni Shopify. Belgique, Luxembourg, Suisse, France.",
+    "ogHeadline": "On code des plateformes métier, pas des templates.",
+    "ogSubline": "Marketplaces B2B, SaaS par abonnement et sites sur mesure. Next.js et TypeScript, de bout en bout."
   },
   "nav": {
     "services": "Services",
@@ -19,52 +21,51 @@
   },
   "home": {
     "hero": {
-      "chip": "Sites · Web apps · Mobile",
+      "chip": "Plateformes · SaaS · Sites sur mesure",
       "greek": "Καλημέρα — « bonjour », en grec",
       "line1": "On conçoit,",
       "line2": "on code,",
       "line3": "on livre.",
-      "description": "Studio de développement web et mobile. Sites vitrines, applications web sur-mesure et apps iOS/Android — design et code par la même équipe, sans template et sans sous-traitance.",
+      "description": "Studio de développement spécialisé dans les plateformes métier : marketplaces B2B, produits SaaS par abonnement et sites sur mesure. Tout est codé — aucun thème, aucun constructeur de pages, aucune sous-traitance.",
       "primary": "Démarrer un projet",
-      "secondary": "Voir nos projets",
-      "proofTitle": "{count}+ projets livrés",
-      "proofSubtitle": "{score} de score Lighthouse en moyenne"
+      "secondary": "Voir nos réalisations",
+      "proofTitle": "{count} projets en production",
+      "proofSubtitle": "dont {count} plateformes B2B avec comptes et abonnements"
     },
     "studio": {
       "chip": "Le studio",
       "titleTop": "Pas une agence.",
       "titleBottom": "Une équipe qui code.",
-      "description": "Vous parlez directement aux personnes qui conçoivent et développent votre projet. Pas de chef de projet intermédiaire, pas de sous-traitance offshore.",
-      "card1Title": "Du sur-mesure, pas du template",
-      "card1Body": "Chaque projet est développé pour vos besoins réels. Code propre, documenté et versionné — le dépôt vous appartient dès le premier jour.",
-      "card2Title": "Design et dev, même équipe",
-      "card2Body": "Les maquettes sont faites par ceux qui les intègrent. Zéro écart entre le Figma et le site en ligne.",
-      "card3Title": "Performance obsessionnelle",
-      "card3Body": "Core Web Vitals au vert, accessibilité et SEO technique traités dès la conception — pas rattrapés après la mise en ligne.",
+      "description": "Vous parlez directement aux personnes qui conçoivent et développent votre produit. Pas de chef de projet intermédiaire, pas de sous-traitance offshore.",
+      "card1Title": "100 % code, zéro plateforme propriétaire",
+      "card1Body": "Ni WordPress, ni Shopify, ni constructeur de pages. Votre produit est écrit en TypeScript, documenté et versionné — le dépôt vous appartient dès le premier jour, et vous n'êtes captif de personne.",
+      "card2Title": "Des produits, pas des brochures",
+      "card2Body": "Comptes utilisateurs, abonnements récurrents, messagerie, accès conditionnés, paiements : nous avons livré cinq plateformes qui tournent avec de vrais clients payants derrière.",
+      "card3Title": "Secteurs réglementés",
+      "card3Body": "Courtage, fiduciaires, immobilier, recrutement financier. Nous connaissons la confidentialité des données, les accès par rôle et les contraintes métier de ces professions.",
       "card4Title": "Multilingue de série",
-      "card4Body": "FR · EN · ES. L'internationalisation est intégrée à l'architecture, pas branchée en plugin six mois plus tard.",
-      "statProjectsCaption": "Sites et applications mis en ligne depuis 2014.",
-      "statScoreCaption": "Score Lighthouse moyen sur nos mises en production."
+      "card4Body": "FR · EN · ES. L'internationalisation est intégrée à l'architecture, pas branchée en plugin six mois plus tard — indispensable en Belgique, au Luxembourg et en Suisse.",
+      "statProjectsCaption": "Projets conçus, développés et mis en production.",
+      "statScoreCaption": "Plateformes B2B en production, avec comptes et abonnements."
     },
     "services": {
       "chip": "Nos services",
-      "titleTop": "Du site vitrine",
-      "titleBottom": "à l'app mobile.",
+      "titleTop": "Du site sur mesure",
+      "titleBottom": "à la plateforme métier.",
       "all": "Tous nos services"
     },
     "work": {
-      "chip": "Projets",
+      "chip": "Réalisations",
       "titleTop": "Ce qu'on a",
-      "titleBottom": "mis en ligne.",
-      "all": "Tout le portfolio",
-      "empty": "Les premiers projets arrivent très bientôt."
+      "titleBottom": "mis en production.",
+      "all": "Toutes les réalisations",
+      "empty": "Les réalisations arrivent très bientôt."
     },
     "stats": {
-      "projects": "Projets livrés",
-      "lighthouse": "Score Lighthouse moyen",
-      "leadTime": "Délai moyen d'un site vitrine",
-      "experience": "Années d'expérience",
-      "weeks": "sem."
+      "projects": "Projets en production",
+      "platforms": "Plateformes B2B livrées",
+      "countries": "Pays où nous avons livré",
+      "locales": "Langues gérées de série"
     },
     "process": {
       "chip": "Méthode",
@@ -84,7 +85,9 @@
       "step4Body": "Tests, redirections, formation à votre back-office, puis maintenance et optimisations mensuelles.",
       "step4Duration": "en continu"
     },
-    "testimonial": { "chip": "Témoignage" },
+    "testimonial": {
+      "chip": "Témoignage"
+    },
     "journal": {
       "chip": "Journal",
       "titleTop": "Ce qu'on",
@@ -102,14 +105,14 @@
   },
   "services": {
     "title": "Services",
-    "intro": "Du site vitrine à l'application mobile, une seule équipe conçoit et développe votre projet.",
+    "intro": "Du site sur mesure à la marketplace B2B, une seule équipe conçoit et développe votre projet. Uniquement du code.",
     "related": "Projets réalisés avec ce service",
     "otherServices": "Nos autres services",
     "backToAll": "Tous les services"
   },
   "work": {
     "title": "Projets",
-    "intro": "Une sélection de sites, de boutiques et d'applications que nous avons mis en ligne.",
+    "intro": "Les plateformes, boutiques et sites que nous avons conçus, développés et mis en production.",
     "filterAll": "Tout",
     "kind": {
       "WEBSITE": "Site vitrine",
@@ -139,7 +142,7 @@
   },
   "studio": {
     "title": "Le studio",
-    "intro": "Une équipe réduite de concepteurs-développeurs, basée entre Athènes, Paris et Dubaï."
+    "intro": "Une équipe réduite de concepteurs-développeurs, basée à Aix-en-Provence et active en Belgique, au Luxembourg, en Suisse et en France."
   },
   "contact": {
     "title": "Parlons de votre projet",
@@ -153,12 +156,13 @@
     "subject": "Type de projet",
     "subjectPlaceholder": "Choisissez un type de projet",
     "subjects": {
-      "website": "Site vitrine",
-      "ecommerce": "E-commerce",
-      "webapp": "Application web",
-      "mobile": "Application mobile",
+      "platform": "Plateforme métier / marketplace B2B",
+      "saas": "Produit SaaS par abonnement",
+      "webapp": "Application web sur mesure",
+      "website": "Site sur mesure",
+      "ecommerce": "E-commerce sur mesure",
       "design": "Design UX / UI",
-      "maintenance": "Maintenance & performance",
+      "maintenance": "Infogérance & performance",
       "other": "Autre demande"
     },
     "budget": "Budget envisagé",
@@ -167,7 +171,8 @@
       "under10": "Moins de 10 000 €",
       "10to25": "10 000 € – 25 000 €",
       "25to50": "25 000 € – 50 000 €",
-      "over50": "Plus de 50 000 €",
+      "50to100": "50 000 € – 100 000 €",
+      "over100": "Plus de 100 000 €",
       "unknown": "Je ne sais pas encore"
     },
     "message": "Votre projet en quelques lignes",
@@ -193,7 +198,7 @@
     }
   },
   "footer": {
-    "about": "Studio indépendant de développement web et mobile. Sites, applications et apps — conçus et codés en interne.",
+    "about": "Studio de développement indépendant. Plateformes métier, SaaS et sites sur mesure — conçus et codés en interne, sans WordPress ni Shopify.",
     "servicesTitle": "Services",
     "studioTitle": "Studio",
     "contactTitle": "Contact",
@@ -216,5 +221,12 @@
     "title": "Une erreur est survenue",
     "description": "Quelque chose s'est mal passé de notre côté. Réessayez dans un instant.",
     "retry": "Réessayer"
+  },
+  "consent": {
+    "title": "Mesure d'audience",
+    "body": "Nous utilisons Google Analytics pour comprendre comment notre site est consulté. Aucun cookie n'est posé avant votre accord.",
+    "privacyLink": "Notre politique de confidentialité",
+    "accept": "Accepter",
+    "refuse": "Refuser"
   }
 }

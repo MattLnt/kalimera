@@ -2,25 +2,35 @@
 
 import { CheckCircle2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 
 import { submitEnquiry, type ContactState } from "./actions";
 
 import { Button } from "@/components/ui/button";
+import { conversions, trackConversion } from "@/lib/analytics";
 import { siteConfig } from "@/lib/site";
 
+/** Les offres à forte valeur en premier : la liste oriente la demande. */
 const subjects = [
+  "platform",
+  "saas",
+  "webapp",
   "website",
   "ecommerce",
-  "webapp",
-  "mobile",
   "design",
   "maintenance",
   "other",
 ] as const;
 
-const budgets = ["under10", "10to25", "25to50", "over50", "unknown"] as const;
+const budgets = [
+  "under10",
+  "10to25",
+  "25to50",
+  "50to100",
+  "over100",
+  "unknown",
+] as const;
 
 const initialState: ContactState = { status: "idle" };
 
@@ -28,6 +38,14 @@ export function ContactForm() {
   const t = useTranslations("contact");
   const locale = useLocale();
   const [state, formAction] = useActionState(submitEnquiry, initialState);
+
+  // La conversion principale. Déclarée une seule fois, à l'entrée en succès :
+  // sans ce signal, une campagne Google Ads optimise vers le clic.
+  useEffect(() => {
+    if (state.status === "success") {
+      trackConversion(conversions.contactSubmit, { locale });
+    }
+  }, [state.status, locale]);
 
   if (state.status === "success") {
     return (

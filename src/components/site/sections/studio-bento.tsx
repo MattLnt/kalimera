@@ -67,7 +67,7 @@ export async function StudioBento() {
 
           <BentoCard delay={3}>
             <div className="gradient-number font-display text-[clamp(2.6rem,4.4vw,3.8rem)] leading-none font-extrabold tracking-[-0.05em]">
-              <Counter value={siteConfig.stats.lighthouse} />
+              <Counter value={siteConfig.stats.platforms} />
             </div>
             <p className="mt-3 max-w-[26ch] text-base leading-[1.5] text-[var(--ink-74)]">
               {t("statScoreCaption")}

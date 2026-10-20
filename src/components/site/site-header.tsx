@@ -9,6 +9,7 @@ import { Logo } from "@/components/site/logo";
 import { Button } from "@/components/ui/button";
 import { Arches, Orbs } from "@/components/ui/decor";
 import { Link, usePathname } from "@/i18n/navigation";
+import { ContactLink } from "@/components/site/contact-link";
 import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -211,24 +212,26 @@ function MobileMenu({
         </Button>
 
         <div className="grid gap-1.5">
-          <a
+          <ContactLink
+            kind="email"
             href={`mailto:${siteConfig.email}`}
             className="font-display text-base font-bold tracking-[-0.02em] text-white transition-colors hover:text-aegean-200"
           >
             {siteConfig.email}
-          </a>
-          <a
+          </ContactLink>
+          <ContactLink
+            kind="phone"
             href={`tel:${siteConfig.phoneHref}`}
             className="font-display text-base font-bold tracking-[-0.02em] text-white/70 transition-colors hover:text-white"
           >
             {siteConfig.phone}
-          </a>
+          </ContactLink>
         </div>
 
         <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-6">
           <LanguageSwitcher tone="dark" />
           <span className="font-display text-xs font-semibold text-white/40">
-            {siteConfig.cities}
+            {siteConfig.markets.map((market) => market.label).join(" · ")}
           </span>
         </div>
       </div>

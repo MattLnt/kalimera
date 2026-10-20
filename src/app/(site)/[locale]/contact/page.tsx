@@ -8,6 +8,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import type { AppLocale } from "@/i18n/routing";
 import { buildAlternates } from "@/lib/seo";
+import { ContactLink } from "@/components/site/contact-link";
 import { siteConfig } from "@/lib/site";
 
 export async function generateMetadata({
@@ -46,12 +47,14 @@ export default async function ContactPage({
           <Reveal delay={1} className="grid gap-3">
             <InfoCard
               icon={<Mail className="size-5" />}
+              kind="email"
               label={t("directEmail")}
               value={siteConfig.email}
               href={`mailto:${siteConfig.email}`}
             />
             <InfoCard
               icon={<Phone className="size-5" />}
+              kind="phone"
               label={t("directPhone")}
               value={siteConfig.phone}
               href={`tel:${siteConfig.phoneHref}`}
@@ -73,17 +76,21 @@ export default async function ContactPage({
 
 function InfoCard({
   icon,
+  kind,
   label,
   value,
   href,
 }: {
   icon: React.ReactNode;
+  /** Conditionne la conversion envoyée : appel ou e-mail. */
+  kind: "phone" | "email";
   label: string;
   value: string;
   href: string;
 }) {
   return (
-    <a
+    <ContactLink
+      kind={kind}
       href={href}
       className="surface-card surface-card-hover flex items-start gap-4 p-6"
     >
@@ -98,6 +105,6 @@ function InfoCard({
           {value}
         </span>
       </span>
-    </a>
+    </ContactLink>
   );
 }

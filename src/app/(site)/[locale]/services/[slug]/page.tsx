@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { JsonLd } from "@/components/site/json-ld";
 import { PageHero } from "@/components/site/page-hero";
 import { ProjectCard } from "@/components/site/project-card";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
@@ -9,11 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Prose } from "@/components/ui/prose";
 import { Reveal } from "@/components/ui/reveal";
 import { Tag } from "@/components/ui/chip";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { getServiceBySlug, getServiceSlugs } from "@/lib/content";
 import { toAppLocale, toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
+import { getSiteUrl } from "@/lib/site";
+import { breadcrumbSchema, graph, serviceSchema } from "@/lib/structured-data";
 
 export const revalidate = 300;
 
@@ -67,8 +70,29 @@ export default async function ServiceDetailPage({
   const t = await getTranslations("services");
   const { service } = translation;
 
+  // `Service` qualifie l'offre, `BreadcrumbList` remplace l'URL brute par un
+  // fil d'Ariane dans les résultats de recherche. Le chemin passe par
+  // `getPathname` : les segments eux-mêmes sont traduits selon la langue.
+  const base = getSiteUrl();
+  const url = `${base}${getPathname({
+    locale,
+    href: { pathname: "/services/[slug]", params: { slug } },
+  })}`;
+  const pageGraph = graph(
+    serviceSchema(base, {
+      name: translation.title,
+      description: translation.summary,
+      url,
+    }),
+    breadcrumbSchema([
+      { name: t("title"), url: `${base}/${locale}` },
+      { name: translation.title, url },
+    ]),
+  );
+
   return (
     <>
+      <JsonLd data={pageGraph} />
       <PageHero chip={t("title")} title={translation.title} lead={translation.summary}>
         <div className="mt-6 flex flex-wrap gap-1.5">
           {service.stack.map((item) => (

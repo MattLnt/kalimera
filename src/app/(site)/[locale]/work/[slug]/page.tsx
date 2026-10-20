@@ -4,18 +4,21 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { JsonLd } from "@/components/site/json-ld";
 import { PageHero } from "@/components/site/page-hero";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
 import { BrowserMockup, PhoneMockup } from "@/components/site/screen-mockup";
 import { Button } from "@/components/ui/button";
 import { Tag } from "@/components/ui/chip";
 import { Reveal } from "@/components/ui/reveal";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { optimized } from "@/lib/cloudinary";
 import { getNextProject, getProjectBySlug, getProjectSlugs } from "@/lib/content";
 import { toAppLocale, toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
+import { getSiteUrl } from "@/lib/site";
+import { breadcrumbSchema, creativeWorkSchema, graph } from "@/lib/structured-data";
 
 export const revalidate = 300;
 
@@ -92,8 +95,31 @@ export default async function ProjectDetailPage({
     { label: t("outcome"), body: translation.outcome },
   ].filter((section) => section.body.trim().length > 0);
 
+  // `CreativeWork` relie la réalisation à son URL publique via `sameAs` : le
+  // lien entre le projet livré et le studio devient explicite pour Google.
+  const base = getSiteUrl();
+  const url = `${base}${getPathname({
+    locale,
+    href: { pathname: "/work/[slug]", params: { slug } },
+  })}`;
+  const pageGraph = graph(
+    creativeWorkSchema(base, {
+      name: translation.title,
+      description: translation.summary,
+      url,
+      liveUrl: project.liveUrl,
+      year: project.year,
+      client: project.client,
+    }),
+    breadcrumbSchema([
+      { name: t("title"), url: `${base}/${locale}` },
+      { name: translation.title, url },
+    ]),
+  );
+
   return (
     <>
+      <JsonLd data={pageGraph} />
       <PageHero
         chip={translation.category}
         title={translation.title}

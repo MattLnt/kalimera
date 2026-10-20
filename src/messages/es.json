@@ -1,9 +1,11 @@
 {
   "meta": {
     "siteName": "Kalimera",
-    "tagline": "Estudio Web y Móvil",
-    "defaultTitle": "Kalimera — Estudio de desarrollo web y móvil",
-    "defaultDescription": "Estudio independiente de desarrollo web y móvil. Webs corporativas, e-commerce, aplicaciones web y apps iOS/Android — diseñadas y programadas en casa."
+    "tagline": "Plataformas web y SaaS B2B",
+    "defaultTitle": "Kalimera — Desarrollo de plataformas web y SaaS B2B",
+    "defaultDescription": "Estudio de desarrollo. Diseñamos y programamos plataformas de negocio, marketplaces B2B y webs a medida. 100 % código, sin WordPress ni Shopify. Bélgica, Luxemburgo, Suiza, Francia.",
+    "ogHeadline": "Programamos plataformas de negocio, no plantillas.",
+    "ogSubline": "Marketplaces B2B, SaaS por suscripción y webs a medida. Next.js y TypeScript, de principio a fin."
   },
   "nav": {
     "services": "Servicios",
@@ -19,52 +21,51 @@
   },
   "home": {
     "hero": {
-      "chip": "Webs · Web apps · Móvil",
+      "chip": "Plataformas · SaaS · Webs a medida",
       "greek": "Καλημέρα — «buenos días», en griego",
       "line1": "Diseñamos,",
       "line2": "programamos,",
       "line3": "entregamos.",
-      "description": "Estudio de desarrollo web y móvil. Webs corporativas, aplicaciones web a medida y apps iOS/Android — diseño y código del mismo equipo, sin plantillas ni subcontratación.",
-      "primary": "Iniciar un proyecto",
-      "secondary": "Ver proyectos",
-      "proofTitle": "+{count} proyectos entregados",
-      "proofSubtitle": "{score} de puntuación Lighthouse media"
+      "description": "Estudio de desarrollo especializado en plataformas de negocio: marketplaces B2B, productos SaaS por suscripción y webs a medida. Todo está programado: sin plantillas, sin maquetadores, sin subcontratación.",
+      "primary": "Empezar un proyecto",
+      "secondary": "Ver nuestros proyectos",
+      "proofTitle": "{count} proyectos en producción",
+      "proofSubtitle": "de los cuales {count} plataformas B2B con cuentas y suscripciones"
     },
     "studio": {
       "chip": "El estudio",
       "titleTop": "No una agencia.",
       "titleBottom": "Un equipo que programa.",
-      "description": "Hablas directamente con quienes diseñan y desarrollan tu proyecto. Sin jefe de proyecto intermedio, sin subcontratación offshore.",
-      "card1Title": "A medida, nunca plantillas",
-      "card1Body": "Cada proyecto se desarrolla para tus necesidades reales. Código limpio, documentado y versionado — el repositorio es tuyo desde el primer día.",
-      "card2Title": "Diseño y desarrollo, un equipo",
-      "card2Body": "Las maquetas las hace quien las implementa. Cero diferencia entre el Figma y la web publicada.",
-      "card3Title": "Obsesión por el rendimiento",
-      "card3Body": "Core Web Vitals en verde, accesibilidad y SEO técnico resueltos en el diseño — no parcheados tras el lanzamiento.",
+      "description": "Hablas directamente con quienes diseñan y desarrollan tu producto. Sin jefe de proyecto intermedio, sin subcontratación offshore.",
+      "card1Title": "100 % código, cero plataforma propietaria",
+      "card1Body": "Ni WordPress, ni Shopify, ni maquetadores. Tu producto está escrito en TypeScript, documentado y versionado: el repositorio es tuyo desde el primer día y no dependes de nadie.",
+      "card2Title": "Productos, no folletos",
+      "card2Body": "Cuentas de usuario, suscripciones recurrentes, mensajería, accesos restringidos, pagos: hemos entregado cinco plataformas que funcionan con clientes reales que pagan.",
+      "card3Title": "Sectores regulados",
+      "card3Body": "Corretaje, asesorías, inmobiliaria, selección financiera. Conocemos la confidencialidad de los datos, los accesos por rol y las exigencias de estas profesiones.",
       "card4Title": "Multilingüe de serie",
-      "card4Body": "FR · EN · ES. La internacionalización forma parte de la arquitectura, no es un plugin añadido seis meses después.",
-      "statProjectsCaption": "Webs y aplicaciones publicadas desde 2014.",
-      "statScoreCaption": "Puntuación Lighthouse media en nuestras publicaciones."
+      "card4Body": "FR · EN · ES. La internacionalización está integrada en la arquitectura, no añadida como plugin seis meses después: imprescindible en Bélgica, Luxemburgo y Suiza.",
+      "statProjectsCaption": "Proyectos diseñados, desarrollados y puestos en producción.",
+      "statScoreCaption": "Plataformas B2B en producción, con cuentas y suscripciones."
     },
     "services": {
       "chip": "Nuestros servicios",
-      "titleTop": "De la web corporativa",
-      "titleBottom": "a la app móvil.",
-      "all": "Todos los servicios"
+      "titleTop": "De la web a medida",
+      "titleBottom": "a la plataforma de negocio.",
+      "all": "Todos nuestros servicios"
     },
     "work": {
       "chip": "Proyectos",
       "titleTop": "Lo que hemos",
-      "titleBottom": "publicado.",
-      "all": "Ver portfolio",
-      "empty": "Los primeros proyectos llegan muy pronto."
+      "titleBottom": "puesto en producción.",
+      "all": "Todos los proyectos",
+      "empty": "Los proyectos llegan muy pronto."
     },
     "stats": {
-      "projects": "Proyectos entregados",
-      "lighthouse": "Puntuación Lighthouse media",
-      "leadTime": "Plazo medio de una web",
-      "experience": "Años de experiencia",
-      "weeks": "sem."
+      "projects": "Proyectos en producción",
+      "platforms": "Plataformas B2B entregadas",
+      "countries": "Países donde hemos entregado",
+      "locales": "Idiomas gestionados de serie"
     },
     "process": {
       "chip": "Método",
@@ -84,7 +85,9 @@
       "step4Body": "Pruebas, redirecciones, formación en tu panel, y después mantenimiento y mejoras mensuales.",
       "step4Duration": "continuo"
     },
-    "testimonial": { "chip": "Testimonio" },
+    "testimonial": {
+      "chip": "Testimonio"
+    },
     "journal": {
       "chip": "Diario",
       "titleTop": "Lo que",
@@ -95,21 +98,21 @@
     "cta": {
       "chip": "Hablemos",
       "titleTop": "¿Un proyecto?",
-      "titleBottom": "Dinos hola.",
-      "description": "Cuéntanos qué necesitas: en 48 h recibes una valoración técnica y una estimación de presupuesto y plazos. Sin compromiso.",
+      "titleBottom": "Di hola.",
+      "description": "Cuéntanos qué necesitas: en 48 h recibes una respuesta técnica y una estimación de presupuesto y plazo. Sin compromiso.",
       "secondary": "Reservar una llamada de 30 min"
     }
   },
   "services": {
     "title": "Servicios",
-    "intro": "De la web corporativa a la aplicación móvil, un solo equipo diseña y desarrolla tu proyecto.",
+    "intro": "De la web a medida al marketplace B2B, un solo equipo diseña y desarrolla tu proyecto. Solo código.",
     "related": "Proyectos realizados con este servicio",
     "otherServices": "Nuestros otros servicios",
     "backToAll": "Todos los servicios"
   },
   "work": {
     "title": "Proyectos",
-    "intro": "Una selección de las webs, tiendas y aplicaciones que hemos publicado.",
+    "intro": "Las plataformas, tiendas y webs que hemos diseñado, desarrollado y puesto en producción.",
     "filterAll": "Todo",
     "kind": {
       "WEBSITE": "Web corporativa",
@@ -139,7 +142,7 @@
   },
   "studio": {
     "title": "El estudio",
-    "intro": "Un equipo reducido de diseñadores-desarrolladores, entre Atenas, París y Dubái."
+    "intro": "Un equipo reducido de diseñadores-desarrolladores, con base en Aix-en-Provence y activo en Bélgica, Luxemburgo, Suiza y Francia."
   },
   "contact": {
     "title": "Hablemos de tu proyecto",
@@ -153,10 +156,11 @@
     "subject": "Tipo de proyecto",
     "subjectPlaceholder": "Elige un tipo de proyecto",
     "subjects": {
-      "website": "Web corporativa",
-      "ecommerce": "E-commerce",
-      "webapp": "Aplicación web",
-      "mobile": "Aplicación móvil",
+      "platform": "Plataforma de negocio / marketplace B2B",
+      "saas": "Producto SaaS por suscripción",
+      "webapp": "Aplicación web a medida",
+      "website": "Web a medida",
+      "ecommerce": "E-commerce a medida",
       "design": "Diseño UX / UI",
       "maintenance": "Mantenimiento y rendimiento",
       "other": "Otra consulta"
@@ -167,7 +171,8 @@
       "under10": "Menos de 10.000 €",
       "10to25": "10.000 € – 25.000 €",
       "25to50": "25.000 € – 50.000 €",
-      "over50": "Más de 50.000 €",
+      "50to100": "50.000 € – 100.000 €",
+      "over100": "Más de 100.000 €",
       "unknown": "Todavía no lo sé"
     },
     "message": "Tu proyecto en unas líneas",
@@ -193,7 +198,7 @@
     }
   },
   "footer": {
-    "about": "Estudio independiente de desarrollo web y móvil. Webs, aplicaciones y apps — diseñadas y programadas en casa.",
+    "about": "Estudio de desarrollo independiente. Plataformas de negocio, SaaS y webs a medida: diseñados y programados internamente, sin WordPress ni Shopify.",
     "servicesTitle": "Servicios",
     "studioTitle": "Estudio",
     "contactTitle": "Contacto",
@@ -216,5 +221,12 @@
     "title": "Se ha producido un error",
     "description": "Algo ha ido mal por nuestra parte. Inténtalo de nuevo en un momento.",
     "retry": "Reintentar"
+  },
+  "consent": {
+    "title": "Medición de audiencia",
+    "body": "Usamos Google Analytics para entender cómo se consulta nuestra web. No se instala ninguna cookie antes de tu consentimiento.",
+    "privacyLink": "Nuestra política de privacidad",
+    "accept": "Aceptar",
+    "refuse": "Rechazar"
   }
 }

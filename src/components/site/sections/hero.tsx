@@ -69,7 +69,7 @@ export async function Hero() {
                 {t("proofTitle", { count: siteConfig.stats.projects })}
               </b>
               <small className="block text-xs text-white/60">
-                {t("proofSubtitle", { score: siteConfig.stats.lighthouse })}
+                {t("proofSubtitle", { count: siteConfig.stats.platforms })}
               </small>
             </div>
           </div>
