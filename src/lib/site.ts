@@ -4,8 +4,8 @@ export const siteConfig = {
   name: "Kalimera",
   domain: "kalimera.agency",
   email: "hello@kalimera.agency",
-  phone: "+33 1 00 00 00 00",
-  phoneHref: "+33100000000",
+  phone: "+33 6 51 48 43 58",
+  phoneHref: "+33651484358",
   cities: "Athènes · Paris · Dubaï",
   social: {
     linkedin: "https://www.linkedin.com/company/kalimera-agency",
