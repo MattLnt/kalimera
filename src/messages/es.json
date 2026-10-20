@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "siteName": "Kalimera",
+    "tagline": "Estudio Web y Móvil",
+    "defaultTitle": "Kalimera — Estudio de desarrollo web y móvil",
+    "defaultDescription": "Estudio independiente de desarrollo web y móvil. Webs corporativas, e-commerce, aplicaciones web y apps iOS/Android — diseñadas y programadas en casa."
+  },
+  "nav": {
+    "services": "Servicios",
+    "work": "Proyectos",
+    "studio": "Estudio",
+    "journal": "Diario",
+    "contact": "Contacto",
+    "cta": "Hablemos",
+    "openMenu": "Abrir el menú",
+    "closeMenu": "Cerrar el menú",
+    "language": "Idioma",
+    "skipToContent": "Ir al contenido"
+  },
+  "home": {
+    "hero": {
+      "chip": "Webs · Web apps · Móvil",
+      "greek": "Καλημέρα — «buenos días», en griego",
+      "line1": "Diseñamos,",
+      "line2": "programamos,",
+      "line3": "entregamos.",
+      "description": "Estudio de desarrollo web y móvil. Webs corporativas, aplicaciones web a medida y apps iOS/Android — diseño y código del mismo equipo, sin plantillas ni subcontratación.",
+      "primary": "Iniciar un proyecto",
+      "secondary": "Ver proyectos",
+      "proofTitle": "+{count} proyectos entregados",
+      "proofSubtitle": "{score} de puntuación Lighthouse media"
+    },
+    "studio": {
+      "chip": "El estudio",
+      "titleTop": "No una agencia.",
+      "titleBottom": "Un equipo que programa.",
+      "description": "Hablas directamente con quienes diseñan y desarrollan tu proyecto. Sin jefe de proyecto intermedio, sin subcontratación offshore.",
+      "card1Title": "A medida, nunca plantillas",
+      "card1Body": "Cada proyecto se desarrolla para tus necesidades reales. Código limpio, documentado y versionado — el repositorio es tuyo desde el primer día.",
+      "card2Title": "Diseño y desarrollo, un equipo",
+      "card2Body": "Las maquetas las hace quien las implementa. Cero diferencia entre el Figma y la web publicada.",
+      "card3Title": "Obsesión por el rendimiento",
+      "card3Body": "Core Web Vitals en verde, accesibilidad y SEO técnico resueltos en el diseño — no parcheados tras el lanzamiento.",
+      "card4Title": "Multilingüe de serie",
+      "card4Body": "FR · EN · ES. La internacionalización forma parte de la arquitectura, no es un plugin añadido seis meses después.",
+      "statProjectsCaption": "Webs y aplicaciones publicadas desde 2014.",
+      "statScoreCaption": "Puntuación Lighthouse media en nuestras publicaciones."
+    },
+    "services": {
+      "chip": "Nuestros servicios",
+      "titleTop": "De la web corporativa",
+      "titleBottom": "a la app móvil.",
+      "all": "Todos los servicios"
+    },
+    "work": {
+      "chip": "Proyectos",
+      "titleTop": "Lo que hemos",
+      "titleBottom": "publicado.",
+      "all": "Ver portfolio",
+      "empty": "Los primeros proyectos llegan muy pronto."
+    },
+    "stats": {
+      "projects": "Proyectos entregados",
+      "lighthouse": "Puntuación Lighthouse media",
+      "leadTime": "Plazo medio de una web",
+      "experience": "Años de experiencia",
+      "weeks": "sem."
+    },
+    "process": {
+      "chip": "Método",
+      "titleTop": "Cuatro etapas,",
+      "titleBottom": "fechas firmes.",
+      "description": "Presupuesto detallado antes de empezar y un enlace de preproducción desde la primera semana: ves avanzar el proyecto en directo, no en reuniones.",
+      "step1Title": "Encuadre",
+      "step1Body": "Objetivos, arquitectura, contenidos y funcionalidades. Sacamos un alcance presupuestado, línea a línea.",
+      "step1Duration": "1 semana",
+      "step2Title": "Diseño",
+      "step2Body": "Maquetas en Figma de cada pantalla, en escritorio y móvil, validadas antes de desarrollar.",
+      "step2Duration": "2 semanas",
+      "step3Title": "Desarrollo",
+      "step3Body": "Implementación, panel de administración y contenidos en los tres idiomas. Preproducción accesible en todo momento.",
+      "step3Duration": "3 a 6 semanas",
+      "step4Title": "Publicación y seguimiento",
+      "step4Body": "Pruebas, redirecciones, formación en tu panel, y después mantenimiento y mejoras mensuales.",
+      "step4Duration": "continuo"
+    },
+    "testimonial": { "chip": "Testimonio" },
+    "journal": {
+      "chip": "Diario",
+      "titleTop": "Lo que",
+      "titleBottom": "aprendemos.",
+      "all": "Todos los artículos",
+      "empty": "Los primeros artículos llegan pronto."
+    },
+    "cta": {
+      "chip": "Hablemos",
+      "titleTop": "¿Un proyecto?",
+      "titleBottom": "Dinos hola.",
+      "description": "Cuéntanos qué necesitas: en 48 h recibes una valoración técnica y una estimación de presupuesto y plazos. Sin compromiso.",
+      "secondary": "Reservar una llamada de 30 min"
+    }
+  },
+  "services": {
+    "title": "Servicios",
+    "intro": "De la web corporativa a la aplicación móvil, un solo equipo diseña y desarrolla tu proyecto.",
+    "related": "Proyectos realizados con este servicio",
+    "otherServices": "Nuestros otros servicios",
+    "backToAll": "Todos los servicios"
+  },
+  "work": {
+    "title": "Proyectos",
+    "intro": "Una selección de las webs, tiendas y aplicaciones que hemos publicado.",
+    "filterAll": "Todo",
+    "kind": {
+      "WEBSITE": "Web corporativa",
+      "ECOMMERCE": "E-commerce",
+      "WEBAPP": "Aplicación web",
+      "MOBILE": "Aplicación móvil",
+      "DESIGN": "Diseño"
+    },
+    "visitSite": "Ver la web publicada",
+    "challenge": "La necesidad",
+    "solution": "Lo que hicimos",
+    "outcome": "El resultado",
+    "stack": "Tecnologías",
+    "services": "Servicios implicados",
+    "year": "Año",
+    "client": "Cliente",
+    "next": "Siguiente proyecto",
+    "backToAll": "Ver portfolio"
+  },
+  "journal": {
+    "title": "Diario",
+    "intro": "Lo que aprendemos sobre desarrollo web, rendimiento y móvil.",
+    "readingTime": "{minutes} min de lectura",
+    "backToAll": "Todos los artículos",
+    "related": "Seguir leyendo",
+    "publishedOn": "Publicado el {date}"
+  },
+  "studio": {
+    "title": "El estudio",
+    "intro": "Un equipo reducido de diseñadores-desarrolladores, entre Atenas, París y Dubái."
+  },
+  "contact": {
+    "title": "Hablemos de tu proyecto",
+    "intro": "Cuéntanos qué necesitas: en 48 h recibes una valoración técnica y una estimación de presupuesto y plazos.",
+    "formTitle": "Tu proyecto",
+    "name": "Nombre y apellidos",
+    "email": "Email profesional",
+    "company": "Empresa",
+    "phone": "Teléfono",
+    "optional": "opcional",
+    "subject": "Tipo de proyecto",
+    "subjectPlaceholder": "Elige un tipo de proyecto",
+    "subjects": {
+      "website": "Web corporativa",
+      "ecommerce": "E-commerce",
+      "webapp": "Aplicación web",
+      "mobile": "Aplicación móvil",
+      "design": "Diseño UX / UI",
+      "maintenance": "Mantenimiento y rendimiento",
+      "other": "Otra consulta"
+    },
+    "budget": "Presupuesto previsto",
+    "budgetPlaceholder": "Elige una horquilla",
+    "budgets": {
+      "under10": "Menos de 10.000 €",
+      "10to25": "10.000 € – 25.000 €",
+      "25to50": "25.000 € – 50.000 €",
+      "over50": "Más de 50.000 €",
+      "unknown": "Todavía no lo sé"
+    },
+    "message": "Tu proyecto en unas líneas",
+    "messagePlaceholder": "Objetivos, contexto, fecha deseada…",
+    "consent": "Acepto que mis datos se usen para responderme.",
+    "submit": "Enviar mi consulta",
+    "submitting": "Enviando…",
+    "successTitle": "Mensaje recibido.",
+    "successBody": "Te respondemos en un plazo de 48 horas laborables, con una primera valoración técnica.",
+    "errorTitle": "El envío ha fallado.",
+    "errorBody": "Inténtalo de nuevo en un momento, o escríbenos directamente a {email}.",
+    "sendAnother": "Enviar otro mensaje",
+    "directEmail": "Por email",
+    "directPhone": "Por teléfono",
+    "responseTime": "Respuesta en 48 h laborables",
+    "errors": {
+      "name": "Indica tu nombre.",
+      "email": "Indica una dirección de email válida.",
+      "subject": "Elige un tipo de proyecto.",
+      "message": "Describe tu proyecto en unas palabras (20 caracteres mínimo).",
+      "consent": "Necesitamos tu consentimiento para tramitar la consulta.",
+      "rateLimit": "Demasiadas consultas enviadas. Inténtalo de nuevo en unos minutos."
+    }
+  },
+  "footer": {
+    "about": "Estudio independiente de desarrollo web y móvil. Webs, aplicaciones y apps — diseñadas y programadas en casa.",
+    "servicesTitle": "Servicios",
+    "studioTitle": "Estudio",
+    "contactTitle": "Contacto",
+    "careers": "Empleo",
+    "legal": "Aviso legal",
+    "privacy": "Privacidad",
+    "rights": "Todos los derechos reservados."
+  },
+  "common": {
+    "readMore": "Leer más",
+    "discover": "Descubrir",
+    "loading": "Cargando…",
+    "backHome": "Volver al inicio"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "Esta página no existe o se ha movido. Comprueba la dirección o vuelve al inicio."
+  },
+  "error": {
+    "title": "Se ha producido un error",
+    "description": "Algo ha ido mal por nuestra parte. Inténtalo de nuevo en un momento.",
+    "retry": "Reintentar"
+  }
+}

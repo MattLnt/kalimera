@@ -1,0 +1,77 @@
+import { createElement } from "react";
+
+import { serviceIcons, isServiceIconName } from "@/components/site/service-icons";
+import { Tag } from "@/components/ui/chip";
+import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
+
+export type ServiceCardData = {
+  slug: string;
+  title: string;
+  summary: string;
+  icon: string;
+  stack: string[];
+};
+
+export function ServiceCard({
+  service,
+  index,
+  className,
+}: {
+  service: ServiceCardData;
+  index: number;
+  className?: string;
+}) {
+  return (
+    <article
+      className={cn(
+        "group relative isolate flex min-h-[19rem] flex-col overflow-hidden rounded-card bg-white p-6 shadow-soft sm:p-8",
+        "transition-[transform,box-shadow] duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 hover:text-white hover:shadow-float",
+        className,
+      )}
+    >
+      {/* Le bleu monte du bas de la carte au survol. */}
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 -z-10 h-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-[height] duration-[600ms] ease-[var(--ease-out-expo)] group-hover:h-full"
+      />
+
+      <span className="absolute top-6 right-6 font-display text-[0.8125rem] font-extrabold text-[var(--ink-45)] transition-colors duration-500 group-hover:text-white/55 sm:top-8 sm:right-8">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      <span className="grid size-12 place-items-center rounded-field bg-aegean-100 text-aegean-700 transition-colors duration-500 group-hover:bg-white/16 group-hover:text-white">
+        {/* createElement plutôt qu'une variable en majuscule : le composant
+            est choisi par nom, il n'est pas créé pendant le rendu. */}
+        {createElement(
+          isServiceIconName(service.icon) ? serviceIcons[service.icon] : serviceIcons.Layers,
+          { className: "size-5.5" },
+        )}
+      </span>
+
+      <h3 className="display-3 mt-6 mb-2.5">
+        <Link
+          href={{ pathname: "/services/[slug]", params: { slug: service.slug } }}
+          className="before:absolute before:inset-0 before:content-['']"
+        >
+          {service.title}
+        </Link>
+      </h3>
+
+      <p className="text-[0.9375rem] text-[var(--ink-65)] transition-colors duration-500 group-hover:text-white/76">
+        {service.summary}
+      </p>
+
+      <div className="mt-auto flex flex-wrap gap-1.5 pt-6">
+        {service.stack.map((item) => (
+          <Tag
+            key={item}
+            className="group-hover:bg-white/14 group-hover:text-white"
+          >
+            {item}
+          </Tag>
+        ))}
+      </div>
+    </article>
+  );
+}

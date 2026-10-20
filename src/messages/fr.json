@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "siteName": "Kalimera",
+    "tagline": "Studio Web & Mobile",
+    "defaultTitle": "Kalimera — Studio de développement web & mobile",
+    "defaultDescription": "Studio indépendant de développement web et mobile. Sites vitrines, e-commerce, applications web et apps iOS/Android — conçus et codés en interne."
+  },
+  "nav": {
+    "services": "Services",
+    "work": "Projets",
+    "studio": "Studio",
+    "journal": "Journal",
+    "contact": "Contact",
+    "cta": "Parlons-en",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "language": "Langue",
+    "skipToContent": "Aller au contenu"
+  },
+  "home": {
+    "hero": {
+      "chip": "Sites · Web apps · Mobile",
+      "greek": "Καλημέρα — « bonjour », en grec",
+      "line1": "On conçoit,",
+      "line2": "on code,",
+      "line3": "on livre.",
+      "description": "Studio de développement web et mobile. Sites vitrines, applications web sur-mesure et apps iOS/Android — design et code par la même équipe, sans template et sans sous-traitance.",
+      "primary": "Démarrer un projet",
+      "secondary": "Voir nos projets",
+      "proofTitle": "{count}+ projets livrés",
+      "proofSubtitle": "{score} de score Lighthouse en moyenne"
+    },
+    "studio": {
+      "chip": "Le studio",
+      "titleTop": "Pas une agence.",
+      "titleBottom": "Une équipe qui code.",
+      "description": "Vous parlez directement aux personnes qui conçoivent et développent votre projet. Pas de chef de projet intermédiaire, pas de sous-traitance offshore.",
+      "card1Title": "Du sur-mesure, pas du template",
+      "card1Body": "Chaque projet est développé pour vos besoins réels. Code propre, documenté et versionné — le dépôt vous appartient dès le premier jour.",
+      "card2Title": "Design et dev, même équipe",
+      "card2Body": "Les maquettes sont faites par ceux qui les intègrent. Zéro écart entre le Figma et le site en ligne.",
+      "card3Title": "Performance obsessionnelle",
+      "card3Body": "Core Web Vitals au vert, accessibilité et SEO technique traités dès la conception — pas rattrapés après la mise en ligne.",
+      "card4Title": "Multilingue de série",
+      "card4Body": "FR · EN · ES. L'internationalisation est intégrée à l'architecture, pas branchée en plugin six mois plus tard.",
+      "statProjectsCaption": "Sites et applications mis en ligne depuis 2014.",
+      "statScoreCaption": "Score Lighthouse moyen sur nos mises en production."
+    },
+    "services": {
+      "chip": "Nos services",
+      "titleTop": "Du site vitrine",
+      "titleBottom": "à l'app mobile.",
+      "all": "Tous nos services"
+    },
+    "work": {
+      "chip": "Projets",
+      "titleTop": "Ce qu'on a",
+      "titleBottom": "mis en ligne.",
+      "all": "Tout le portfolio",
+      "empty": "Les premiers projets arrivent très bientôt."
+    },
+    "stats": {
+      "projects": "Projets livrés",
+      "lighthouse": "Score Lighthouse moyen",
+      "leadTime": "Délai moyen d'un site vitrine",
+      "experience": "Années d'expérience",
+      "weeks": "sem."
+    },
+    "process": {
+      "chip": "Méthode",
+      "titleTop": "Quatre étapes,",
+      "titleBottom": "des dates fermes.",
+      "description": "Devis détaillé avant de commencer, et un lien de préproduction dès la première semaine : vous voyez le projet avancer en direct, pas en réunion.",
+      "step1Title": "Cadrage",
+      "step1Body": "Objectifs, arborescence, contenus et fonctionnalités. On sort un périmètre chiffré, ligne par ligne.",
+      "step1Duration": "1 semaine",
+      "step2Title": "Design",
+      "step2Body": "Maquettes Figma de chaque écran, en version desktop et mobile, validées avant tout développement.",
+      "step2Duration": "2 semaines",
+      "step3Title": "Développement",
+      "step3Body": "Intégration, back-office, contenus dans les trois langues. Préproduction accessible en continu.",
+      "step3Duration": "3 à 6 semaines",
+      "step4Title": "Mise en ligne & suivi",
+      "step4Body": "Tests, redirections, formation à votre back-office, puis maintenance et optimisations mensuelles.",
+      "step4Duration": "en continu"
+    },
+    "testimonial": { "chip": "Témoignage" },
+    "journal": {
+      "chip": "Journal",
+      "titleTop": "Ce qu'on",
+      "titleBottom": "apprend.",
+      "all": "Tous les articles",
+      "empty": "Les premiers articles arrivent bientôt."
+    },
+    "cta": {
+      "chip": "Parlons-en",
+      "titleTop": "Un projet ?",
+      "titleBottom": "Dites bonjour.",
+      "description": "Décrivez-nous votre besoin : vous recevez sous 48 h un retour technique et une estimation de budget et de délai. Sans engagement.",
+      "secondary": "Réserver un appel de 30 min"
+    }
+  },
+  "services": {
+    "title": "Services",
+    "intro": "Du site vitrine à l'application mobile, une seule équipe conçoit et développe votre projet.",
+    "related": "Projets réalisés avec ce service",
+    "otherServices": "Nos autres services",
+    "backToAll": "Tous les services"
+  },
+  "work": {
+    "title": "Projets",
+    "intro": "Une sélection de sites, de boutiques et d'applications que nous avons mis en ligne.",
+    "filterAll": "Tout",
+    "kind": {
+      "WEBSITE": "Site vitrine",
+      "ECOMMERCE": "E-commerce",
+      "WEBAPP": "Application web",
+      "MOBILE": "Application mobile",
+      "DESIGN": "Design"
+    },
+    "visitSite": "Voir le site en ligne",
+    "challenge": "Le besoin",
+    "solution": "Ce qu'on a fait",
+    "outcome": "Le résultat",
+    "stack": "Technologies",
+    "services": "Services mobilisés",
+    "year": "Année",
+    "client": "Client",
+    "next": "Projet suivant",
+    "backToAll": "Tout le portfolio"
+  },
+  "journal": {
+    "title": "Journal",
+    "intro": "Nos retours d'expérience sur le développement web, la performance et le mobile.",
+    "readingTime": "{minutes} min de lecture",
+    "backToAll": "Tous les articles",
+    "related": "À lire ensuite",
+    "publishedOn": "Publié le {date}"
+  },
+  "studio": {
+    "title": "Le studio",
+    "intro": "Une équipe réduite de concepteurs-développeurs, basée entre Athènes, Paris et Dubaï."
+  },
+  "contact": {
+    "title": "Parlons de votre projet",
+    "intro": "Décrivez-nous votre besoin : vous recevez sous 48 h un retour technique et une estimation de budget et de délai.",
+    "formTitle": "Votre projet",
+    "name": "Nom et prénom",
+    "email": "Email professionnel",
+    "company": "Société",
+    "phone": "Téléphone",
+    "optional": "facultatif",
+    "subject": "Type de projet",
+    "subjectPlaceholder": "Choisissez un type de projet",
+    "subjects": {
+      "website": "Site vitrine",
+      "ecommerce": "E-commerce",
+      "webapp": "Application web",
+      "mobile": "Application mobile",
+      "design": "Design UX / UI",
+      "maintenance": "Maintenance & performance",
+      "other": "Autre demande"
+    },
+    "budget": "Budget envisagé",
+    "budgetPlaceholder": "Choisissez une fourchette",
+    "budgets": {
+      "under10": "Moins de 10 000 €",
+      "10to25": "10 000 € – 25 000 €",
+      "25to50": "25 000 € – 50 000 €",
+      "over50": "Plus de 50 000 €",
+      "unknown": "Je ne sais pas encore"
+    },
+    "message": "Votre projet en quelques lignes",
+    "messagePlaceholder": "Objectifs, contexte, échéance souhaitée…",
+    "consent": "J'accepte que mes informations soient utilisées pour me recontacter.",
+    "submit": "Envoyer ma demande",
+    "submitting": "Envoi en cours…",
+    "successTitle": "Message bien reçu.",
+    "successBody": "Nous revenons vers vous sous 48 heures ouvrées, avec un premier retour technique.",
+    "errorTitle": "L'envoi a échoué.",
+    "errorBody": "Réessayez dans un instant, ou écrivez-nous directement à {email}.",
+    "sendAnother": "Envoyer un autre message",
+    "directEmail": "Par email",
+    "directPhone": "Par téléphone",
+    "responseTime": "Réponse sous 48 h ouvrées",
+    "errors": {
+      "name": "Indiquez votre nom.",
+      "email": "Indiquez une adresse email valide.",
+      "subject": "Choisissez un type de projet.",
+      "message": "Décrivez votre projet en quelques mots (20 caractères minimum).",
+      "consent": "Votre accord est nécessaire pour traiter la demande.",
+      "rateLimit": "Trop de demandes envoyées. Réessayez dans quelques minutes."
+    }
+  },
+  "footer": {
+    "about": "Studio indépendant de développement web et mobile. Sites, applications et apps — conçus et codés en interne.",
+    "servicesTitle": "Services",
+    "studioTitle": "Studio",
+    "contactTitle": "Contact",
+    "careers": "Carrières",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "rights": "Tous droits réservés."
+  },
+  "common": {
+    "readMore": "Lire la suite",
+    "discover": "Découvrir",
+    "loading": "Chargement…",
+    "backHome": "Retour à l'accueil"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "Cette page n'existe pas ou a été déplacée. Vérifiez l'adresse, ou revenez à l'accueil."
+  },
+  "error": {
+    "title": "Une erreur est survenue",
+    "description": "Quelque chose s'est mal passé de notre côté. Réessayez dans un instant.",
+    "retry": "Réessayer"
+  }
+}

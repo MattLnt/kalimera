@@ -1,0 +1,280 @@
+// Kalimera — schéma de base
+// Chaque contenu éditorial a une ligne "parent" (données non traduisibles :
+// ordre, images, techno, dates) et une ligne de traduction par langue
+// (titre, slug, textes, SEO). Cela permet des URLs traduites par marché.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Locale {
+  FR
+  EN
+  ES
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum ProjectKind {
+  WEBSITE
+  ECOMMERCE
+  WEBAPP
+  MOBILE
+  DESIGN
+}
+
+enum MessageStatus {
+  NEW
+  READ
+  ARCHIVED
+}
+
+// ---------------------------------------------------------------- utilisateurs
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ---------------------------------------------------------------- services
+
+model Service {
+  id        String   @id @default(cuid())
+  /// Identifiant stable, non traduit : sert de clé technique et d'ancre.
+  key       String   @unique
+  /// Nom de l'icône lucide-react affichée sur la carte.
+  icon      String   @default("Layers")
+  /// Pastilles techno affichées sur la carte (identiques dans toutes les langues).
+  stack     String[] @default([])
+  position  Int      @default(0)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  translations ServiceTranslation[]
+  projects     Project[]            @relation("ProjectServices")
+
+  @@index([published, position])
+  @@map("services")
+}
+
+model ServiceTranslation {
+  id        String  @id @default(cuid())
+  serviceId String
+  locale    Locale
+  slug      String
+  title     String
+  summary   String
+  /// Corps de la page service, en Markdown.
+  body      String  @default("")
+  seoTitle       String?
+  seoDescription String?
+
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceId, locale])
+  @@unique([locale, slug])
+  @@map("service_translations")
+}
+
+// ---------------------------------------------------------------- projets
+
+model Project {
+  id        String      @id @default(cuid())
+  key       String      @unique
+  kind      ProjectKind @default(WEBSITE)
+  client    String
+  /// Année de mise en ligne.
+  year      Int
+  /// URL publique du site livré, affichée sur la fiche projet.
+  liveUrl   String?
+  stack     String[]    @default([])
+  /// Dégradé de la carte quand aucune image de couverture n'est fournie.
+  accent    String      @default("g1")
+  featured  Boolean     @default(false)
+  position  Int         @default(0)
+  published Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  coverImageId String?
+  coverImage   Media?  @relation("ProjectCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+
+  gallery      Media[]              @relation("ProjectGallery")
+  services     Service[]            @relation("ProjectServices")
+  metrics      ProjectMetric[]
+  translations ProjectTranslation[]
+
+  @@index([published, position])
+  @@map("projects")
+}
+
+model ProjectTranslation {
+  id        String  @id @default(cuid())
+  projectId String
+  locale    Locale
+  slug      String
+  title     String
+  /// Sur-titre de la carte, ex. « Site vitrine · Hôtellerie ».
+  category  String
+  summary   String
+  challenge String  @default("")
+  solution  String  @default("")
+  outcome   String  @default("")
+  seoTitle       String?
+  seoDescription String?
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, locale])
+  @@unique([locale, slug])
+  @@map("project_translations")
+}
+
+/// Chiffre clé affiché sur la carte projet (badge au survol) et la fiche.
+model ProjectMetric {
+  id        String @id @default(cuid())
+  projectId String
+  value     String
+  labelFr   String
+  labelEn   String
+  labelEs   String
+  position  Int    @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, position])
+  @@map("project_metrics")
+}
+
+// ---------------------------------------------------------------- journal
+
+model Post {
+  id          String    @id @default(cuid())
+  key         String    @unique
+  category    String    @default("engineering")
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  coverImageId String?
+  coverImage   Media?  @relation("PostCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+
+  translations PostTranslation[]
+
+  @@index([published, publishedAt])
+  @@map("posts")
+}
+
+model PostTranslation {
+  id      String @id @default(cuid())
+  postId  String
+  locale  Locale
+  slug    String
+  title   String
+  excerpt String
+  /// Corps de l'article, en Markdown.
+  body    String @default("")
+  /// Libellé de catégorie traduit, ex. « Performance ».
+  categoryLabel  String  @default("")
+  seoTitle       String?
+  seoDescription String?
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, locale])
+  @@unique([locale, slug])
+  @@map("post_translations")
+}
+
+// ---------------------------------------------------------------- témoignages
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  author    String
+  published Boolean  @default(false)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  avatarId String?
+  avatar   Media?  @relation("TestimonialAvatar", fields: [avatarId], references: [id], onDelete: SetNull)
+
+  translations TestimonialTranslation[]
+
+  @@map("testimonials")
+}
+
+model TestimonialTranslation {
+  id            String @id @default(cuid())
+  testimonialId String
+  locale        Locale
+  quote         String
+  /// Fonction + société, ex. « Directrice marketing — Thalassa Resorts ».
+  role          String
+
+  testimonial Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+
+  @@unique([testimonialId, locale])
+  @@map("testimonial_translations")
+}
+
+// ---------------------------------------------------------------- médias
+
+model Media {
+  id        String   @id @default(cuid())
+  publicId  String   @unique
+  url       String
+  width     Int
+  height    Int
+  format    String
+  bytes     Int
+  /// Texte alternatif par langue, pour l'accessibilité et le SEO.
+  altFr     String   @default("")
+  altEn     String   @default("")
+  altEs     String   @default("")
+  createdAt DateTime @default(now())
+
+  projectCovers     Project[]     @relation("ProjectCover")
+  projectGalleries  Project[]     @relation("ProjectGallery")
+  postCovers        Post[]        @relation("PostCover")
+  testimonialAvatar Testimonial[] @relation("TestimonialAvatar")
+
+  @@map("media")
+}
+
+// ---------------------------------------------------------------- contact
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  phone     String?
+  /// Type de projet choisi dans le formulaire.
+  subject   String
+  budget    String?
+  message   String
+  locale    Locale        @default(FR)
+  status    MessageStatus @default(NEW)
+  createdAt DateTime      @default(now())
+
+  @@index([status, createdAt])
+  @@map("contact_messages")
+}

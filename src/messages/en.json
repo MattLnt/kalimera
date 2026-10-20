@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "siteName": "Kalimera",
+    "tagline": "Web & Mobile Studio",
+    "defaultTitle": "Kalimera — Web & mobile development studio",
+    "defaultDescription": "Independent web and mobile development studio. Marketing sites, e-commerce, web applications and iOS/Android apps — designed and built in-house."
+  },
+  "nav": {
+    "services": "Services",
+    "work": "Work",
+    "studio": "Studio",
+    "journal": "Journal",
+    "contact": "Contact",
+    "cta": "Let's talk",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "skipToContent": "Skip to content"
+  },
+  "home": {
+    "hero": {
+      "chip": "Websites · Web apps · Mobile",
+      "greek": "Καλημέρα — “good morning”, in Greek",
+      "line1": "We design,",
+      "line2": "we build,",
+      "line3": "we ship.",
+      "description": "Web and mobile development studio. Marketing sites, custom web applications and iOS/Android apps — design and code by the same team, no templates, no outsourcing.",
+      "primary": "Start a project",
+      "secondary": "See our work",
+      "proofTitle": "{count}+ projects shipped",
+      "proofSubtitle": "{score} average Lighthouse score"
+    },
+    "studio": {
+      "chip": "The studio",
+      "titleTop": "Not an agency.",
+      "titleBottom": "A team that codes.",
+      "description": "You talk directly to the people designing and building your project. No middle manager, no offshore subcontracting.",
+      "card1Title": "Custom-built, never templated",
+      "card1Body": "Every project is built for your actual needs. Clean, documented, version-controlled code — the repository is yours from day one.",
+      "card2Title": "Design and dev, one team",
+      "card2Body": "The mockups are made by the people who build them. Zero gap between the Figma file and the live site.",
+      "card3Title": "Obsessive about performance",
+      "card3Body": "Core Web Vitals in the green, accessibility and technical SEO handled by design — not patched after launch.",
+      "card4Title": "Multilingual by default",
+      "card4Body": "FR · EN · ES. Internationalisation is part of the architecture, not a plugin bolted on six months later.",
+      "statProjectsCaption": "Websites and apps shipped since 2014.",
+      "statScoreCaption": "Average Lighthouse score across our production releases."
+    },
+    "services": {
+      "chip": "Our services",
+      "titleTop": "From marketing site",
+      "titleBottom": "to mobile app.",
+      "all": "All services"
+    },
+    "work": {
+      "chip": "Work",
+      "titleTop": "What we've",
+      "titleBottom": "put live.",
+      "all": "Full portfolio",
+      "empty": "The first projects are coming very soon."
+    },
+    "stats": {
+      "projects": "Projects shipped",
+      "lighthouse": "Average Lighthouse score",
+      "leadTime": "Typical website lead time",
+      "experience": "Years of experience",
+      "weeks": "wks"
+    },
+    "process": {
+      "chip": "Method",
+      "titleTop": "Four phases,",
+      "titleBottom": "firm dates.",
+      "description": "A detailed quote before we start, and a staging link from week one: you watch the project progress live, not in meetings.",
+      "step1Title": "Scoping",
+      "step1Body": "Goals, site structure, content and features. You get a costed scope, line by line.",
+      "step1Duration": "1 week",
+      "step2Title": "Design",
+      "step2Body": "Figma mockups of every screen, desktop and mobile, signed off before any development.",
+      "step2Duration": "2 weeks",
+      "step3Title": "Development",
+      "step3Body": "Build, back office, content in all three languages. Staging available throughout.",
+      "step3Duration": "3 to 6 weeks",
+      "step4Title": "Launch & support",
+      "step4Body": "Testing, redirects, back-office training, then maintenance and monthly improvements.",
+      "step4Duration": "ongoing"
+    },
+    "testimonial": { "chip": "Testimonial" },
+    "journal": {
+      "chip": "Journal",
+      "titleTop": "What we're",
+      "titleBottom": "learning.",
+      "all": "All articles",
+      "empty": "The first articles are coming soon."
+    },
+    "cta": {
+      "chip": "Let's talk",
+      "titleTop": "Got a project?",
+      "titleBottom": "Say hello.",
+      "description": "Tell us what you need: within 48 hours you get technical feedback and an estimate of budget and timeline. No strings.",
+      "secondary": "Book a 30-min call"
+    }
+  },
+  "services": {
+    "title": "Services",
+    "intro": "From a marketing site to a mobile app, one team designs and builds your project.",
+    "related": "Projects delivered with this service",
+    "otherServices": "Our other services",
+    "backToAll": "All services"
+  },
+  "work": {
+    "title": "Work",
+    "intro": "A selection of the websites, stores and applications we have put live.",
+    "filterAll": "All",
+    "kind": {
+      "WEBSITE": "Marketing site",
+      "ECOMMERCE": "E-commerce",
+      "WEBAPP": "Web application",
+      "MOBILE": "Mobile application",
+      "DESIGN": "Design"
+    },
+    "visitSite": "Visit the live site",
+    "challenge": "The brief",
+    "solution": "What we did",
+    "outcome": "The outcome",
+    "stack": "Technologies",
+    "services": "Services involved",
+    "year": "Year",
+    "client": "Client",
+    "next": "Next project",
+    "backToAll": "Full portfolio"
+  },
+  "journal": {
+    "title": "Journal",
+    "intro": "What we learn about web development, performance and mobile.",
+    "readingTime": "{minutes} min read",
+    "backToAll": "All articles",
+    "related": "Read next",
+    "publishedOn": "Published on {date}"
+  },
+  "studio": {
+    "title": "The studio",
+    "intro": "A small team of designer-developers, based between Athens, Paris and Dubai."
+  },
+  "contact": {
+    "title": "Let's talk about your project",
+    "intro": "Tell us what you need: within 48 hours you get technical feedback and an estimate of budget and timeline.",
+    "formTitle": "Your project",
+    "name": "Full name",
+    "email": "Work email",
+    "company": "Company",
+    "phone": "Phone",
+    "optional": "optional",
+    "subject": "Project type",
+    "subjectPlaceholder": "Choose a project type",
+    "subjects": {
+      "website": "Marketing website",
+      "ecommerce": "E-commerce",
+      "webapp": "Web application",
+      "mobile": "Mobile application",
+      "design": "UX / UI design",
+      "maintenance": "Maintenance & performance",
+      "other": "Something else"
+    },
+    "budget": "Budget range",
+    "budgetPlaceholder": "Choose a range",
+    "budgets": {
+      "under10": "Under €10,000",
+      "10to25": "€10,000 – €25,000",
+      "25to50": "€25,000 – €50,000",
+      "over50": "Over €50,000",
+      "unknown": "Not sure yet"
+    },
+    "message": "Your project in a few lines",
+    "messagePlaceholder": "Goals, context, target date…",
+    "consent": "I agree that my details may be used to get back to me.",
+    "submit": "Send my enquiry",
+    "submitting": "Sending…",
+    "successTitle": "Message received.",
+    "successBody": "We'll get back to you within two working days, with initial technical feedback.",
+    "errorTitle": "The message didn't send.",
+    "errorBody": "Try again in a moment, or email us directly at {email}.",
+    "sendAnother": "Send another message",
+    "directEmail": "By email",
+    "directPhone": "By phone",
+    "responseTime": "Reply within 2 working days",
+    "errors": {
+      "name": "Please enter your name.",
+      "email": "Please enter a valid email address.",
+      "subject": "Please choose a project type.",
+      "message": "Describe your project in a few words (20 characters minimum).",
+      "consent": "We need your agreement to process the enquiry.",
+      "rateLimit": "Too many enquiries sent. Please try again in a few minutes."
+    }
+  },
+  "footer": {
+    "about": "Independent web and mobile development studio. Websites, applications and apps — designed and built in-house.",
+    "servicesTitle": "Services",
+    "studioTitle": "Studio",
+    "contactTitle": "Contact",
+    "careers": "Careers",
+    "legal": "Legal notice",
+    "privacy": "Privacy",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "readMore": "Read more",
+    "discover": "Discover",
+    "loading": "Loading…",
+    "backHome": "Back to home"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "This page doesn't exist or has moved. Check the address, or head back to the homepage."
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An error occurred on our side. Please try again in a moment.",
+    "retry": "Try again"
+  }
+}

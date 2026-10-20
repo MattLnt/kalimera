@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalimera — Studio Web & Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===========================================================
+   KALIMERA — v3 · studio web & mobile
+   =========================================================== */
+:root{
+  --blue-950:#04152B; --blue-900:#07213F; --blue-800:#0B3161; --blue-700:#0F4486;
+  --blue-600:#1562B8; --blue-500:#2A86E8; --blue-400:#62A9F2;
+  --blue-200:#BBDBFB; --blue-100:#E2EEFC; --blue-50:#F1F7FE;
+
+  --bg:#F3F6FB; --card:#FFFFFF; --ink:#08090B;
+  --ink-65:rgba(8,9,11,.65); --ink-45:rgba(8,9,11,.45); --ink-10:rgba(8,9,11,.08);
+
+  --disp:"Manrope",system-ui,sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+
+  --r-xl:40px; --r-lg:28px; --r-md:20px; --r-sm:14px;
+
+  --sh-1:0 1px 2px rgba(7,33,63,.05), 0 4px 12px -2px rgba(7,33,63,.06);
+  --sh-2:0 2px 4px rgba(7,33,63,.05), 0 18px 40px -12px rgba(7,33,63,.14);
+  --sh-3:0 4px 8px rgba(7,33,63,.06), 0 34px 70px -20px rgba(7,33,63,.22);
+
+  --max:1280px; --pad:clamp(16px,3.2vw,36px);
+  --e:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--blue-500);color:#fff}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+
+/* ---------- Type ---------- */
+h1,h2,h3,h4{margin:0;font-family:var(--disp);font-weight:800;letter-spacing:-.045em;line-height:.98}
+.d1{font-size:clamp(2.9rem,8vw,6.6rem)}
+.d2{font-size:clamp(2.1rem,4.9vw,4.1rem);letter-spacing:-.04em;line-height:1}
+.d3{font-size:clamp(1.3rem,2vw,1.75rem);letter-spacing:-.03em;line-height:1.08;font-weight:700}
+.d4{font-family:var(--disp);font-weight:700;font-size:1.0625rem;letter-spacing:-.02em;line-height:1.25}
+.grad{background:linear-gradient(104deg,var(--blue-400),#fff 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gradb{background:linear-gradient(104deg,var(--blue-600),var(--blue-400));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:clamp(1.0625rem,1.25vw,1.1875rem);color:var(--ink-65);max-width:54ch}
+.lead-l{color:rgba(255,255,255,.72)}
+
+.chip{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--disp);font-size:.75rem;font-weight:600;
+  padding:.5rem 1rem .5rem .75rem;border-radius:999px;background:var(--blue-100);color:var(--blue-700)}
+.chip::before{content:"";width:7px;height:7px;border-radius:999px;background:var(--blue-500)}
+.chip.on-dark{background:rgba(255,255,255,.1);color:#fff;backdrop-filter:blur(8px)}
+.chip.on-dark::before{background:var(--blue-400)}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;font-family:var(--disp);font-size:.9375rem;font-weight:700;
+  letter-spacing:-.01em;padding:.6rem .7rem .6rem 1.4rem;border-radius:999px;border:0;background:var(--ink);color:#fff;
+  transition:transform .4s var(--e),box-shadow .4s var(--e),background .4s;box-shadow:var(--sh-1)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--sh-2)}
+.btn .circ{width:32px;height:32px;border-radius:999px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none;
+  transition:background .4s,transform .5s var(--e)}
+.btn:hover .circ{background:var(--blue-500);transform:rotate(45deg)}
+.btn-blue{background:var(--blue-600)}.btn-blue:hover{background:var(--blue-700)}
+.btn-blue .circ{background:rgba(255,255,255,.18)}.btn-blue:hover .circ{background:#fff;color:var(--blue-700)}
+.btn-white{background:#fff;color:var(--ink)}.btn-white .circ{background:var(--blue-100);color:var(--blue-700)}
+.btn-white:hover .circ{background:var(--blue-600);color:#fff}
+.btn-soft{background:rgba(255,255,255,.12);color:#fff;backdrop-filter:blur(10px);box-shadow:none}
+.btn-soft:hover{background:rgba(255,255,255,.2)}
+.btn-line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink-10)}
+.btn-line:hover{background:#fff;box-shadow:var(--sh-2)}
+.btn-line .circ{background:var(--blue-100);color:var(--blue-700)}
+.btn-sm{font-size:.875rem;padding:.45rem .5rem .45rem 1.1rem}.btn-sm .circ{width:28px;height:28px}
+.ar{width:14px;height:14px}
+
+/* ===========================================================
+   NAV
+   =========================================================== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px var(--pad);transition:padding .5s var(--e)}
+.nav.small{padding-top:8px}
+.nav-pill{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:1rem;padding:9px 9px 9px 22px;border-radius:999px;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(22px) saturate(1.6);
+  box-shadow:0 1px 1px rgba(7,33,63,.04),0 10px 30px -12px rgba(7,33,63,.18)}
+.brand{display:flex;align-items:center;gap:.55rem;margin-right:auto;font-family:var(--disp);font-weight:800;font-size:1.2rem;letter-spacing:-.04em}
+.logo{width:28px;height:28px;flex:none}
+.nav-links{display:flex;gap:.25rem;list-style:none;margin:0;padding:0}
+.nav-links a{display:block;font-family:var(--disp);font-size:.9375rem;font-weight:600;letter-spacing:-.01em;padding:.55rem .9rem;
+  border-radius:999px;color:var(--ink-65);transition:all .35s var(--e)}
+.nav-links a:hover{background:rgba(8,9,11,.05);color:var(--ink)}
+.lang{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(8,9,11,.05)}
+.lang button{appearance:none;border:0;background:none;cursor:pointer;border-radius:999px;font-family:var(--disp);font-size:.75rem;
+  font-weight:700;padding:.4rem .62rem;color:var(--ink-45);transition:all .3s var(--e)}
+.lang button:hover{color:var(--ink)}
+.lang button.on{background:#fff;color:var(--blue-700);box-shadow:var(--sh-1)}
+
+/* ===========================================================
+   HERO
+   =========================================================== */
+.hero{position:relative;margin:0 var(--pad);border-radius:var(--r-xl);overflow:hidden;min-height:min(92vh,880px);
+  display:flex;align-items:flex-end;padding:clamp(110px,16vh,170px) clamp(22px,4vw,64px) clamp(26px,4vh,44px);
+  background:
+    radial-gradient(70% 55% at 76% 6%,rgba(42,134,232,.75) 0%,rgba(11,49,97,0) 62%),
+    radial-gradient(60% 55% at 12% 96%,rgba(21,98,184,.6) 0%,rgba(4,21,43,0) 64%),
+    radial-gradient(90% 90% at 50% 120%,rgba(98,169,242,.35) 0%,rgba(4,21,43,0) 60%),
+    linear-gradient(162deg,#04152B 0%,#07213F 45%,#0B3161 100%);
+  color:#fff;isolation:isolate}
+.hero::after{content:"";position:absolute;inset:0;z-index:0;opacity:.3;pointer-events:none;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E")}
+.orb{position:absolute;border-radius:999px;filter:blur(60px);pointer-events:none;z-index:0}
+.orb-1{width:44vw;height:44vw;right:-8vw;top:-12vw;background:radial-gradient(circle,rgba(98,169,242,.5),transparent 68%);animation:drift 20s ease-in-out infinite alternate}
+.orb-2{width:36vw;height:36vw;left:-10vw;bottom:-14vw;background:radial-gradient(circle,rgba(42,134,232,.42),transparent 68%);animation:drift 26s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate3d(-5vw,5vw,0) scale(1.12)}}
+.arches{position:absolute;inset:auto 0 0 0;height:62%;z-index:0;display:flex;gap:2.2%;padding:0 6%;opacity:.5;pointer-events:none}
+.arches i{flex:1;border-radius:999px 999px 0 0;background:linear-gradient(to top,rgba(255,255,255,.085),rgba(255,255,255,0) 72%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);transform:translateY(22%)}
+.arches i:nth-child(odd){transform:translateY(34%)}
+.hero-in{position:relative;z-index:2;width:100%}
+.hero-head{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;margin-bottom:clamp(1.6rem,4vh,2.6rem)}
+.hero-greek{font-family:var(--disp);font-weight:600;font-size:.9375rem;color:rgba(255,255,255,.6)}
+.d1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+.d1 .ln i{display:block;font-style:normal;transform:translateY(108%);transition:transform 1.15s var(--e)}
+.d1 .ln:nth-child(2) i{transition-delay:.09s}.d1 .ln:nth-child(3) i{transition-delay:.18s}
+.ready .d1 .ln i{transform:translateY(0)}
+.hero-foot{display:grid;grid-template-columns:1fr auto;gap:clamp(1.5rem,4vw,4rem);align-items:end;margin-top:clamp(1.8rem,5vh,3rem)}
+.fade{opacity:0;transform:translateY(16px);transition:opacity .9s var(--e) .5s,transform .9s var(--e) .5s}
+.ready .fade{opacity:1;transform:none}
+.hero-acts{display:flex;gap:.6rem;flex-wrap:wrap}
+.proof{display:flex;align-items:center;gap:1.1rem;padding:1rem 1.3rem;border-radius:999px;background:rgba(255,255,255,.1);
+  backdrop-filter:blur(14px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.avs{display:flex}
+.avs span{width:34px;height:34px;border-radius:999px;margin-left:-11px;box-shadow:0 0 0 2px var(--blue-900);
+  background:linear-gradient(140deg,var(--blue-400),var(--blue-700))}
+.avs span:first-child{margin-left:0}
+.avs span:nth-child(2){background:linear-gradient(140deg,#8EC5FF,#1562B8)}
+.avs span:nth-child(3){background:linear-gradient(140deg,#BBDBFB,#0F4486)}
+.proof small{display:block;font-size:.75rem;color:rgba(255,255,255,.6)}
+.proof b{font-family:var(--disp);font-size:.9375rem;letter-spacing:-.02em}
+
+/* ---------- stack marquee ---------- */
+.strip{padding:clamp(2rem,4vh,3rem) 0 clamp(1rem,2vh,1.5rem);overflow:hidden}
+.strip-mask{position:relative}
+.strip-mask::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--bg),transparent 10%,transparent 90%,var(--bg))}
+.marq{display:flex;gap:.75rem;width:max-content;animation:scroll 40s linear infinite}
+@keyframes scroll{to{transform:translateX(-50%)}}
+.marq span{font-family:var(--disp);font-weight:700;font-size:1rem;letter-spacing:-.02em;white-space:nowrap;
+  padding:.7rem 1.4rem;border-radius:999px;background:#fff;color:var(--ink-65);box-shadow:var(--sh-1)}
+
+/* ===========================================================
+   Sections
+   =========================================================== */
+.sec{padding:clamp(4.5rem,10vh,8rem) 0}
+.sec-head{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(1.5rem,4vw,4rem);align-items:end;margin-bottom:clamp(2.2rem,5vh,3.5rem)}
+.sec-head .d2{margin-top:1.1rem}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s var(--e),transform .85s var(--e)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.07s}.rv.d2{transition-delay:.14s}.rv.d3{transition-delay:.21s}.rv.d4{transition-delay:.28s}
+
+/* ---------- bento ---------- */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(.75rem,1.4vw,1.1rem)}
+.card{background:var(--card);border-radius:var(--r-lg);padding:clamp(1.5rem,2.3vw,2.1rem);box-shadow:var(--sh-1);
+  transition:transform .55s var(--e),box-shadow .55s var(--e);position:relative;overflow:hidden}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh-2)}
+.b-half{grid-column:span 3}.b-third{grid-column:span 2}.b-full{grid-column:span 6}
+.card .ico{width:46px;height:46px;border-radius:var(--r-sm);display:grid;place-items:center;background:var(--blue-100);
+  color:var(--blue-700);margin-bottom:1.1rem}
+.card p{margin:.6rem 0 0;color:var(--ink-65);font-size:.9375rem}
+.card.dark{background:linear-gradient(150deg,var(--blue-800),var(--blue-950));color:#fff}
+.card.dark p{color:rgba(255,255,255,.68)}
+.card.dark .ico{background:rgba(255,255,255,.12);color:#fff}
+.card.blue{background:linear-gradient(150deg,var(--blue-600),var(--blue-800));color:#fff}
+.card.blue p{color:rgba(255,255,255,.72)}
+.big-stat{font-family:var(--disp);font-weight:800;font-size:clamp(2.6rem,4.4vw,3.8rem);letter-spacing:-.05em;line-height:1}
+/* chiffre : dégradé resserré sur des bleus foncés pour rester contrasté sur blanc */
+.gradn{background:linear-gradient(104deg,var(--blue-800),var(--blue-600) 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* légende d'un chiffre : même fonte et même taille que les paragraphes, contraste renforcé */
+.stat-cap{font-family:var(--body);font-size:1rem;line-height:1.5;color:rgba(8,9,11,.74);max-width:26ch}
+.card .arch-deco{position:absolute;right:-18%;bottom:-32%;width:62%;aspect-ratio:1/1.5;border-radius:999px 999px 0 0;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);background:linear-gradient(to top,rgba(255,255,255,.08),transparent 70%);pointer-events:none}
+
+/* terminal mini dans le bento */
+.term{margin-top:1.2rem;border-radius:var(--r-sm);background:rgba(0,0,0,.28);padding:.9rem 1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78125rem;line-height:1.8;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.term div{color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.term b{color:#8EE6A8;font-weight:400}
+.term u{color:var(--blue-400);text-decoration:none}
+
+/* ---------- Offres ---------- */
+.offers{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.75rem,1.4vw,1.1rem)}
+.offer{background:var(--card);border-radius:var(--r-lg);padding:clamp(1.6rem,2.4vw,2.2rem);box-shadow:var(--sh-1);
+  position:relative;overflow:hidden;min-height:300px;display:flex;flex-direction:column;
+  transition:transform .55s var(--e),box-shadow .55s var(--e)}
+.offer::before{content:"";position:absolute;left:0;right:0;top:0;height:0;z-index:0;
+  background:linear-gradient(150deg,var(--blue-600),var(--blue-900));transition:height .6s var(--e)}
+.offer:hover::before{height:100%}
+.offer>*{position:relative;z-index:1}
+.offer:hover{transform:translateY(-5px);box-shadow:var(--sh-3);color:#fff}
+.offer .ico{width:48px;height:48px;border-radius:var(--r-sm);display:grid;place-items:center;background:var(--blue-100);
+  color:var(--blue-700);transition:all .5s var(--e)}
+.offer:hover .ico{background:rgba(255,255,255,.16);color:#fff}
+.offer h3{margin:1.5rem 0 .65rem}
+.offer p{margin:0;color:var(--ink-65);font-size:.9375rem;transition:color .5s}
+.offer:hover p{color:rgba(255,255,255,.76)}
+.offer .tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:auto;padding-top:1.6rem}
+.offer .tags i{font-style:normal;font-family:var(--disp);font-weight:600;font-size:.75rem;padding:.35rem .75rem;
+  border-radius:999px;background:var(--blue-50);color:var(--blue-700);transition:all .5s}
+.offer:hover .tags i{background:rgba(255,255,255,.14);color:#fff}
+.offer .num{position:absolute;top:clamp(1.6rem,2.4vw,2.2rem);right:clamp(1.6rem,2.4vw,2.2rem);font-family:var(--disp);
+  font-weight:800;font-size:.8125rem;color:var(--ink-45);transition:color .5s}
+.offer:hover .num{color:rgba(255,255,255,.55)}
+
+/* ===========================================================
+   PORTFOLIO — maquettes de sites
+   =========================================================== */
+.works{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(.75rem,1.4vw,1.1rem)}
+.case{position:relative;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;box-shadow:var(--sh-1);color:#fff;
+  padding:clamp(1.5rem,2.3vw,2.1rem) clamp(1.5rem,2.3vw,2.1rem) 0;display:flex;flex-direction:column;
+  transition:transform .6s var(--e),box-shadow .6s var(--e);isolation:isolate}
+.case:hover{transform:translateY(-6px);box-shadow:var(--sh-3)}
+.case::before{content:"";position:absolute;inset:0;z-index:-2}
+.case::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.22;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E")}
+.case.g1::before{background:radial-gradient(85% 85% at 20% 8%,#62A9F2,#07213F 74%)}
+.case.g2::before{background:radial-gradient(85% 85% at 80% 12%,#2A86E8,#04152B 76%)}
+.case.g3::before{background:radial-gradient(90% 90% at 50% 0%,#BBDBFB,#0F4486 72%)}
+.case.g4::before{background:radial-gradient(100% 85% at 8% 10%,#1562B8,#04152B 78%)}
+.case.w7{grid-column:span 7}.case.w5{grid-column:span 5}
+.case-head{position:relative;z-index:2}
+.case-head .cat{display:inline-block;font-family:var(--disp);font-weight:600;font-size:.75rem;padding:.35rem .8rem;
+  border-radius:999px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px)}
+.case-head h3{margin:.8rem 0 .7rem;color:#fff}
+.stack{display:flex;flex-wrap:wrap;gap:.35rem}
+.stack i{font-style:normal;font-family:var(--disp);font-weight:600;font-size:.6875rem;padding:.3rem .65rem;border-radius:999px;
+  background:rgba(255,255,255,.12);color:rgba(255,255,255,.82);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+
+/* fenêtre navigateur */
+.shot{margin:clamp(1.4rem,2.4vw,2rem) 0 0;border-radius:12px 12px 0 0;background:#fff;overflow:hidden;
+  box-shadow:0 -2px 10px rgba(4,21,43,.12),0 -24px 60px -20px rgba(4,21,43,.5);
+  transform:translateY(12%);transition:transform .7s var(--e);flex:1;min-height:0}
+.case:hover .shot{transform:translateY(5%)}
+.shot .bar{display:flex;align-items:center;gap:.4rem;padding:.6rem .8rem;background:#F4F6F9;border-bottom:1px solid rgba(8,9,11,.06)}
+.shot .bar i{width:8px;height:8px;border-radius:999px;background:#D7DDE6;flex:none}
+.shot .bar .url{margin-left:.5rem;flex:1;height:18px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(8,9,11,.07);
+  font-family:var(--body);font-size:.625rem;color:var(--ink-45);display:flex;align-items:center;padding:0 .6rem;letter-spacing:0}
+.sk{padding:clamp(.8rem,1.4vw,1.1rem);display:grid;gap:.5rem}
+.sk .nav-sk{display:flex;align-items:center;gap:.4rem}
+.sk .nav-sk b{width:34px;height:9px;border-radius:3px;background:var(--blue-800);display:block}
+.sk .nav-sk u{width:20px;height:6px;border-radius:3px;background:var(--ink-10);display:block}
+.sk .nav-sk em{margin-left:auto;width:42px;height:14px;border-radius:999px;background:var(--blue-600);display:block}
+.sk .hero-sk{height:clamp(44px,7vw,78px);border-radius:10px;background:linear-gradient(120deg,var(--blue-600),var(--blue-900));position:relative;overflow:hidden}
+.sk .hero-sk::after{content:"";position:absolute;left:10%;top:32%;width:46%;height:10px;border-radius:3px;background:rgba(255,255,255,.75);box-shadow:0 18px 0 rgba(255,255,255,.35),0 34px 0 rgba(255,255,255,.2)}
+.sk .row{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.sk .row span{height:clamp(22px,3.4vw,38px);border-radius:8px;background:var(--blue-50);box-shadow:inset 0 0 0 1px rgba(8,9,11,.05)}
+.sk .row.two{grid-template-columns:1.6fr 1fr}
+.sk .line{height:7px;border-radius:3px;background:var(--ink-10)}
+.sk .line.s{width:60%}
+
+/* écran mobile */
+.shot.phone{width:min(56%,230px);margin-left:auto;margin-right:auto;border-radius:26px 26px 0 0;padding:8px 8px 0;background:#0B0D10;
+  box-shadow:0 -2px 10px rgba(4,21,43,.2),0 -26px 60px -18px rgba(4,21,43,.55)}
+.shot.phone .inner{background:#fff;border-radius:20px 20px 0 0;overflow:hidden;height:100%}
+.shot.phone .notch{width:34%;height:5px;border-radius:999px;background:rgba(255,255,255,.3);margin:0 auto .5rem}
+.sk.app{gap:.45rem}
+.sk.app .app-top{display:flex;align-items:center;gap:.4rem}
+.sk.app .app-top b{width:22px;height:22px;border-radius:999px;background:linear-gradient(140deg,var(--blue-400),var(--blue-700));display:block}
+.sk.app .app-top u{width:46px;height:7px;border-radius:3px;background:var(--ink-10);display:block}
+.sk.app .bal{height:40px;border-radius:10px;background:linear-gradient(120deg,var(--blue-600),var(--blue-900))}
+.sk.app .li{display:flex;align-items:center;gap:.4rem}
+.sk.app .li span{width:18px;height:18px;border-radius:6px;background:var(--blue-50);flex:none}
+.sk.app .li em{flex:1;height:6px;border-radius:3px;background:var(--ink-10);display:block}
+.sk.app .tabs{display:flex;gap:.4rem;margin-top:.2rem}
+.sk.app .tabs i{flex:1;height:5px;border-radius:999px;background:var(--ink-10)}
+.sk.app .tabs i:first-child{background:var(--blue-600)}
+
+/* badge perf */
+.perf{position:absolute;top:clamp(1.5rem,2.3vw,2.1rem);right:clamp(1.5rem,2.3vw,2.1rem);z-index:3;
+  display:flex;align-items:center;gap:.5rem;padding:.45rem .8rem .45rem .5rem;border-radius:999px;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);
+  opacity:0;transform:translateY(-6px);transition:all .5s var(--e)}
+.case:hover .perf{opacity:1;transform:none}
+.perf b{width:30px;height:30px;border-radius:999px;background:#1FBF6B;color:#04281A;display:grid;place-items:center;
+  font-family:var(--disp);font-weight:800;font-size:.6875rem}
+.perf small{font-family:var(--disp);font-weight:600;font-size:.6875rem;color:rgba(255,255,255,.85)}
+
+/* ---------- Stats ---------- */
+.stats-panel{margin:0 var(--pad);border-radius:var(--r-xl);padding:clamp(2.2rem,5vw,4rem);position:relative;overflow:hidden;
+  background:linear-gradient(152deg,#07213F,#04152B 60%,#0B3161);color:#fff;box-shadow:var(--sh-2)}
+.stats-panel .arches{height:70%;opacity:.4}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1rem,2vw,1.6rem);position:relative;z-index:1}
+.stat{padding:1.4rem 1.5rem;border-radius:var(--r-md);background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.stat .num{font-family:var(--disp);font-weight:800;font-size:clamp(2.2rem,3.8vw,3.2rem);letter-spacing:-.05em;line-height:1}
+.stat .lbl{margin-top:.5rem;font-size:.875rem;color:rgba(255,255,255,.62)}
+
+/* ---------- Process ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(.75rem,1.4vw,1.1rem)}
+.step{background:var(--card);border-radius:var(--r-lg);padding:clamp(1.4rem,2.2vw,1.9rem);box-shadow:var(--sh-1);
+  transition:transform .55s var(--e),box-shadow .55s var(--e)}
+.step:hover{transform:translateY(-4px);box-shadow:var(--sh-2)}
+.step .n{width:40px;height:40px;border-radius:999px;display:grid;place-items:center;margin-bottom:1.1rem;
+  font-family:var(--disp);font-weight:800;font-size:.875rem;background:var(--ink);color:#fff}
+.step .dur{display:inline-block;margin-top:.9rem;font-family:var(--disp);font-weight:600;font-size:.75rem;
+  padding:.3rem .7rem;border-radius:999px;background:var(--blue-50);color:var(--blue-700)}
+.step p{margin:.55rem 0 0;color:var(--ink-65);font-size:.9375rem}
+
+/* ---------- Testimonial ---------- */
+.testi{border-radius:var(--r-xl);padding:clamp(2rem,4.5vw,3.6rem);background:var(--card);box-shadow:var(--sh-2);
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(1.5rem,3vw,2.8rem);align-items:center}
+.testi .av{width:84px;height:84px;border-radius:999px;background:linear-gradient(140deg,var(--blue-400),var(--blue-800));flex:none;box-shadow:var(--sh-1)}
+.testi blockquote{margin:0;font-family:var(--disp);font-weight:700;letter-spacing:-.035em;font-size:clamp(1.3rem,2.6vw,2.1rem);line-height:1.18}
+.testi .who{margin-top:1.2rem;font-size:.9375rem;color:var(--ink-45)}
+
+/* ---------- News ---------- */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.75rem,1.4vw,1.1rem)}
+.post{background:var(--card);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);cursor:pointer;
+  transition:transform .55s var(--e),box-shadow .55s var(--e);display:flex;flex-direction:column}
+.post:hover{transform:translateY(-5px);box-shadow:var(--sh-2)}
+.post .ph{aspect-ratio:16/10;position:relative;overflow:hidden;margin:10px 10px 0;border-radius:var(--r-md)}
+.post .ph div{position:absolute;inset:0;transition:transform 1.2s var(--e)}
+.post:hover .ph div{transform:scale(1.07)}
+.v1{background:radial-gradient(85% 85% at 22% 12%,#62A9F2,#07213F 72%)}
+.v2{background:radial-gradient(85% 85% at 78% 16%,#2A86E8,#04152B 74%)}
+.v3{background:radial-gradient(80% 100% at 46% 108%,#BBDBFB,#0F4486 72%)}
+.post .bd{padding:clamp(1.1rem,1.8vw,1.5rem)}
+.pmeta{display:flex;align-items:center;gap:.6rem;font-family:var(--disp);font-size:.75rem;font-weight:600}
+.pmeta i{font-style:normal;padding:.3rem .7rem;border-radius:999px;background:var(--blue-50);color:var(--blue-700)}
+.pmeta em{font-style:normal;color:var(--ink-45)}
+.post h3{margin:.85rem 0 .5rem;font-size:1.1875rem;letter-spacing:-.03em;line-height:1.22}
+.post p{margin:0;font-size:.9375rem;color:var(--ink-65)}
+
+/* ---------- CTA ---------- */
+.cta{margin:0 var(--pad) var(--pad);border-radius:var(--r-xl);overflow:hidden;position:relative;
+  padding:clamp(3rem,8vh,6rem) clamp(1.5rem,4vw,3rem);text-align:center;color:#fff;
+  background:radial-gradient(60% 60% at 50% -10%,rgba(42,134,232,.75),transparent 70%),linear-gradient(160deg,#07213F,#04152B 55%,#0B3161);
+  box-shadow:var(--sh-2)}
+.cta .arches{height:55%;opacity:.45}
+.cta-in{position:relative;z-index:2;max-width:820px;margin:0 auto}
+.cta .d2{margin:1.2rem 0}
+.cta p{color:rgba(255,255,255,.7);max-width:48ch;margin:0 auto 2rem}
+.cta-acts{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+
+/* ---------- Footer ---------- */
+footer{padding:clamp(2.5rem,5vh,4rem) 0 2rem}
+.f-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(1.5rem,3vw,3rem);padding-bottom:2.5rem}
+footer .f-about{margin:1rem 0 1.6rem;max-width:32ch;color:var(--ink-65);font-size:.9375rem}
+.f-col h5{font-family:var(--disp);font-size:.8125rem;font-weight:700;color:var(--ink-45);margin:0 0 1rem}
+.f-col ul{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+.f-col a{font-size:.9375rem;color:var(--ink-65);transition:color .3s}
+.f-col a:hover{color:var(--ink)}
+.f-bot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.3rem 1.6rem;border-radius:999px;
+  background:#fff;box-shadow:var(--sh-1);font-size:.8125rem;color:var(--ink-45)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1080px){
+  .b-half{grid-column:span 6}.b-third{grid-column:span 3}
+  .offers,.posts,.steps{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .f-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:880px){
+  .nav-links{display:none}
+  .sec-head,.hero-foot{grid-template-columns:1fr;gap:1.4rem}
+  .works{grid-template-columns:1fr}
+  .case.w7,.case.w5{grid-column:span 1;min-height:460px}
+  .testi{grid-template-columns:1fr}
+  :root{--r-xl:28px;--r-lg:22px}
+}
+@media(max-width:600px){
+  .b-third{grid-column:span 6}
+  .offers,.posts,.steps,.stats-grid,.f-grid{grid-template-columns:1fr}
+  .proof{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important}
+  .rv,.fade{opacity:1;transform:none}.d1 .ln i{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="nav-pill">
+    <a href="#top" class="brand">
+      <svg class="logo" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="10" fill="url(#lg)"/>
+        <path d="M10 23V15a6 6 0 0 1 12 0v8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2A86E8"/><stop offset="1" stop-color="#07213F"/></linearGradient></defs>
+      </svg>
+      Kalimera
+    </a>
+    <ul class="nav-links">
+      <li><a href="#offres" data-i18n="nav.offers">Services</a></li>
+      <li><a href="#work" data-i18n="nav.work">Projets</a></li>
+      <li><a href="#approche" data-i18n="nav.about">Studio</a></li>
+      <li><a href="#news" data-i18n="nav.news">Journal</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Langue">
+      <button class="on" data-lang="fr">FR</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="es">ES</button>
+    </div>
+    <a href="#contact" class="btn btn-sm"><span data-i18n="nav.cta">Parlons-en</span>
+      <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div>
+  <div class="arches"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-in">
+    <div class="hero-head">
+      <span class="chip on-dark fade" data-i18n="hero.chip">Sites · Web apps · Mobile</span>
+      <span class="hero-greek fade" data-i18n="hero.greek">Καλημέρα — « bonjour », en grec</span>
+    </div>
+
+    <h1 class="d1">
+      <span class="ln"><i data-i18n="hero.l1">On conçoit,</i></span>
+      <span class="ln"><i data-i18n="hero.l2">on code,</i></span>
+      <span class="ln"><i data-i18n="hero.l3"><span class="grad">on livre.</span></i></span>
+    </h1>
+
+    <div class="hero-foot fade">
+      <div>
+        <p class="lead lead-l" data-i18n="hero.desc">Studio de développement web et mobile. Sites vitrines, applications web sur-mesure et apps iOS/Android — design et code par la même équipe, sans template et sans sous-traitance.</p>
+        <div class="hero-acts" style="margin-top:1.6rem">
+          <a href="#contact" class="btn btn-white"><span data-i18n="cta.start">Démarrer un projet</span>
+            <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+          <a href="#work" class="btn btn-soft"><span data-i18n="cta.work">Voir nos projets</span>
+            <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
+      </div>
+      <div class="proof">
+        <div class="avs"><span></span><span></span><span></span></div>
+        <div><b data-i18n="hero.proof1">180+ projets livrés</b><small data-i18n="hero.proof2">98 de score Lighthouse en moyenne</small></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STACK ============ -->
+<div class="strip">
+  <div class="strip-mask">
+    <div class="marq">
+      <span>Next.js</span><span>React</span><span>TypeScript</span><span>React Native</span><span>Swift</span>
+      <span>Node.js</span><span>Shopify</span><span>Tailwind CSS</span><span>PostgreSQL</span><span>Vercel</span><span>Figma</span>
+      <span>Next.js</span><span>React</span><span>TypeScript</span><span>React Native</span><span>Swift</span>
+      <span>Node.js</span><span>Shopify</span><span>Tailwind CSS</span><span>PostgreSQL</span><span>Vercel</span><span>Figma</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STUDIO (bento) ============ -->
+<section class="sec" id="approche">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv">
+        <span class="chip" data-i18n="man.chip">Le studio</span>
+        <h2 class="d2" data-i18n="man.title">Pas une agence.<br><span class="gradb">Une équipe qui code.</span></h2>
+      </div>
+      <p class="lead rv d1" data-i18n="man.desc">Vous parlez directement aux personnes qui conçoivent et développent votre projet. Pas de chef de projet intermédiaire, pas de sous-traitance offshore.</p>
+    </div>
+
+    <div class="bento">
+      <div class="card b-half dark rv">
+        <div class="arch-deco"></div>
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="m9 18-6-6 6-6M15 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3 class="d3" data-i18n="man.1t">Du sur-mesure, pas du template</h3>
+        <p data-i18n="man.1d">Chaque projet est développé pour vos besoins réels. Code propre, documenté et versionné — le dépôt vous appartient dès le premier jour.</p>
+        <div class="term">
+          <div><u>$</u> npm run build</div>
+          <div><b>✓</b> Compiled successfully — 0 errors</div>
+          <div><b>✓</b> 42 pages generated · 1.2s</div>
+        </div>
+      </div>
+      <div class="card b-third rv d1">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 12v9M4 7.5 12 12l8-4.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3 class="d3" data-i18n="man.2t">Design et dev, même équipe</h3>
+        <p data-i18n="man.2d">Les maquettes sont faites par ceux qui les intègrent. Zéro écart entre le Figma et le site en ligne.</p>
+      </div>
+      <div class="card b-third rv d2">
+        <div class="big-stat gradn" data-count="180" data-suffix="+">0</div>
+        <p class="stat-cap" data-i18n="man.stat1">Sites et applications mis en ligne depuis 2014.</p>
+      </div>
+      <div class="card b-third rv d1">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13H11l-1 9 8.5-11H12l1-9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3 class="d3" data-i18n="man.3t">Performance obsessionnelle</h3>
+        <p data-i18n="man.3d">Core Web Vitals au vert, accessibilité et SEO technique traités dès la conception — pas rattrapés après la mise en ligne.</p>
+      </div>
+      <div class="card b-third blue rv d2">
+        <div class="arch-deco"></div>
+        <h3 class="d3" data-i18n="man.4t">Multilingue de série</h3>
+        <p data-i18n="man.4d">FR · EN · ES. L'internationalisation est intégrée à l'architecture, pas branchée en plugin six mois plus tard.</p>
+      </div>
+      <div class="card b-third rv d3">
+        <div class="big-stat gradn" data-count="98">0</div>
+        <p class="stat-cap" data-i18n="man.stat2">Score Lighthouse moyen sur nos mises en production.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="sec" id="offres" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv">
+        <span class="chip" data-i18n="off.chip">Nos services</span>
+        <h2 class="d2" data-i18n="off.title">Du site vitrine<br><span class="gradb">à l'app mobile.</span></h2>
+      </div>
+      <div class="rv d1" style="display:flex;align-items:end;justify-content:flex-end">
+        <a href="#" class="btn btn-line"><span data-i18n="off.all">Tous nos services</span>
+          <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="offers">
+      <article class="offer rv">
+        <span class="num">01</span>
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="15" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 9h18" stroke="currentColor" stroke-width="2"/></svg></div>
+        <h3 class="d3" data-i18n="off.1t">Sites vitrines</h3>
+        <p data-i18n="off.1d">Sites de marque rapides et bien référencés, avec un back-office où vous modifiez tout vous-même, dans chaque langue.</p>
+        <div class="tags"><i>Next.js</i><i>Back-office</i><i>Multilingue</i></div>
+      </article>
+
+      <article class="offer rv d1">
+        <span class="num">02</span>
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 6v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6M9 11h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m8 3 1.5 3M16 3l-1.5 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3 class="d3" data-i18n="off.2t">E-commerce</h3>
+        <p data-i18n="off.2d">Boutiques Shopify ou sur-mesure : fiches produit qui convertissent, tunnel optimisé, paiements et logistique connectés.</p>
+        <div class="tags"><i>Shopify</i><i>Stripe</i><i>CRO</i></div>
+      </article>
+
+      <article class="offer rv d2">
+        <span class="num">03</span>
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 17V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" stroke="currentColor" stroke-width="2"/><path d="M8 12h4M8 15.5h8M8 8.5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3 class="d3" data-i18n="off.3t">Applications web</h3>
+        <p data-i18n="off.3d">Plateformes SaaS, espaces clients, outils métier et portails internes. Du cadrage fonctionnel à la mise en production.</p>
+        <div class="tags"><i>React</i><i>Node.js</i><i>PostgreSQL</i></div>
+      </article>
+
+      <article class="offer rv">
+        <span class="num">04</span>
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="3" stroke="currentColor" stroke-width="2"/><path d="M11 18.5h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3 class="d3" data-i18n="off.4t">Applications mobiles</h3>
+        <p data-i18n="off.4d">Apps iOS et Android, une seule base de code. Notifications, mode hors-ligne, et publication sur les deux stores gérée par nous.</p>
+        <div class="tags"><i>React Native</i><i>iOS</i><i>Android</i></div>
+      </article>
+
+      <article class="offer rv d1">
+        <span class="num">05</span>
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17.5 12 3l9 14.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2"/></svg></div>
+        <h3 class="d3" data-i18n="off.5t">Design UX / UI</h3>
+        <p data-i18n="off.5d">Parcours, maquettes et design system sur Figma. Prototypes cliquables validés avant la première ligne de code.</p>
+        <div class="tags"><i>Figma</i><i>Design system</i><i>Prototypage</i></div>
+      </article>
+
+      <article class="offer rv d2">
+        <span class="num">06</span>
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 4.6 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 11.5 4.6a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 19.4 11a2 2 0 1 1 0 4Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+        <h3 class="d3" data-i18n="off.6t">Maintenance & performance</h3>
+        <p data-i18n="off.6d">Hébergement, mises à jour, sauvegardes, supervision et optimisation continue de la vitesse. Avec un délai de réponse garanti.</p>
+        <div class="tags"><i>Hébergement</i><i>Monitoring</i><i>Core Web Vitals</i></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJETS ============ -->
+<section class="sec" id="work" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv">
+        <span class="chip" data-i18n="work.chip">Projets</span>
+        <h2 class="d2" data-i18n="work.title">Ce qu'on a<br><span class="gradb">mis en ligne.</span></h2>
+      </div>
+      <div class="rv d1" style="display:flex;align-items:end;justify-content:flex-end">
+        <a href="#" class="btn btn-line"><span data-i18n="work.all">Tout le portfolio</span>
+          <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="works">
+      <!-- 1 : site vitrine -->
+      <article class="case w7 g1 rv">
+        <div class="perf"><b>98</b><small data-i18n="work.perf">Lighthouse</small></div>
+        <div class="case-head">
+          <span class="cat" data-i18n="work.1c">Site vitrine · Hôtellerie</span>
+          <h3 class="d3">Thalassa Resorts</h3>
+          <div class="stack"><i>Next.js</i><i>Sanity</i><i>3 langues</i></div>
+        </div>
+        <div class="shot">
+          <div class="bar"><i></i><i></i><i></i><span class="url">thalassa-resorts.com</span></div>
+          <div class="sk">
+            <div class="nav-sk"><b></b><u></u><u></u><u></u><em></em></div>
+            <div class="hero-sk"></div>
+            <div class="row"><span></span><span></span><span></span></div>
+            <div class="line"></div><div class="line s"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2 : app mobile -->
+      <article class="case w5 g2 rv d1">
+        <div class="perf"><b>4.8</b><small data-i18n="work.store">App Store</small></div>
+        <div class="case-head">
+          <span class="cat" data-i18n="work.2c">Application mobile · Sport</span>
+          <h3 class="d3">Kyma Fitness</h3>
+          <div class="stack"><i>React Native</i><i>iOS + Android</i></div>
+        </div>
+        <div class="shot phone">
+          <div class="notch"></div>
+          <div class="inner">
+            <div class="sk app">
+              <div class="app-top"><b></b><u></u></div>
+              <div class="bal"></div>
+              <div class="li"><span></span><em></em></div>
+              <div class="li"><span></span><em></em></div>
+              <div class="li"><span></span><em></em></div>
+              <div class="tabs"><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3 : e-commerce -->
+      <article class="case w5 g3 rv d1">
+        <div class="perf"><b>+64</b><small data-i18n="work.conv">% conversion</small></div>
+        <div class="case-head">
+          <span class="cat" data-i18n="work.3c">E-commerce · Cosmétique</span>
+          <h3 class="d3">Helia Cosmetics</h3>
+          <div class="stack"><i>Shopify</i><i>Stripe</i></div>
+        </div>
+        <div class="shot">
+          <div class="bar"><i></i><i></i><i></i><span class="url">helia.com</span></div>
+          <div class="sk">
+            <div class="nav-sk"><b></b><u></u><u></u><em></em></div>
+            <div class="row two"><span style="height:46px"></span><span style="height:46px"></span></div>
+            <div class="row"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4 : web app -->
+      <article class="case w7 g4 rv d2">
+        <div class="perf"><b>2k</b><small data-i18n="work.users">utilisateurs/j</small></div>
+        <div class="case-head">
+          <span class="cat" data-i18n="work.4c">Application web · Finance</span>
+          <h3 class="d3">Delphi Capital — Espace client</h3>
+          <div class="stack"><i>React</i><i>Node.js</i><i>PostgreSQL</i></div>
+        </div>
+        <div class="shot">
+          <div class="bar"><i></i><i></i><i></i><span class="url">app.delphi-capital.com</span></div>
+          <div class="sk">
+            <div class="nav-sk"><b></b><u></u><u></u><u></u><em></em></div>
+            <div class="row two"><span style="height:50px"></span><span style="height:50px"></span></div>
+            <div class="row"><span></span><span></span><span></span></div>
+            <div class="line"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHIFFRES ============ -->
+<div class="stats-panel rv">
+  <div class="arches"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="stats-grid">
+    <div class="stat"><div class="num" data-count="180" data-suffix="+">0</div><div class="lbl" data-i18n="st.1">Projets livrés</div></div>
+    <div class="stat"><div class="num" data-count="98" data-suffix="/100">0</div><div class="lbl" data-i18n="st.2">Score Lighthouse moyen</div></div>
+    <div class="stat"><div class="num" data-count="6" data-suffix=" sem.">0</div><div class="lbl" data-i18n="st.3">Délai moyen d'un site vitrine</div></div>
+    <div class="stat"><div class="num" data-count="12">0</div><div class="lbl" data-i18n="st.4">Années d'expérience</div></div>
+  </div>
+</div>
+
+<!-- ============ MÉTHODE ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv">
+        <span class="chip" data-i18n="pr.chip">Méthode</span>
+        <h2 class="d2" data-i18n="pr.title">Quatre étapes,<br><span class="gradb">des dates fermes.</span></h2>
+      </div>
+      <p class="lead rv d1" data-i18n="pr.desc">Devis détaillé avant de commencer, et un lien de préproduction dès la première semaine : vous voyez le projet avancer en direct, pas en réunion.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><div class="n">01</div><h4 class="d4" data-i18n="pr.1t">Cadrage</h4><p data-i18n="pr.1d">Objectifs, arborescence, contenus et fonctionnalités. On sort un périmètre chiffré, ligne par ligne.</p><span class="dur" data-i18n="pr.1w">1 semaine</span></div>
+      <div class="step rv d1"><div class="n">02</div><h4 class="d4" data-i18n="pr.2t">Design</h4><p data-i18n="pr.2d">Maquettes Figma de chaque écran, en version desktop et mobile, validées avant tout développement.</p><span class="dur" data-i18n="pr.2w">2 semaines</span></div>
+      <div class="step rv d2"><div class="n">03</div><h4 class="d4" data-i18n="pr.3t">Développement</h4><p data-i18n="pr.3d">Intégration, back-office, contenus dans les trois langues. Préproduction accessible en continu.</p><span class="dur" data-i18n="pr.3w">3 à 6 semaines</span></div>
+      <div class="step rv d3"><div class="n">04</div><h4 class="d4" data-i18n="pr.4t">Mise en ligne & suivi</h4><p data-i18n="pr.4d">Tests, redirections, formation à votre back-office, puis maintenance et optimisations mensuelles.</p><span class="dur" data-i18n="pr.4w">en continu</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TÉMOIGNAGE ============ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="testi rv">
+      <div class="av"></div>
+      <div>
+        <span class="chip" data-i18n="tm.chip">Témoignage</span>
+        <blockquote style="margin-top:1.2rem" data-i18n="tm.quote">« Trois prestataires avant eux nous avaient livré un site qu'on ne pouvait pas modifier. Kalimera a tout refait en sept semaines, et depuis on publie nos pages nous-mêmes, dans les trois langues. »</blockquote>
+        <div class="who" data-i18n="tm.who">Directrice marketing — Thalassa Resorts</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JOURNAL ============ -->
+<section class="sec" id="news" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv">
+        <span class="chip" data-i18n="nw.chip">Journal</span>
+        <h2 class="d2" data-i18n="nw.title">Ce qu'on <span class="gradb">apprend.</span></h2>
+      </div>
+      <div class="rv d1" style="display:flex;align-items:end;justify-content:flex-end">
+        <a href="#" class="btn btn-line"><span data-i18n="nw.all">Tous les articles</span>
+          <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </div>
+    </div>
+    <div class="posts">
+      <article class="post rv"><div class="ph"><div class="v1"></div></div><div class="bd">
+        <div class="pmeta"><i data-i18n="nw.c1">Technique</i><em>12.09.2026</em></div>
+        <h3 data-i18n="nw.1t">Combien coûte vraiment un site vitrine en 2026</h3>
+        <p data-i18n="nw.1d">Le détail poste par poste, et pourquoi un devis à 1 500 € vous coûtera plus cher à la fin.</p>
+      </div></article>
+      <article class="post rv d1"><div class="ph"><div class="v3"></div></div><div class="bd">
+        <div class="pmeta"><i data-i18n="nw.c2">Performance</i><em>28.08.2026</em></div>
+        <h3 data-i18n="nw.2t">Nos règles pour tenir 98 de Lighthouse en production</h3>
+        <p data-i18n="nw.2d">Images, polices, scripts tiers : les six décisions qui font tout le score.</p>
+      </div></article>
+      <article class="post rv d2"><div class="ph"><div class="v2"></div></div><div class="bd">
+        <div class="pmeta"><i data-i18n="nw.c3">Mobile</i><em>05.07.2026</em></div>
+        <h3 data-i18n="nw.3t">App mobile ou site mobile : comment trancher</h3>
+        <p data-i18n="nw.3d">Les quatre questions à se poser avant d'engager un budget d'application.</p>
+      </div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contact">
+  <div class="arches"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="cta-in">
+    <span class="chip on-dark rv" data-i18n="ct.chip">Parlons-en</span>
+    <h2 class="d2 rv d1" data-i18n="ct.title">Un projet ? <span class="grad">Dites bonjour.</span></h2>
+    <p class="rv d2" data-i18n="ct.desc">Décrivez-nous votre besoin : vous recevez sous 48 h un retour technique et une estimation de budget et de délai. Sans engagement.</p>
+    <div class="cta-acts rv d3">
+      <a href="mailto:hello@kalimera.agency" class="btn btn-white"><span>hello@kalimera.agency</span>
+        <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a href="#" class="btn btn-soft"><span data-i18n="ct.call">Réserver un appel de 30 min</span>
+        <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a href="#top" class="brand">
+          <svg class="logo" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="10" fill="url(#lg2)"/>
+            <path d="M10 23V15a6 6 0 0 1 12 0v8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+            <defs><linearGradient id="lg2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2A86E8"/><stop offset="1" stop-color="#07213F"/></linearGradient></defs>
+          </svg>
+          Kalimera
+        </a>
+        <p class="f-about" data-i18n="ft.about">Studio indépendant de développement web et mobile. Sites, applications et apps — conçus et codés en interne.</p>
+        <a href="#contact" class="btn btn-blue btn-sm"><span data-i18n="nav.cta">Parlons-en</span>
+          <span class="circ"><svg class="ar" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </div>
+      <div class="f-col">
+        <h5 data-i18n="ft.h1">Services</h5>
+        <ul>
+          <li><a href="#" data-i18n="off.1t">Sites vitrines</a></li>
+          <li><a href="#" data-i18n="off.2t">E-commerce</a></li>
+          <li><a href="#" data-i18n="off.3t">Applications web</a></li>
+          <li><a href="#" data-i18n="off.4t">Applications mobiles</a></li>
+          <li><a href="#" data-i18n="off.5t">Design UX / UI</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5 data-i18n="ft.h2">Studio</h5>
+        <ul>
+          <li><a href="#approche" data-i18n="nav.about">Studio</a></li>
+          <li><a href="#work" data-i18n="nav.work">Projets</a></li>
+          <li><a href="#news" data-i18n="nav.news">Journal</a></li>
+          <li><a href="#" data-i18n="ft.jobs">Carrières</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5 data-i18n="ft.h3">Contact</h5>
+        <ul>
+          <li><a href="mailto:hello@kalimera.agency">hello@kalimera.agency</a></li>
+          <li><a href="tel:+33100000000">+33 1 00 00 00 00</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bot">
+      <span>© 2026 Kalimera — kalimera.agency</span>
+      <span data-i18n="ft.legal">Mentions légales · Confidentialité · Cookies</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ i18n ============ */
+const I18N={
+ fr:{},
+ en:{
+  "nav.offers":"Services","nav.work":"Work","nav.about":"Studio","nav.news":"Journal","nav.cta":"Let's talk",
+  "hero.chip":"Websites · Web apps · Mobile","hero.greek":"Καλημέρα — “good morning”, in Greek",
+  "hero.l1":"We design,","hero.l2":"we build,","hero.l3":"<span class='grad'>we ship.</span>",
+  "hero.desc":"Web and mobile development studio. Marketing sites, custom web applications and iOS/Android apps — design and code by the same team, no templates, no outsourcing.",
+  "cta.start":"Start a project","cta.work":"See our work",
+  "hero.proof1":"180+ projects shipped","hero.proof2":"98 average Lighthouse score",
+  "man.chip":"The studio","man.title":"Not an agency.<br><span class='gradb'>A team that codes.</span>",
+  "man.desc":"You talk directly to the people designing and building your project. No middle-manager, no offshore subcontracting.",
+  "man.1t":"Custom-built, never templated","man.1d":"Every project is built for your actual needs. Clean, documented, version-controlled code — the repository is yours from day one.",
+  "man.2t":"Design and dev, one team","man.2d":"The mockups are made by the people who build them. Zero gap between the Figma file and the live site.",
+  "man.3t":"Obsessive about performance","man.3d":"Core Web Vitals in the green, accessibility and technical SEO handled by design — not patched after launch.",
+  "man.4t":"Multilingual by default","man.4d":"FR · EN · ES. Internationalisation is part of the architecture, not a plugin bolted on six months later.",
+  "man.stat1":"Websites and apps shipped since 2014.","man.stat2":"Average Lighthouse score across our production releases.",
+  "off.chip":"Our services","off.title":"From marketing site<br><span class='gradb'>to mobile app.</span>","off.all":"All services",
+  "off.1t":"Marketing websites","off.1d":"Fast, well-ranked brand sites with a back office where you edit everything yourself, in every language.",
+  "off.2t":"E-commerce","off.2d":"Shopify or custom stores: product pages that convert, an optimised funnel, payments and logistics connected.",
+  "off.3t":"Web applications","off.3d":"SaaS platforms, client portals, internal tools and business software. From functional scoping to production.",
+  "off.4t":"Mobile applications","off.4d":"iOS and Android apps from a single codebase. Notifications, offline mode, and both store submissions handled by us.",
+  "off.5t":"UX / UI design","off.5d":"User journeys, mockups and design systems in Figma. Clickable prototypes signed off before the first line of code.",
+  "off.6t":"Maintenance & performance","off.6d":"Hosting, updates, backups, monitoring and continuous speed optimisation. With a guaranteed response time.",
+  "work.chip":"Work","work.title":"What we’ve<br><span class='gradb'>put live.</span>","work.all":"Full portfolio",
+  "work.1c":"Marketing site · Hospitality","work.2c":"Mobile app · Fitness","work.3c":"E-commerce · Beauty","work.4c":"Web app · Finance",
+  "work.perf":"Lighthouse","work.store":"App Store","work.conv":"% conversion","work.users":"users/day",
+  "st.1":"Projects shipped","st.2":"Average Lighthouse score","st.3":"Typical website lead time","st.4":"Years of experience",
+  "pr.chip":"Method","pr.title":"Four phases,<br><span class='gradb'>firm dates.</span>",
+  "pr.desc":"A detailed quote before we start, and a staging link from week one: you watch the project progress live, not in meetings.",
+  "pr.1t":"Scoping","pr.1d":"Goals, site structure, content and features. You get a costed scope, line by line.","pr.1w":"1 week",
+  "pr.2t":"Design","pr.2d":"Figma mockups of every screen, desktop and mobile, signed off before any development.","pr.2w":"2 weeks",
+  "pr.3t":"Development","pr.3d":"Build, back office, content in all three languages. Staging available throughout.","pr.3w":"3 to 6 weeks",
+  "pr.4t":"Launch & support","pr.4d":"Testing, redirects, back-office training, then maintenance and monthly improvements.","pr.4w":"ongoing",
+  "tm.chip":"Testimonial",
+  "tm.quote":"“Three suppliers before them delivered a site we couldn’t edit. Kalimera rebuilt everything in seven weeks, and we’ve been publishing our own pages since — in all three languages.”",
+  "tm.who":"Marketing Director — Thalassa Resorts",
+  "nw.chip":"Journal","nw.title":"What we’re <span class='gradb'>learning.</span>","nw.all":"All articles",
+  "nw.c1":"Engineering","nw.c2":"Performance","nw.c3":"Mobile",
+  "nw.1t":"What a marketing website really costs in 2026","nw.1d":"The breakdown line by line, and why a €1,500 quote ends up costing you more.",
+  "nw.2t":"Our rules for holding a 98 Lighthouse score in production","nw.2d":"Images, fonts, third-party scripts: the six decisions that make the whole score.",
+  "nw.3t":"Mobile app or mobile site: how to decide","nw.3d":"The four questions to answer before committing an app budget.",
+  "ct.chip":"Let’s talk","ct.title":"Got a project? <span class='grad'>Say hello.</span>",
+  "ct.desc":"Tell us what you need: within 48 hours you get technical feedback and an estimate of budget and timeline. No strings.",
+  "ct.call":"Book a 30-min call",
+  "ft.about":"Independent web and mobile development studio. Websites, applications and apps — designed and built in-house.",
+  "ft.h1":"Services","ft.h2":"Studio","ft.h3":"Contact","ft.jobs":"Careers","ft.legal":"Legal · Privacy · Cookies"
+ },
+ es:{
+  "nav.offers":"Servicios","nav.work":"Proyectos","nav.about":"Estudio","nav.news":"Diario","nav.cta":"Hablemos",
+  "hero.chip":"Webs · Web apps · Móvil","hero.greek":"Καλημέρα — «buenos días», en griego",
+  "hero.l1":"Diseñamos,","hero.l2":"programamos,","hero.l3":"<span class='grad'>entregamos.</span>",
+  "hero.desc":"Estudio de desarrollo web y móvil. Webs corporativas, aplicaciones web a medida y apps iOS/Android — diseño y código del mismo equipo, sin plantillas ni subcontratación.",
+  "cta.start":"Iniciar un proyecto","cta.work":"Ver proyectos",
+  "hero.proof1":"+180 proyectos entregados","hero.proof2":"98 de puntuación Lighthouse media",
+  "man.chip":"El estudio","man.title":"No una agencia.<br><span class='gradb'>Un equipo que programa.</span>",
+  "man.desc":"Hablas directamente con quienes diseñan y desarrollan tu proyecto. Sin jefe de proyecto intermedio, sin subcontratación offshore.",
+  "man.1t":"A medida, nunca plantillas","man.1d":"Cada proyecto se desarrolla para tus necesidades reales. Código limpio, documentado y versionado — el repositorio es tuyo desde el primer día.",
+  "man.2t":"Diseño y desarrollo, un equipo","man.2d":"Las maquetas las hace quien las implementa. Cero diferencia entre el Figma y la web publicada.",
+  "man.3t":"Obsesión por el rendimiento","man.3d":"Core Web Vitals en verde, accesibilidad y SEO técnico resueltos en el diseño — no parcheados tras el lanzamiento.",
+  "man.4t":"Multilingüe de serie","man.4d":"FR · EN · ES. La internacionalización forma parte de la arquitectura, no es un plugin añadido seis meses después.",
+  "man.stat1":"Webs y aplicaciones publicadas desde 2014.","man.stat2":"Puntuación Lighthouse media en nuestras publicaciones.",
+  "off.chip":"Nuestros servicios","off.title":"De la web corporativa<br><span class='gradb'>a la app móvil.</span>","off.all":"Todos los servicios",
+  "off.1t":"Webs corporativas","off.1d":"Webs de marca rápidas y bien posicionadas, con un panel donde lo editas todo tú mismo, en cada idioma.",
+  "off.2t":"E-commerce","off.2d":"Tiendas Shopify o a medida: fichas de producto que convierten, embudo optimizado, pagos y logística conectados.",
+  "off.3t":"Aplicaciones web","off.3d":"Plataformas SaaS, áreas de cliente, herramientas internas y portales. Del encuadre funcional a producción.",
+  "off.4t":"Aplicaciones móviles","off.4d":"Apps iOS y Android con una sola base de código. Notificaciones, modo sin conexión y publicación en ambas tiendas gestionada por nosotros.",
+  "off.5t":"Diseño UX / UI","off.5d":"Recorridos, maquetas y design system en Figma. Prototipos navegables validados antes de la primera línea de código.",
+  "off.6t":"Mantenimiento y rendimiento","off.6d":"Alojamiento, actualizaciones, copias de seguridad, supervisión y optimización continua de la velocidad. Con tiempo de respuesta garantizado.",
+  "work.chip":"Proyectos","work.title":"Lo que hemos<br><span class='gradb'>publicado.</span>","work.all":"Ver portfolio",
+  "work.1c":"Web corporativa · Hotelería","work.2c":"App móvil · Fitness","work.3c":"E-commerce · Cosmética","work.4c":"Aplicación web · Finanzas",
+  "work.perf":"Lighthouse","work.store":"App Store","work.conv":"% conversión","work.users":"usuarios/día",
+  "st.1":"Proyectos entregados","st.2":"Puntuación Lighthouse media","st.3":"Plazo medio de una web","st.4":"Años de experiencia",
+  "pr.chip":"Método","pr.title":"Cuatro etapas,<br><span class='gradb'>fechas firmes.</span>",
+  "pr.desc":"Presupuesto detallado antes de empezar y un enlace de preproducción desde la primera semana: ves avanzar el proyecto en directo, no en reuniones.",
+  "pr.1t":"Encuadre","pr.1d":"Objetivos, arquitectura, contenidos y funcionalidades. Sacamos un alcance presupuestado, línea a línea.","pr.1w":"1 semana",
+  "pr.2t":"Diseño","pr.2d":"Maquetas en Figma de cada pantalla, en escritorio y móvil, validadas antes de desarrollar.","pr.2w":"2 semanas",
+  "pr.3t":"Desarrollo","pr.3d":"Implementación, panel de administración y contenidos en los tres idiomas. Preproducción accesible en todo momento.","pr.3w":"3 a 6 semanas",
+  "pr.4t":"Publicación y seguimiento","pr.4d":"Pruebas, redirecciones, formación en tu panel, y después mantenimiento y mejoras mensuales.","pr.4w":"continuo",
+  "tm.chip":"Testimonio",
+  "tm.quote":"«Tres proveedores antes de ellos nos entregaron una web que no podíamos modificar. Kalimera lo rehízo todo en siete semanas, y desde entonces publicamos nuestras páginas nosotros mismos, en los tres idiomas.»",
+  "tm.who":"Directora de marketing — Thalassa Resorts",
+  "nw.chip":"Diario","nw.title":"Lo que <span class='gradb'>aprendemos.</span>","nw.all":"Todos los artículos",
+  "nw.c1":"Técnica","nw.c2":"Rendimiento","nw.c3":"Móvil",
+  "nw.1t":"Cuánto cuesta realmente una web corporativa en 2026","nw.1d":"El detalle partida por partida, y por qué un presupuesto de 1.500 € te saldrá más caro al final.",
+  "nw.2t":"Nuestras reglas para mantener un 98 de Lighthouse en producción","nw.2d":"Imágenes, tipografías y scripts de terceros: las seis decisiones que determinan toda la puntuación.",
+  "nw.3t":"App móvil o web móvil: cómo decidir","nw.3d":"Las cuatro preguntas que responder antes de comprometer un presupuesto de app.",
+  "ct.chip":"Hablemos","ct.title":"¿Un proyecto? <span class='grad'>Dinos hola.</span>",
+  "ct.desc":"Cuéntanos qué necesitas: en 48 h recibes una valoración técnica y una estimación de presupuesto y plazos. Sin compromiso.",
+  "ct.call":"Reservar una llamada de 30 min",
+  "ft.about":"Estudio independiente de desarrollo web y móvil. Webs, aplicaciones y apps — diseñadas y programadas en casa.",
+  "ft.h1":"Servicios","ft.h2":"Estudio","ft.h3":"Contacto","ft.jobs":"Empleo","ft.legal":"Aviso legal · Privacidad · Cookies"
+ }
+};
+document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(!(k in I18N.fr))I18N.fr[k]=el.innerHTML});
+function setLang(l){
+  const d=I18N[l]||I18N.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=d[el.dataset.i18n];if(v!=null)el.innerHTML=v});
+  document.documentElement.lang=l;
+  document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===l));
+}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+/* ============ nav ============ */
+const nav=document.getElementById('nav');
+const onS=()=>nav.classList.toggle('small',window.scrollY>40);
+onS();addEventListener('scroll',onS,{passive:true});
+
+/* ============ reveal ============ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* ============ counters ============ */
+const co=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,t=parseFloat(el.dataset.count),sf=el.dataset.suffix||'',t0=performance.now(),dur=1500;
+  const tick=n=>{const p=Math.min((n-t0)/dur,1);el.textContent=Math.round(t*(1-Math.pow(1-p,3)))+sf;if(p<1)requestAnimationFrame(tick)};
+  requestAnimationFrame(tick);co.unobserve(el);
+}),{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+
+requestAnimationFrame(()=>document.body.classList.add('ready'));
+</script>
+</body>
+</html>
