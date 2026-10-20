@@ -112,7 +112,12 @@ indispensable pour notre usage.
 
 1. Créer un projet Railway, puis **New → Database → PostgreSQL**.
 2. Onglet **Variables** du service Postgres, copier `DATABASE_URL` (variante
-   publique). Ajouter `?sslmode=require` si absent.
+   publique), puis ajouter `?sslmode=require&uselibpqcompat=true`.
+
+   `uselibpqcompat=true` est indispensable : le proxy Railway présente un
+   certificat auto-signé, et les versions récentes du pilote `pg` traitent
+   `sslmode=require` comme `verify-full`, ce qui ferait échouer la connexion
+   avec « self-signed certificate in certificate chain ».
 3. Appliquer le schéma et le contenu de départ depuis le poste local :
 
 ```bash
@@ -165,26 +170,31 @@ Variables à créer dans Vercel (Production **et** Preview) :
 
 ### 3.5 Domaine et DNS — o2switch
 
-Dans Vercel, **Settings → Domains**, ajouter `kalimera.agency` et
-`www.kalimera.agency`. Puis dans le cPanel o2switch, **Zone Editor** du
-domaine, créer :
+Les deux domaines sont déjà rattachés au projet Vercel. Les serveurs de noms
+restent chez o2switch (`ns1.o2switch.net`, `ns2.o2switch.net`), il suffit donc
+de corriger deux enregistrements dans **cPanel → Zone Editor** de
+`kalimera.agency` :
 
-| Type | Nom | Valeur | TTL |
-| --- | --- | --- | --- |
-| `A` | `@` | `216.198.79.1` | 300 |
-| `CNAME` | `www` | `<valeur affichée par Vercel>` | 300 |
+| Action | Type | Nom | Valeur | TTL |
+| --- | --- | --- | --- | --- |
+| **Modifier** l'enregistrement existant | `A` | `@` | `216.198.79.1` | 300 |
+| **Remplacer** l'alias actuel | `CNAME` | `www` | `1bad04bff658b5cd.vercel-dns-017.com.` | 300 |
 
-Vercel affiche les valeurs exactes à utiliser : **reprendre celles de
-l'interface**, elles peuvent différer de cet exemple.
+Avant modification, l'apex pointait sur `109.234.162.71` (hébergement
+o2switch) et `www` était un alias de l'apex. Les deux doivent être remplacés,
+sinon le domaine continue de répondre chez o2switch.
 
-Supprimer les enregistrements `A` et `CNAME` existants qui pointent vers
-l'hébergement o2switch, sinon le domaine continuera d'y répondre.
+Ne pas toucher aux enregistrements `MX` : la messagerie du domaine reste chez
+o2switch.
 
-Ajouter dans la même zone les enregistrements fournis par Resend (TXT pour SPF
-et DKIM, éventuellement un CNAME de suivi).
+Vérification une fois la propagation faite :
 
-La propagation prend de quelques minutes à quelques heures. Vercel émet le
-certificat TLS automatiquement une fois le domaine vérifié.
+```bash
+nslookup kalimera.agency        # doit renvoyer 216.198.79.1
+vercel domains inspect kalimera.agency
+```
+
+Vercel émet le certificat TLS automatiquement dans les minutes qui suivent.
 
 ---
 
