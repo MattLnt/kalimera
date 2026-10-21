@@ -263,7 +263,12 @@ export async function getLandings(locale: DbLocale, kind: LandingKind) {
   const landings = await prisma.landing.findMany({
     where: { published: true, kind },
     orderBy: { position: "asc" },
-    include: { translations: translationForLocale(locale) },
+    include: {
+      translations: translationForLocale(locale),
+      // Le nombre de réalisations citées s'affiche sur la carte : c'est le
+      // signal de crédibilité qui fait cliquer, plus que le titre.
+      _count: { select: { projects: { where: { published: true } } } },
+    },
   });
   return landings.filter((landing) => landing.translations.length > 0);
 }

@@ -3,7 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { JsonLd } from "@/components/site/json-ld";
 import { LandingIndex } from "@/components/site/landing-index";
-import { PageHero } from "@/components/site/page-hero";
+
+import { HeroStats, PageHero } from "@/components/site/page-hero";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
 import { LandingKind } from "@/generated/prisma/enums";
 import { getPathname } from "@/i18n/navigation";
@@ -11,7 +12,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { getLandings } from "@/lib/content";
 import { toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
-import { getSiteUrl } from "@/lib/site";
+import { getSiteUrl, siteConfig } from "@/lib/site";
 import { breadcrumbSchema, graph } from "@/lib/structured-data";
 
 export const revalidate = 300;
@@ -56,10 +57,22 @@ export default async function LocationsPage({
         chip={t("locationChip")}
         title={t("locationsTitle")}
         lead={t("locationsIntro")}
+        aside={<HeroStats stats={[
+          { value: String(locations.length), label: t("statPages") },
+          {
+            value: String(
+              locations.reduce((total, item) => total + item._count.projects, 0),
+            ),
+            label: t("statProjects"),
+          },
+          { value: String(siteConfig.markets.length), label: t("statMarkets") },
+          { value: String(siteConfig.stats.locales), label: t("statLocales") },
+        ]} />}
       />
 
       <section className="py-[clamp(3rem,8vh,5rem)]">
         <LandingIndex
+          proofLabel={t("proofCount")}
           pathname="/locations/[slug]"
           items={locations.map((location) => ({
             id: location.id,
@@ -68,6 +81,7 @@ export default async function LocationsPage({
             lead: location.translations[0].lead,
             icon: location.icon,
             highlights: location.highlights,
+            proofCount: location._count.projects,
           }))}
         />
       </section>

@@ -1,13 +1,24 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { cn } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 
 /**
  * Rendu des corps de texte stockés en Markdown (pages service, articles).
  * Le composant s'exécute côté serveur : rien de la librairie n'est envoyé
  * au navigateur.
  */
+/** Texte brut d'un nœud React, pour en dériver une ancre stable. */
+function flatten(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(flatten).join("");
+  if (node && typeof node === "object" && "props" in node) {
+    const props = (node as { props?: { children?: React.ReactNode } }).props;
+    return flatten(props?.children);
+  }
+  return "";
+}
+
 export function Prose({
   content,
   className,
@@ -20,8 +31,16 @@ export function Prose({
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
+          // Les titres portent une ancre : c'est ce qui permet au sommaire
+          // latéral de pointer dessus, et à Google de proposer des liens
+          // directs vers une section dans ses résultats.
           h2: ({ children }) => (
-            <h2 className="display-3 mt-12 mb-4 first:mt-0">{children}</h2>
+            <h2
+              id={slugify(flatten(children))}
+              className="display-3 mt-12 mb-4 scroll-mt-28 first:mt-0"
+            >
+              {children}
+            </h2>
           ),
           h3: ({ children }) => (
             <h3 className="display-4 mt-9 mb-3 text-xl">{children}</h3>

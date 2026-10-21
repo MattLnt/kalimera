@@ -127,10 +127,12 @@ export function SiteHeader({ nav }: { nav: NavData }) {
   const columns: Record<MegaKey, MegaColumn[]> = {
     build: [
       {
+        heading: t("build"),
         entries: nav.services,
         pathname: "/services/[slug]",
         allLabel: t("allServices"),
         allHref: "/services",
+        split: true,
       },
     ],
     sectors: [
@@ -257,11 +259,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
           onMouseLeave={scheduleClose}
           className="relative z-9 mx-auto mt-2 hidden max-w-[1280px] animate-[menu-open_0.32s_var(--ease-out-expo)_both] overflow-hidden rounded-[26px] bg-white/92 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150 lg:block"
         >
-          <MegaPanel
-            lead={mega === "build" ? t("megaBuildLead") : t("megaSectorsLead")}
-            columns={columns[mega]}
-            onNavigate={() => setMega(null)}
-          />
+          <MegaPanel columns={columns[mega]} onNavigate={() => setMega(null)} />
         </div>
       ) : null}
 

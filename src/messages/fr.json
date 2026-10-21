@@ -24,8 +24,6 @@
     "allServices": "Voir toutes nos expertises",
     "allSectors": "Voir tous les secteurs",
     "markets": "Villes & marchés",
-    "megaBuildLead": "Des plateformes métier aux sites sur mesure. Tout est codé, rien n'est assemblé.",
-    "megaSectorsLead": "Les métiers pour lesquels nous avons déjà livré, et les marchés que nous servons.",
     "closeSubmenu": "Fermer le sous-menu"
   },
   "home": {
@@ -247,6 +245,33 @@
     "locationsIntro": "Où nous sommes établis, et où nous avons livré. Aix-en-Provence et Marseille pour la proximité, Belgique, Luxembourg et Suisse romande pour les plateformes B2B.",
     "proof": "Les réalisations qui le prouvent",
     "relatedServices": "Les services concernés",
-    "faq": "Questions fréquentes"
+    "faq": "Questions fréquentes",
+    "statProjects": "Réalisations citées",
+    "statServices": "Expertises mobilisées",
+    "statMarkets": "Marchés servis",
+    "statStack": "Technologies employées",
+    "statLocales": "Langues de série",
+    "proofChip": "Preuve",
+    "proofLead": "Des plateformes et des sites en production, consultables en ligne. Pas de maquette, pas de client inventé.",
+    "servicesChip": "Expertises",
+    "relatedServicesLead": "Ce que nous développons concrètement sur ce périmètre.",
+    "toc": "Sur cette page",
+    "asideCtaTitle": "Un projet comparable ?",
+    "asideCtaBody": "Décrivez votre besoin : retour technique et estimation de budget sous 48 h.",
+    "asideCtaLabel": "Démarrer la discussion",
+    "stackTitle": "Les technologies employées",
+    "stackLead": "Celles des réalisations citées sur cette page. Uniquement du code : ni WordPress, ni Shopify.",
+    "faqChip": "Questions",
+    "placeTitle": "Où nous sommes, et comment nous travaillons",
+    "placeOnSiteLead": "Notre établissement est ici. Le rendez-vous de cadrage et la recette se font sur place, et ne vous sont pas facturés.",
+    "placeRemoteLead": "Nous ne sommes pas établis sur ce marché et nous préférons l'écrire. Nous y travaillons à distance, avec des déplacements aux étapes clés.",
+    "placeAddress": "Établissement",
+    "placeRemote": "À distance, depuis Aix-en-Provence",
+    "placeCoverage": "Marchés servis",
+    "placePoint1": "Lien de préproduction accessible en continu dès la première semaine",
+    "placePoint2": "Vous parlez aux personnes qui conçoivent et développent, sans intermédiaire",
+    "placePoint3": "Le dépôt de code vous appartient dès le premier jour",
+    "proofCount": "réalisations",
+    "statPages": "Pages d'intention"
   }
 }

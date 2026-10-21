@@ -3,19 +3,24 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { JsonLd } from "@/components/site/json-ld";
-import { PageHero } from "@/components/site/page-hero";
+import {
+  LandingAside,
+  SectionHead,
+  extractHeadings,
+} from "@/components/site/landing-sections";
+import { HeroStats, PageHero } from "@/components/site/page-hero";
 import { ProjectCard } from "@/components/site/project-card";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
 import { Button } from "@/components/ui/button";
 import { Prose } from "@/components/ui/prose";
 import { Reveal } from "@/components/ui/reveal";
-import { Tag } from "@/components/ui/chip";
+import { TechStrip } from "@/components/site/tech-icons";
 import { getPathname, Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { getServiceBySlug, getServiceSlugs } from "@/lib/content";
 import { toAppLocale, toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
-import { getSiteUrl } from "@/lib/site";
+import { getSiteUrl, siteConfig } from "@/lib/site";
 import { breadcrumbSchema, graph, serviceSchema } from "@/lib/structured-data";
 
 export const revalidate = 300;
@@ -68,6 +73,7 @@ export default async function ServiceDetailPage({
   if (!translation) notFound();
 
   const t = await getTranslations("services");
+  const tl = await getTranslations("landings");
   const { service } = translation;
 
   // `Service` qualifie l'offre, `BreadcrumbList` remplace l'URL brute par un
@@ -93,20 +99,44 @@ export default async function ServiceDetailPage({
   return (
     <>
       <JsonLd data={pageGraph} />
-      <PageHero chip={t("title")} title={translation.title} lead={translation.summary}>
-        <div className="mt-6 flex flex-wrap gap-1.5">
-          {service.stack.map((item) => (
-            <Tag key={item} tone="dark">
-              {item}
-            </Tag>
-          ))}
-        </div>
+      <PageHero
+        chip={t("title")}
+        title={translation.title}
+        lead={translation.summary}
+        aside={
+          <HeroStats
+            stats={[
+              {
+                value: String(service.projects.length),
+                label: tl("statProjects"),
+              },
+              { value: String(service.stack.length), label: tl("statStack") },
+              {
+                value: String(siteConfig.markets.length),
+                label: tl("statMarkets"),
+              },
+              {
+                value: String(siteConfig.stats.locales),
+                label: tl("statLocales"),
+              },
+            ]}
+          />
+        }
+      >
+        <TechStrip items={service.stack} tone="dark" className="mt-7" />
       </PageHero>
 
       <section className="py-[clamp(3rem,8vh,5rem)]">
-        <div className="page-shell">
-          <Reveal className="surface-card p-6 sm:p-10 lg:p-14">
-            <Prose content={translation.body} />
+        <div className="page-shell grid gap-6 lg:grid-cols-[20rem_1fr] lg:gap-10">
+          <LandingAside
+            headings={extractHeadings(translation.body)}
+            tocLabel={tl("toc")}
+            ctaTitle={tl("asideCtaTitle")}
+            ctaBody={tl("asideCtaBody")}
+            ctaLabel={tl("asideCtaLabel")}
+          />
+          <Reveal className="surface-card p-6 sm:p-10 lg:p-12">
+            <Prose content={translation.body} className="max-w-none" />
           </Reveal>
         </div>
       </section>
@@ -114,7 +144,11 @@ export default async function ServiceDetailPage({
       {service.projects.length > 0 ? (
         <section className="pb-[clamp(3rem,8vh,5rem)]">
           <div className="page-shell">
-            <h2 className="display-2 mb-8">{t("related")}</h2>
+            <SectionHead
+              chip={tl("proofChip")}
+              title={t("related")}
+              lead={tl("proofLead")}
+            />
             <div className="grid gap-3 lg:grid-cols-2">
               {service.projects.map((project, index) => (
                 <Reveal key={project.id} delay={(index % 3) as 0 | 1 | 2}>

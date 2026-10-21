@@ -24,8 +24,6 @@
     "allServices": "Ver todas nuestras especialidades",
     "allSectors": "Ver todos los sectores",
     "markets": "Ciudades y mercados",
-    "megaBuildLead": "De las plataformas de negocio a las webs a medida. Todo está programado, nada está ensamblado.",
-    "megaSectorsLead": "Las profesiones para las que ya hemos entregado y los mercados que servimos.",
     "closeSubmenu": "Cerrar el submenú"
   },
   "home": {
@@ -247,6 +245,33 @@
     "locationsIntro": "Dónde estamos establecidos y dónde hemos entregado. Aix-en-Provence y Marsella por proximidad; Bélgica, Luxemburgo y la Suiza francófona para plataformas B2B.",
     "proof": "Los proyectos que lo demuestran",
     "relatedServices": "Los servicios implicados",
-    "faq": "Preguntas frecuentes"
+    "faq": "Preguntas frecuentes",
+    "statProjects": "Proyectos citados",
+    "statServices": "Especialidades implicadas",
+    "statMarkets": "Mercados servidos",
+    "statStack": "Tecnologías empleadas",
+    "statLocales": "Idiomas de serie",
+    "proofChip": "Prueba",
+    "proofLead": "Plataformas y webs en producción, consultables en línea. Sin maquetas, sin clientes inventados.",
+    "servicesChip": "Especialidades",
+    "relatedServicesLead": "Lo que desarrollamos concretamente en este ámbito.",
+    "toc": "En esta página",
+    "asideCtaTitle": "¿Un proyecto parecido?",
+    "asideCtaBody": "Describe tu necesidad: respuesta técnica y estimación de presupuesto en 48 h.",
+    "asideCtaLabel": "Empezar la conversación",
+    "stackTitle": "Las tecnologías empleadas",
+    "stackLead": "Las de los proyectos citados en esta página. Solo código: sin WordPress ni Shopify.",
+    "faqChip": "Preguntas",
+    "placeTitle": "Dónde estamos y cómo trabajamos",
+    "placeOnSiteLead": "Nuestra oficina está aquí. La reunión de encuadre y la recepción se hacen presencialmente y no se te facturan.",
+    "placeRemoteLead": "No estamos establecidos en este mercado y preferimos decirlo. Trabajamos aquí a distancia, con desplazamientos en las etapas clave.",
+    "placeAddress": "Oficina",
+    "placeRemote": "A distancia, desde Aix-en-Provence",
+    "placeCoverage": "Mercados servidos",
+    "placePoint1": "Enlace de preproducción disponible de forma continua desde la primera semana",
+    "placePoint2": "Hablas con quienes lo diseñan y desarrollan, sin intermediarios",
+    "placePoint3": "El repositorio de código es tuyo desde el primer día",
+    "proofCount": "proyectos",
+    "statPages": "Páginas de intención"
   }
 }

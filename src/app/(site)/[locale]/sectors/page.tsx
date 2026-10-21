@@ -3,7 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { JsonLd } from "@/components/site/json-ld";
 import { LandingIndex } from "@/components/site/landing-index";
-import { PageHero } from "@/components/site/page-hero";
+
+import { HeroStats, PageHero } from "@/components/site/page-hero";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
 import { LandingKind } from "@/generated/prisma/enums";
 import { getPathname } from "@/i18n/navigation";
@@ -11,7 +12,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { getLandings } from "@/lib/content";
 import { toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
-import { getSiteUrl } from "@/lib/site";
+import { getSiteUrl, siteConfig } from "@/lib/site";
 import { breadcrumbSchema, graph } from "@/lib/structured-data";
 
 export const revalidate = 300;
@@ -56,10 +57,22 @@ export default async function SectorsPage({
         chip={t("sectorChip")}
         title={t("sectorsTitle")}
         lead={t("sectorsIntro")}
+        aside={<HeroStats stats={[
+          { value: String(sectors.length), label: t("statPages") },
+          {
+            value: String(
+              sectors.reduce((total, item) => total + item._count.projects, 0),
+            ),
+            label: t("statProjects"),
+          },
+          { value: String(siteConfig.markets.length), label: t("statMarkets") },
+          { value: String(siteConfig.stats.locales), label: t("statLocales") },
+        ]} />}
       />
 
       <section className="py-[clamp(3rem,8vh,5rem)]">
         <LandingIndex
+          proofLabel={t("proofCount")}
           pathname="/sectors/[slug]"
           items={sectors.map((sector) => ({
             id: sector.id,
@@ -68,6 +81,7 @@ export default async function SectorsPage({
             lead: sector.translations[0].lead,
             icon: sector.icon,
             highlights: sector.highlights,
+            proofCount: sector._count.projects,
           }))}
         />
       </section>

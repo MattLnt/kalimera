@@ -24,8 +24,6 @@
     "allServices": "See all our expertise",
     "allSectors": "See all sectors",
     "markets": "Cities & markets",
-    "megaBuildLead": "From business platforms to bespoke sites. Everything is coded, nothing is assembled.",
-    "megaSectorsLead": "The professions we have already delivered for, and the markets we serve.",
     "closeSubmenu": "Close submenu"
   },
   "home": {
@@ -247,6 +245,33 @@
     "locationsIntro": "Where we are based, and where we have delivered. Aix-en-Provence and Marseille for proximity; Belgium, Luxembourg and French-speaking Switzerland for B2B platforms.",
     "proof": "The work that proves it",
     "relatedServices": "The services involved",
-    "faq": "Frequently asked questions"
+    "faq": "Frequently asked questions",
+    "statProjects": "Work cited",
+    "statServices": "Expertise involved",
+    "statMarkets": "Markets served",
+    "statStack": "Technologies used",
+    "statLocales": "Languages by default",
+    "proofChip": "Proof",
+    "proofLead": "Platforms and sites in production, viewable online. No mockups, no invented clients.",
+    "servicesChip": "Expertise",
+    "relatedServicesLead": "What we concretely build within this scope.",
+    "toc": "On this page",
+    "asideCtaTitle": "A comparable project?",
+    "asideCtaBody": "Describe what you need: technical feedback and a budget estimate within 48 hours.",
+    "asideCtaLabel": "Start the conversation",
+    "stackTitle": "The technologies used",
+    "stackLead": "Those of the work cited on this page. Code only: no WordPress, no Shopify.",
+    "faqChip": "Questions",
+    "placeTitle": "Where we are, and how we work",
+    "placeOnSiteLead": "Our office is here. The scoping meeting and acceptance happen in person, and are not billed to you.",
+    "placeRemoteLead": "We are not based in this market and we prefer to say so. We work here remotely, travelling at key milestones.",
+    "placeAddress": "Office",
+    "placeRemote": "Remotely, from Aix-en-Provence",
+    "placeCoverage": "Markets served",
+    "placePoint1": "A preview link continuously available from the first week",
+    "placePoint2": "You talk to the people designing and building it, with nobody in between",
+    "placePoint3": "The code repository is yours from day one",
+    "proofCount": "projects",
+    "statPages": "Intent pages"
   }
 }

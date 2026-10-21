@@ -1,7 +1,15 @@
 import { getTranslations } from "next-intl/server";
 
+import { FaqList } from "@/components/site/faq-list";
 import { JsonLd } from "@/components/site/json-ld";
-import { PageHero } from "@/components/site/page-hero";
+import {
+  LandingAside,
+  PlacePanel,
+  SectionHead,
+  StackSection,
+  extractHeadings,
+} from "@/components/site/landing-sections";
+import { HeroStats, PageHero, type HeroStat } from "@/components/site/page-hero";
 import { ProjectCard } from "@/components/site/project-card";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
 import { ServiceCard } from "@/components/site/service-card";
@@ -12,7 +20,7 @@ import { getPathname } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import type { LandingKind } from "@/generated/prisma/enums";
 import type { getLandingBySlug } from "@/lib/content";
-import { getSiteUrl } from "@/lib/site";
+import { getSiteUrl, siteConfig } from "@/lib/site";
 import {
   breadcrumbSchema,
   faqSchema,
@@ -23,10 +31,7 @@ import {
 type Landing = NonNullable<Awaited<ReturnType<typeof getLandingBySlug>>>;
 
 /** Choisit la traduction d'une FAQ sans multiplier les lignes en base. */
-function localized(
-  faq: Landing["landing"]["faqs"][number],
-  locale: AppLocale,
-) {
+function localized(faq: Landing["landing"]["faqs"][number], locale: AppLocale) {
   if (locale === "en") {
     return {
       question: faq.questionEn || faq.questionFr,
@@ -42,13 +47,16 @@ function localized(
   return { question: faq.questionFr, answer: faq.answerFr };
 }
 
+/** Les villes de Provence ont un établissement derrière, les pays non. */
+const ON_SITE_KEYS = new Set(["aix-en-provence", "marseille"]);
+
 /**
  * Page sectorielle ou géographique.
  *
- * Les deux familles partagent exactement la même mise en page : une promesse,
- * un corps rédigé, les services concernés, les réalisations qui les prouvent,
- * et les questions fréquentes. Seules la route et l'étiquette changent, d'où
- * un composant unique plutôt que deux copies à maintenir.
+ * Les deux familles partagent les mêmes briques mais pas la même composition :
+ * une page secteur ouvre sur la preuve, parce que c'est ce qu'un prospect de
+ * ce métier vient vérifier ; une page de marché ouvre sur le lieu et la
+ * couverture, parce que la première question y est « où êtes-vous ».
  */
 export async function LandingDetail({
   translation,
@@ -61,18 +69,61 @@ export async function LandingDetail({
 }) {
   const t = await getTranslations("landings");
   const { landing } = translation;
+
   const faqs = landing.faqs.map((faq) => localized(faq, locale));
+  const headings = extractHeadings(translation.body);
+  const isSector = kind === "SECTOR";
+  const onSite = ON_SITE_KEYS.has(landing.key);
+
+  // Les technologies viennent des projets liés : la liste reste vraie sans
+  // être entretenue, et les doublons entre projets sont fusionnés.
+  const stack = [...new Set(landing.projects.flatMap((project) => project.stack))];
+
+  const metricLabel = (metric: { labelFr: string; labelEn: string; labelEs: string }) =>
+    locale === "fr" ? metric.labelFr : locale === "en" ? metric.labelEn : metric.labelEs;
+
+  const toCard = (project: Landing["landing"]["projects"][number]) => ({
+    slug: project.translations[0].slug,
+    title: project.translations[0].title,
+    category: project.translations[0].category,
+    kind: project.kind,
+    accent: project.accent,
+    stack: project.stack,
+    liveUrl: project.liveUrl,
+    cover: project.coverImage
+      ? {
+          url: project.coverImage.url,
+          width: project.coverImage.width,
+          height: project.coverImage.height,
+          alt: project.coverImage.altFr,
+        }
+      : null,
+    metrics: project.metrics.map((metric) => ({
+      value: metric.value,
+      label: metricLabel(metric),
+    })),
+  });
+
+  const stats: HeroStat[] = [
+    { value: String(landing.projects.length), label: t("statProjects") },
+    { value: String(landing.services.length), label: t("statServices") },
+    {
+      value: isSector ? String(siteConfig.markets.length) : String(stack.length || 3),
+      label: isSector ? t("statMarkets") : t("statStack"),
+    },
+    { value: String(siteConfig.stats.locales), label: t("statLocales") },
+  ];
 
   const base = getSiteUrl();
-  const pathname = kind === "SECTOR" ? "/sectors/[slug]" : "/locations/[slug]";
-  const indexPathname = kind === "SECTOR" ? "/sectors" : "/locations";
+  const pathname = isSector ? "/sectors/[slug]" : "/locations/[slug]";
+  const indexPathname = isSector ? "/sectors" : "/locations";
   const url = `${base}${getPathname({
     locale,
     href: { pathname, params: { slug: translation.slug } },
   })}`;
 
   // Le `FAQPage` n'est déclaré que si des questions existent réellement :
-  // un bloc vide est signalé comme invalide par Google.
+  // Google signale un bloc vide comme invalide.
   const pageGraph = graph(
     serviceSchema(base, {
       name: translation.title,
@@ -81,7 +132,7 @@ export async function LandingDetail({
     }),
     breadcrumbSchema([
       {
-        name: kind === "SECTOR" ? t("sectorsTitle") : t("locationsTitle"),
+        name: isSector ? t("sectorsTitle") : t("locationsTitle"),
         url: `${base}${getPathname({ locale, href: indexPathname })}`,
       },
       { name: translation.title, url },
@@ -89,126 +140,123 @@ export async function LandingDetail({
     ...(faqs.length > 0 ? [faqSchema(faqs)] : []),
   );
 
+  const proofSection =
+    landing.projects.length > 0 ? (
+      <section className="py-[clamp(3rem,8vh,5rem)]">
+        <div className="page-shell">
+          <SectionHead chip={t("proofChip")} title={t("proof")} lead={t("proofLead")} />
+          <div
+            className={
+              landing.projects.length === 1
+                ? "grid gap-3"
+                : "grid gap-3 lg:grid-cols-2"
+            }
+          >
+            {landing.projects.map((project, index) => (
+              <Reveal key={project.id} delay={(index % 3) as 0 | 1 | 2}>
+                <ProjectCard
+                  size={landing.projects.length === 1 ? "wide" : "narrow"}
+                  project={toCard(project)}
+                />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+    ) : null;
+
+  const servicesSection =
+    landing.services.length > 0 ? (
+      <section className="pb-[clamp(3rem,8vh,5rem)]">
+        <div className="page-shell">
+          <SectionHead
+            chip={t("servicesChip")}
+            title={t("relatedServices")}
+            lead={t("relatedServicesLead")}
+          />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {landing.services.map((service, index) => (
+              <Reveal key={service.id} delay={(index % 3) as 0 | 1 | 2}>
+                <ServiceCard
+                  index={index}
+                  service={{
+                    slug: service.translations[0].slug,
+                    title: service.translations[0].title,
+                    summary: service.translations[0].summary,
+                    icon: service.icon,
+                    stack: service.stack,
+                  }}
+                />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+    ) : null;
+
   return (
     <>
       <JsonLd data={pageGraph} />
 
       <PageHero
-        chip={kind === "SECTOR" ? t("sectorChip") : t("locationChip")}
+        chip={isSector ? t("sectorChip") : t("locationChip")}
         title={translation.title}
         lead={translation.lead}
+        aside={<HeroStats stats={stats} />}
       >
         {landing.highlights.length > 0 ? (
-          <div className="mt-6 flex flex-wrap gap-1.5">
-            {landing.highlights.map((item) => (
-              <Tag key={item} tone="dark">
-                {item}
-              </Tag>
+          <ul className="mt-7 flex flex-wrap gap-1.5">
+            {landing.highlights.map((highlight) => (
+              <li key={highlight}>
+                <Tag tone="dark">{highlight}</Tag>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : null}
       </PageHero>
 
+      {/* Une page secteur ouvre sur la preuve ; une page de marché sur le lieu. */}
+      {isSector ? proofSection : null}
+
+      {!isSector ? (
+        <PlacePanel
+          onSite={onSite}
+          title={t("placeTitle")}
+          lead={onSite ? t("placeOnSiteLead") : t("placeRemoteLead")}
+          addressLabel={t("placeAddress")}
+          remoteLabel={t("placeRemote")}
+          coverageLabel={t("placeCoverage")}
+          coverage={siteConfig.markets.map((market) => market.label)}
+          points={[t("placePoint1"), t("placePoint2"), t("placePoint3")]}
+        />
+      ) : null}
+
       <section className="py-[clamp(3rem,8vh,5rem)]">
-        <div className="page-shell">
-          <Reveal className="surface-card p-6 sm:p-10 lg:p-14">
-            <Prose content={translation.body} />
+        <div className="page-shell grid gap-6 lg:grid-cols-[20rem_1fr] lg:gap-10">
+          <LandingAside
+            headings={headings}
+            tocLabel={t("toc")}
+            ctaTitle={t("asideCtaTitle")}
+            ctaBody={t("asideCtaBody")}
+            ctaLabel={t("asideCtaLabel")}
+          />
+
+          <Reveal className="surface-card p-6 sm:p-10 lg:p-12">
+            <Prose content={translation.body} className="max-w-none" />
           </Reveal>
         </div>
       </section>
 
-      {landing.projects.length > 0 ? (
-        <section className="pb-[clamp(3rem,8vh,5rem)]">
-          <div className="page-shell">
-            <h2 className="display-2 mb-8">{t("proof")}</h2>
-            <div className="grid gap-3 lg:grid-cols-2">
-              {landing.projects.map((project, index) => (
-                <Reveal key={project.id} delay={(index % 3) as 0 | 1 | 2}>
-                  <ProjectCard
-                    size="narrow"
-                    project={{
-                      slug: project.translations[0].slug,
-                      title: project.translations[0].title,
-                      category: project.translations[0].category,
-                      kind: project.kind,
-                      accent: project.accent,
-                      stack: project.stack,
-                      liveUrl: project.liveUrl,
-                      cover: project.coverImage
-                        ? {
-                            url: project.coverImage.url,
-                            width: project.coverImage.width,
-                            height: project.coverImage.height,
-                            alt: project.coverImage.altFr,
-                          }
-                        : null,
-                      metrics: project.metrics.map((metric) => ({
-                        value: metric.value,
-                        label:
-                          locale === "fr"
-                            ? metric.labelFr
-                            : locale === "en"
-                              ? metric.labelEn
-                              : metric.labelEs,
-                      })),
-                    }}
-                  />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <StackSection items={stack} title={t("stackTitle")} lead={t("stackLead")} />
 
-      {landing.services.length > 0 ? (
-        <section className="pb-[clamp(3rem,8vh,5rem)]">
-          <div className="page-shell">
-            <h2 className="display-2 mb-8">{t("relatedServices")}</h2>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {landing.services.map((service, index) => (
-                <Reveal key={service.id} delay={(index % 3) as 0 | 1 | 2}>
-                  <ServiceCard
-                    index={index}
-                    service={{
-                      slug: service.translations[0].slug,
-                      title: service.translations[0].title,
-                      summary: service.translations[0].summary,
-                      icon: service.icon,
-                      stack: service.stack,
-                    }}
-                  />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      {isSector ? servicesSection : proofSection}
+      {isSector ? null : servicesSection}
 
       {faqs.length > 0 ? (
         <section className="pb-[clamp(3rem,8vh,5rem)]">
-          <div className="page-shell max-w-[70ch]">
-            <h2 className="display-2 mb-8">{t("faq")}</h2>
-            <div className="grid gap-2">
-              {faqs.map((faq) => (
-                <details
-                  key={faq.question}
-                  className="surface-card group p-5 sm:p-6"
-                >
-                  <summary className="flex cursor-pointer list-none items-start justify-between gap-4 font-display text-[1.0625rem] font-bold tracking-[-0.02em]">
-                    {faq.question}
-                    <span
-                      aria-hidden
-                      className="mt-1 shrink-0 text-[var(--ink-45)] transition-transform duration-300 group-open:rotate-45"
-                    >
-                      +
-                    </span>
-                  </summary>
-                  <p className="mt-3 text-[0.9375rem] leading-[1.6] text-[var(--ink-65)]">
-                    {faq.answer}
-                  </p>
-                </details>
-              ))}
-            </div>
+          <div className="page-shell">
+            <SectionHead chip={t("faqChip")} title={t("faq")} />
+            <FaqList items={faqs} />
           </div>
         </section>
       ) : null}
