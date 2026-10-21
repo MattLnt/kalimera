@@ -56,7 +56,11 @@ export function ProjectCard({
       ) : null}
 
       <div className="relative z-10">
-        <span className="inline-block rounded-full bg-white/16 px-3 py-1.5 font-display text-xs font-semibold backdrop-blur-md">
+        {/* Sans `backdrop-blur` : la pastille vit dans une carte qui monte de
+            6 px au survol, et déplacer un élément flouté change ce qu'il y a
+            derrière lui — le flou serait refait à chaque image. Sur un
+            dégradé lisse, il ne se voyait de toute façon pas. */}
+        <span className="inline-block rounded-full bg-white/16 px-3 py-1.5 font-display text-xs font-semibold">
           {project.category}
         </span>
         <h3 className="display-3 mt-3 mb-3 text-white">
