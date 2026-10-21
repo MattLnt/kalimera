@@ -23,11 +23,11 @@ export function Orbs() {
     <>
       <div
         aria-hidden
-        className="orb orb-drift top-[-12vw] right-[-8vw] size-[44vw] bg-[radial-gradient(circle,rgba(98,169,242,0.5),transparent_68%)]"
+        className="orb top-[-12vw] right-[-8vw] size-[44vw] bg-[radial-gradient(circle,rgba(98,169,242,0.5),transparent_68%)]"
       />
       <div
         aria-hidden
-        className="orb orb-drift-slow bottom-[-14vw] left-[-10vw] size-[36vw] bg-[radial-gradient(circle,rgba(42,134,232,0.42),transparent_68%)]"
+        className="orb bottom-[-14vw] left-[-10vw] size-[36vw] bg-[radial-gradient(circle,rgba(42,134,232,0.42),transparent_68%)]"
       />
     </>
   );

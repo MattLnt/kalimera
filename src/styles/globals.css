@@ -348,30 +348,20 @@
     }
   }
 
-  /* Pas de `filter: blur()` ici, volontairement. Le fond est déjà un dégradé
-     radial qui s'éteint à 68 % : un flou par-dessus ne se voit pas, mais
-     `orb-drift` met l'orbe à l'échelle en boucle infinie, et mettre à
-     l'échelle une surface floutée force le navigateur à recalculer un flou de
-     60 px sur 790 px à chaque image. La page entière y perdait sa cadence, et
-     tout ce qu'on survolait paraissait saccadé. Sans filtre, l'animation ne
-     coûte plus qu'un déplacement de calque. */
+  /* Orbes fixes, et sans `filter: blur()`.
+     La dérive parcourait 5 vw en 20 secondes, soit un quart de vw par
+     seconde : invisible à l'œil, mais elle obligeait le navigateur à
+     recomposer le héros à chaque image sans fin — et, par-dessus, le
+     `backdrop-filter` de la barre fixe, puisque son arrière-plan changeait
+     en permanence. La page ne s'endormait jamais, et il ne restait plus
+     grand-chose pour le survol.
+     Le flou, lui, ne se voyait pas : le fond est déjà un dégradé radial
+     qui s'éteint à 68 %. */
   .orb {
     position: absolute;
     border-radius: 999px;
     pointer-events: none;
     z-index: 0;
-    will-change: transform;
-  }
-  @keyframes orb-drift {
-    to {
-      transform: translate3d(-5vw, 5vw, 0) scale(1.12);
-    }
-  }
-  .orb-drift {
-    animation: orb-drift 20s ease-in-out infinite alternate;
-  }
-  .orb-drift-slow {
-    animation: orb-drift 26s ease-in-out infinite alternate-reverse;
   }
 }
 
