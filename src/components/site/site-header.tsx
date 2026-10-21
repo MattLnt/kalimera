@@ -2,7 +2,7 @@
 
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ContactLink } from "@/components/site/contact-link";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
@@ -27,6 +27,8 @@ type StaticPath =
 type NavKey = "build" | "sectors" | "work" | "studio" | "journal";
 
 type MegaKey = "build" | "sectors";
+
+const megaKeys: MegaKey[] = ["build", "sectors"];
 
 /**
  * Deux entrées ouvrent un panneau, les autres sont des liens directs.
@@ -116,15 +118,18 @@ export function SiteHeader({ nav }: { nav: NavData }) {
   }, [open]);
 
   /** Latence à la sortie : traverser le vide ne doit pas tout refermer. */
-  const scheduleClose = () => {
+  const scheduleClose = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setMega(null), 110);
-  };
-  const cancelClose = () => {
+  }, []);
+  const cancelClose = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-  };
+  }, []);
+  const closeMega = useCallback(() => setMega(null), []);
 
-  const columns: Record<MegaKey, MegaColumn[]> = {
+  // Référence stable : `MegaPanel` est mémoïsé, et un tableau recréé à chaque
+  // rendu annulerait la mémoïsation au moment précis où elle sert.
+  const columns: Record<MegaKey, MegaColumn[]> = useMemo(() => ({
     build: [
       {
         heading: t("build"),
@@ -151,7 +156,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         allHref: "/locations",
       },
     ],
-  };
+  }), [nav, t]);
 
   return (
     <header
@@ -255,18 +260,28 @@ export function SiteHeader({ nav }: { nav: NavData }) {
       {/* Hors du <nav> arrondi : le panneau doit pouvoir le déborder. Le
           conteneur inclut l'espace qui le sépare de la barre, sinon une
           trajectoire en diagonale traverse une zone morte et referme tout. */}
-      {mega ? (
-        <div
-          ref={megaRef}
-          onMouseEnter={cancelClose}
-          onMouseLeave={scheduleClose}
-          className="relative z-9 mx-auto hidden max-w-[1280px] pt-2 lg:block"
-        >
-          <div className="animate-[menu-open_0.18s_var(--ease-out-expo)_both] overflow-hidden rounded-[26px] bg-white/92 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150">
-            <MegaPanel columns={columns[mega]} onNavigate={() => setMega(null)} />
-          </div>
+      <div
+        ref={megaRef}
+        onMouseEnter={cancelClose}
+        onMouseLeave={scheduleClose}
+        aria-hidden={!mega}
+        className={cn(
+          "relative z-9 mx-auto hidden max-w-[1280px] pt-2 transition-[opacity,transform] duration-200 ease-[var(--ease-out-expo)] lg:block",
+          mega
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-1 opacity-0",
+        )}
+      >
+        <div className="overflow-hidden rounded-[26px] bg-white/92 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150">
+          {/* Les deux panneaux restent montés : monter une couche de flou et
+              vingt-cinq lignes sur un simple survol se voyait à l'œil nu. */}
+          {megaKeys.map((key) => (
+            <div key={key} className={key === mega ? undefined : "hidden"}>
+              <MegaPanel columns={columns[key]} onNavigate={closeMega} />
+            </div>
+          ))}
         </div>
-      ) : null}
+      </div>
 
       <MobileMenu
         open={open}

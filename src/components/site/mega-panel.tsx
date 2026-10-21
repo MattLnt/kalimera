@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { createElement } from "react";
+import { createElement, memo } from "react";
 
 import type { NavEntry } from "@/components/site/nav-data";
 import { serviceIcons, isServiceIconName } from "@/components/site/service-icons";
@@ -32,8 +32,12 @@ export type MegaColumn = {
  * panneau trop haut couvre la page et se parcourt moins vite qu'il ne se lit.
  * Chaque ligne tient donc sur une hauteur de bouton — icône, libellé, flèche
  * au survol — et le panneau reste sous les 300 pixels.
+ *
+ * Mémoïsé : les deux panneaux restent montés en permanence et le survol ne
+ * change qu'une classe. Sans cela, chaque changement d'entrée re-rendrait la
+ * vingtaine de lignes des deux panneaux et ferait sentir sa latence.
  */
-export function MegaPanel({
+export const MegaPanel = memo(function MegaPanel({
   columns,
   onNavigate,
 }: {
@@ -105,4 +109,4 @@ export function MegaPanel({
       ))}
     </div>
   );
-}
+});
