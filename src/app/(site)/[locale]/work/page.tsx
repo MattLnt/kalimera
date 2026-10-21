@@ -76,15 +76,6 @@ export default async function WorkPage({
                                 : project.coverImage.altEs,
                         }
                       : null,
-                    metrics: project.metrics.map((metric) => ({
-                      value: metric.value,
-                      label:
-                        locale === "fr"
-                          ? metric.labelFr
-                          : locale === "en"
-                            ? metric.labelEn
-                            : metric.labelEs,
-                    })),
                   }}
                 />
               </Reveal>

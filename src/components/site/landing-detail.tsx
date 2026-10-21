@@ -80,9 +80,6 @@ export async function LandingDetail({
   // être entretenue, et les doublons entre projets sont fusionnés.
   const stack = [...new Set(landing.projects.flatMap((project) => project.stack))];
 
-  const metricLabel = (metric: { labelFr: string; labelEn: string; labelEs: string }) =>
-    locale === "fr" ? metric.labelFr : locale === "en" ? metric.labelEn : metric.labelEs;
-
   const toCard = (project: Landing["landing"]["projects"][number]) => ({
     slug: project.translations[0].slug,
     title: project.translations[0].title,
@@ -99,10 +96,6 @@ export async function LandingDetail({
           alt: project.coverImage.altFr,
         }
       : null,
-    metrics: project.metrics.map((metric) => ({
-      value: metric.value,
-      label: metricLabel(metric),
-    })),
   });
 
   const stats: HeroStat[] = [
