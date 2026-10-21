@@ -28,8 +28,6 @@ type NavKey = "build" | "sectors" | "work" | "studio" | "journal";
 
 type MegaKey = "build" | "sectors";
 
-const megaKeys: MegaKey[] = ["build", "sectors"];
-
 /**
  * Deux entrées ouvrent un panneau, les autres sont des liens directs.
  *
@@ -54,7 +52,6 @@ export function SiteHeader({ nav }: { nav: NavData }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const megaRef = useRef<HTMLDivElement>(null);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -117,15 +114,13 @@ export function SiteHeader({ nav }: { nav: NavData }) {
     };
   }, [open]);
 
-  /** Latence à la sortie : traverser le vide ne doit pas tout refermer. */
-  const scheduleClose = useCallback(() => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setMega(null), 110);
-  }, []);
-  const cancelClose = useCallback(() => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-  }, []);
   const closeMega = useCallback(() => setMega(null), []);
+
+  // Le panneau garde son contenu pendant qu'il s'efface : sans cela il se
+  // viderait d'un coup à la fermeture. On retient donc la dernière entrée
+  // ouverte, et `mega` ne commande plus que la visibilité.
+  const [shown, setShown] = useState<MegaKey>("build");
+  if (mega && mega !== shown) setShown(mega);
 
   // Référence stable : `MegaPanel` est mémoïsé, et un tableau recréé à chaque
   // rendu annulerait la mémoïsation au moment précis où elle sert.
@@ -165,27 +160,31 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         scrolled && !open ? "pt-2 pb-3" : "py-3.5",
       )}
     >
+      {/* Barre et panneau dans un même parent, l'espace qui les sépare
+          compris : la souris ne traverse jamais de zone morte, et un simple
+          `onMouseLeave` suffit — aucun minuteur, comme chez Côté BURO. */}
+      <div
+        className="relative mx-auto max-w-[1280px]"
+        onMouseLeave={closeMega}
+      >
       <nav
         aria-label="Principal"
-        onMouseEnter={cancelClose}
         className={cn(
-          "relative isolate z-10 mx-auto flex max-w-[1280px] items-center gap-4 py-[9px] pr-[9px] pl-[22px] transition-colors duration-500 ease-[var(--ease-out-expo)]",
+          "relative isolate z-10 flex items-center gap-4 py-[9px] pr-[9px] pl-[22px] transition-colors duration-500 ease-[var(--ease-out-expo)]",
           open && "text-white",
         )}
       >
-        {/* Le flou vit sur une couche sœur, derrière le contenu, et non sur la
-            barre elle-même. Un `backdrop-filter` doit être recalculé dès que
-            l'élément qui le porte se repeint : le fond qui apparaît au survol
-            d'une entrée étant son descendant, chaque survol refloutait toute
-            la barre. Isolée et promue, la couche ne bouge plus et le survol ne
-            repeint que le texte. */}
+        {/* Fond plein, sans `backdrop-filter`. Un flou d'arrière-plan doit être
+            recalculé dès que ce qu'il y a derrière change — et derrière cette
+            barre, il y a toute la page qui défile. C'est le choix qui rend le
+            menu de Côté BURO fluide, et le seul qui coûte zéro. */}
         <span
           aria-hidden
           className={cn(
-            "absolute inset-0 z-[-1] rounded-full backdrop-blur-[22px] will-change-transform transition-[background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]",
+            "absolute inset-0 z-[-1] rounded-full transition-[background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]",
             open
               ? "bg-white/10 shadow-none"
-              : "bg-white/72 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_10px_30px_-12px_rgba(7,33,63,0.18)] backdrop-saturate-150",
+              : "bg-white shadow-[0_1px_1px_rgba(7,33,63,0.04),0_10px_30px_-12px_rgba(7,33,63,0.18)]",
           )}
         />
         <Link
@@ -206,15 +205,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
             return (
               <li
                 key={link.href}
-                onMouseEnter={() => {
-                  if (!link.menu) {
-                    setMega(null);
-                    return;
-                  }
-                  cancelClose();
-                  setMega(link.menu);
-                }}
-                onMouseLeave={link.menu ? scheduleClose : undefined}
+                onMouseEnter={() => setMega(link.menu ?? null)}
               >
                 <Link
                   href={link.href}
@@ -270,42 +261,27 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         </button>
       </nav>
 
-      {/* Hors du <nav> arrondi : le panneau doit pouvoir le déborder. Le
-          conteneur inclut l'espace qui le sépare de la barre, sinon une
-          trajectoire en diagonale traverse une zone morte et referme tout. */}
+      {/* `absolute`, donc hors du flux : l'ouverture ne change plus la hauteur
+          d'un en-tête `fixed`, et le navigateur n'a plus de mise en page à
+          refaire. Un seul panneau, dont on change les colonnes — et non deux
+          panneaux qu'on montre et qu'on cache, ce qui remettait vingt-cinq
+          lignes en page à chaque passage d'une entrée à l'autre. */}
       <div
         ref={megaRef}
-        onMouseEnter={cancelClose}
-        onMouseLeave={scheduleClose}
         aria-hidden={!mega}
         className={cn(
-          "relative z-9 mx-auto hidden max-w-[1280px] pt-2 transition-[opacity,transform,visibility] duration-200 ease-[var(--ease-out-expo)] lg:block",
-          // `invisible` et pas seulement `opacity-0` : les panneaux restant
-          // montés, leur vingtaine de liens traverserait sinon l'ordre de
-          // tabulation. La visibilité s'interpole par paliers, donc elle
-          // repasse à `visible` dès le début de l'ouverture et ne retombe
-          // qu'à la fin de la fermeture.
-          mega
-            ? "visible translate-y-0 opacity-100"
-            : "invisible pointer-events-none -translate-y-1 opacity-0",
+          "absolute inset-x-0 top-full z-9 hidden pt-2 transition-[opacity,visibility] duration-[180ms] ease-out lg:block",
+          // `invisible` et pas seulement `opacity-0` : le panneau reste monté,
+          // et sa vingtaine de liens traverserait sinon l'ordre de tabulation.
+          // La visibilité s'interpole par paliers, donc elle repasse à
+          // `visible` dès le début de l'ouverture et ne retombe qu'à la fin.
+          mega ? "visible opacity-100" : "invisible pointer-events-none opacity-0",
         )}
       >
-        <div className="relative isolate">
-          {/* Même raison que la barre : le survol d'une ligne ne doit pas
-              refaire le flou du panneau entier. */}
-          <span
-            aria-hidden
-            className="absolute inset-0 z-[-1] rounded-[26px] bg-white/92 will-change-transform shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150"
-          />
-
-          {/* Les deux panneaux restent montés : monter une couche de flou et
-              vingt-cinq lignes sur un simple survol se voyait à l'œil nu. */}
-          {megaKeys.map((key) => (
-            <div key={key} className={key === mega ? undefined : "hidden"}>
-              <MegaPanel columns={columns[key]} onNavigate={closeMega} />
-            </div>
-          ))}
+        <div className="rounded-[26px] bg-white shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)]">
+          <MegaPanel columns={columns[shown]} onNavigate={closeMega} />
         </div>
+      </div>
       </div>
 
       <MobileMenu
