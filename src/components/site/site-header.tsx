@@ -184,7 +184,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         <span
           aria-hidden
           className={cn(
-            "absolute inset-0 z-[-1] rounded-full backdrop-blur-[22px] transition-[background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]",
+            "absolute inset-0 z-[-1] rounded-full backdrop-blur-[22px] will-change-transform transition-[background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]",
             open
               ? "bg-white/10 shadow-none"
               : "bg-white/72 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_10px_30px_-12px_rgba(7,33,63,0.18)] backdrop-saturate-150",
@@ -242,7 +242,10 @@ export function SiteHeader({ nav }: { nav: NavData }) {
           <LanguageSwitcher tone={open ? "dark" : "light"} />
         </div>
 
-        <Button asChild size="sm" className="hidden sm:inline-flex">
+        {/* `will-change-transform` : seul bouton du site à se déplacer
+            au-dessus d'une couche floutée. Sur son propre calque, le
+            compositeur le bouge sans rien redemander au flou en dessous. */}
+        <Button asChild size="sm" className="hidden will-change-transform sm:inline-flex">
           <Link href="/contact" onClick={() => setOpen(false)}>
             {t("cta")}
           </Link>
