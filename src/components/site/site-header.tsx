@@ -169,12 +169,25 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         aria-label="Principal"
         onMouseEnter={cancelClose}
         className={cn(
-          "relative z-10 mx-auto flex max-w-[1280px] items-center gap-4 rounded-full py-[9px] pr-[9px] pl-[22px] transition-[background-color,box-shadow,color] duration-500 ease-[var(--ease-out-expo)]",
-          open
-            ? "bg-white/10 text-white shadow-none backdrop-blur-[22px]"
-            : "bg-white/72 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_10px_30px_-12px_rgba(7,33,63,0.18)] backdrop-blur-[22px] backdrop-saturate-150",
+          "relative isolate z-10 mx-auto flex max-w-[1280px] items-center gap-4 py-[9px] pr-[9px] pl-[22px] transition-colors duration-500 ease-[var(--ease-out-expo)]",
+          open && "text-white",
         )}
       >
+        {/* Le flou vit sur une couche sœur, derrière le contenu, et non sur la
+            barre elle-même. Un `backdrop-filter` doit être recalculé dès que
+            l'élément qui le porte se repeint : le fond qui apparaît au survol
+            d'une entrée étant son descendant, chaque survol refloutait toute
+            la barre. Isolée et promue, la couche ne bouge plus et le survol ne
+            repeint que le texte. */}
+        <span
+          aria-hidden
+          className={cn(
+            "absolute inset-0 z-[-1] rounded-full backdrop-blur-[22px] will-change-transform transition-[background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]",
+            open
+              ? "bg-white/10 shadow-none"
+              : "bg-white/72 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_10px_30px_-12px_rgba(7,33,63,0.18)] backdrop-saturate-150",
+          )}
+        />
         <Link
           href="/"
           onClick={() => setOpen(false)}
@@ -266,13 +279,25 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         onMouseLeave={scheduleClose}
         aria-hidden={!mega}
         className={cn(
-          "relative z-9 mx-auto hidden max-w-[1280px] pt-2 transition-[opacity,transform] duration-200 ease-[var(--ease-out-expo)] lg:block",
+          "relative z-9 mx-auto hidden max-w-[1280px] pt-2 transition-[opacity,transform,visibility] duration-200 ease-[var(--ease-out-expo)] lg:block",
+          // `invisible` et pas seulement `opacity-0` : les panneaux restant
+          // montés, leur vingtaine de liens traverserait sinon l'ordre de
+          // tabulation. La visibilité s'interpole par paliers, donc elle
+          // repasse à `visible` dès le début de l'ouverture et ne retombe
+          // qu'à la fin de la fermeture.
           mega
-            ? "translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-1 opacity-0",
+            ? "visible translate-y-0 opacity-100"
+            : "invisible pointer-events-none -translate-y-1 opacity-0",
         )}
       >
-        <div className="overflow-hidden rounded-[26px] bg-white/92 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150">
+        <div className="relative isolate">
+          {/* Même raison que la barre : le survol d'une ligne ne doit pas
+              refaire le flou du panneau entier. */}
+          <span
+            aria-hidden
+            className="absolute inset-0 z-[-1] rounded-[26px] bg-white/92 will-change-transform shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150"
+          />
+
           {/* Les deux panneaux restent montés : monter une couche de flou et
               vingt-cinq lignes sur un simple survol se voyait à l'œil nu. */}
           {megaKeys.map((key) => (
