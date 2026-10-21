@@ -10,6 +10,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { getServices } from "@/lib/content";
 import { toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -46,10 +47,19 @@ export default async function ServicesPage({
 
       <section className="py-[clamp(3rem,8vh,5rem)]">
         <div className="page-shell grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Huit services : sur trois colonnes, le dernier rang serait
+              dépareillé. La carte de tête occupe donc deux colonnes et
+              les neuf emplacements sont remplis — ce qui met au passage
+              en avant l'offre qui porte le positionnement. */}
           {services.map((service, index) => (
-            <Reveal key={service.id} delay={(index % 3) as 0 | 1 | 2}>
+            <Reveal
+              key={service.id}
+              delay={(index % 3) as 0 | 1 | 2}
+              className={cn("h-full", index === 0 && "lg:col-span-2")}
+            >
               <ServiceCard
                 index={index}
+                className="h-full"
                 service={{
                   slug: service.translations[0].slug,
                   title: service.translations[0].title,

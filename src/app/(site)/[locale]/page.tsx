@@ -1,5 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { cn } from "@/lib/utils";
+
 import { PostCard } from "@/components/site/post-card";
 import { ProjectCard } from "@/components/site/project-card";
 import { ServiceCard } from "@/components/site/service-card";
@@ -58,10 +60,19 @@ export default async function HomePage({
               }
             />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Huit services : sur trois colonnes, le dernier rang serait
+                  dépareillé. La carte de tête occupe donc deux colonnes et
+                  les neuf emplacements sont remplis — ce qui met au passage
+                  en avant l'offre qui porte le positionnement. */}
               {services.map((service, index) => (
-                <Reveal key={service.id} delay={(index % 3) as 0 | 1 | 2}>
+                <Reveal
+                  key={service.id}
+                  delay={(index % 3) as 0 | 1 | 2}
+                  className={cn("h-full", index === 0 && "lg:col-span-2")}
+                >
                   <ServiceCard
                     index={index}
+                    className="h-full"
                     service={{
                       slug: service.translations[0].slug,
                       title: service.translations[0].title,
