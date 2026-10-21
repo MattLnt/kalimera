@@ -85,7 +85,7 @@ export function LandingIndex({
                 <ArrowRight
                   aria-hidden
                   className={cn(
-                    "size-5 shrink-0 transition-[transform,color] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1",
+                    "size-5 shrink-0 transition-[translate,color] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1",
                     featured ? "text-white/40" : "text-[var(--ink-45)] group-hover:text-white",
                   )}
                 />

@@ -45,7 +45,7 @@ export function ProjectCard({
       <span aria-hidden className="grain-layer -z-10" />
 
       {project.metrics[0] ? (
-        <div className="absolute top-6 right-6 z-10 flex translate-y-[-6px] items-center gap-2 rounded-full bg-white/14 py-1.5 pr-3 pl-2 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] transition-[opacity,transform] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0 group-hover:opacity-100 sm:top-8 sm:right-8">
+        <div className="absolute top-6 right-6 z-10 flex translate-y-[-6px] items-center gap-2 rounded-full bg-white/14 py-1.5 pr-3 pl-2 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] transition-[opacity,translate] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0 group-hover:opacity-100 sm:top-8 sm:right-8">
           <span className="grid size-[30px] place-items-center rounded-full bg-[#1FBF6B] font-display text-[0.6875rem] font-extrabold text-[#04281A]">
             {project.metrics[0].value}
           </span>

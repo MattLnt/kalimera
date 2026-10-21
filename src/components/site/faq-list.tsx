@@ -46,7 +46,7 @@ export function FaqList({
 
             <span
               aria-hidden
-              className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-aegean-100 text-aegean-700 transition-[transform,background-color] duration-[450ms] ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:bg-aegean-600 group-open:text-white"
+              className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-aegean-100 text-aegean-700 transition-[rotate,background-color,color] duration-[450ms] ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:bg-aegean-600 group-open:text-white"
             >
               <Plus className="size-4" />
             </span>

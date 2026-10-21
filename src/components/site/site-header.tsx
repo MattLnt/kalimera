@@ -379,7 +379,7 @@ function MobileMenu({
                     {groups.length === 0 ? (
                       <ArrowUpRight
                         aria-hidden
-                        className="ml-auto size-6 self-center text-white/35 transition-[transform,color] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-white"
+                        className="ml-auto size-6 self-center text-white/35 transition-[translate,color] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-white"
                       />
                     ) : null}
                   </Link>

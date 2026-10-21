@@ -5,6 +5,12 @@ import { cn } from "@/lib/utils";
 type Variant = "dark" | "blue" | "white" | "soft" | "line";
 
 /**
+ * `rotate` et non `transform` dans la liste des transitions : Tailwind v4
+ * écrit `rotate: 45deg`, et non `transform: rotate(45deg)`. Une liste qui dit
+ * `transform` ne couvre donc rien, et la flèche basculait d'un coup. Même
+ * piège pour `translate-*` et `scale-*`, qui écrivent `translate` et `scale`.
+ * L'utilitaire `transition-transform`, lui, couvre les quatre.
+ *
  * Le bouton ne se déplace plus au survol : tout le mouvement est porté par la
  * pastille de la flèche. Un déplacement de quelques pixels se lisait mal, et
  * dans l'en-tête il se faisait au-dessus de la barre floutée, où il accrochait.
@@ -72,7 +78,7 @@ export function Button({
       key="arrow"
       aria-hidden
       className={cn(
-        "grid shrink-0 place-items-center rounded-full transition-[background-color,color,transform] duration-[260ms] ease-[var(--ease-hover)] group-hover:rotate-45",
+        "grid shrink-0 place-items-center rounded-full transition-[background-color,color,rotate] duration-[260ms] ease-[var(--ease-hover)] group-hover:rotate-45",
         size === "md" ? "size-8" : "size-7",
         circleVariants[variant],
       )}

@@ -98,7 +98,7 @@ export const MegaPanel = memo(function MegaPanel({
 
                     <ArrowRight
                       aria-hidden
-                      className="size-3.5 shrink-0 text-aegean-600 opacity-0 transition-[opacity,transform] duration-300 group-hover/row:translate-x-0.5 group-hover/row:opacity-100"
+                      className="size-3.5 shrink-0 text-aegean-600 opacity-0 transition-[opacity,translate] duration-300 group-hover/row:translate-x-0.5 group-hover/row:opacity-100"
                     />
                   </Link>
                 </li>
