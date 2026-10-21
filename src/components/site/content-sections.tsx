@@ -408,10 +408,10 @@ export function ContentSections({
                   <Reveal key={i} delay={(i % 3) as 0 | 1 | 2}>
                     <article
                       className={cn(
-                        "group h-full rounded-card p-5 transition-[transform,box-shadow] duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 sm:p-6",
+                        "group h-full rounded-card p-5 transition-transform duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 sm:p-6",
                         white
-                          ? "bg-canvas shadow-[inset_0_0_0_1px_var(--ink-10)] hover:shadow-lift"
-                          : "surface-card hover:shadow-lift",
+                          ? "bg-canvas card-ring"
+                          : "surface-card",
                       )}
                     >
                       <CardMark mark={v.cardMark} index={i} />

@@ -161,17 +161,26 @@
     padding-inline: var(--page-gutter);
   }
 
+  /* La carte monte, son ombre ne bouge pas.
+     Une ombre portée se repeint à chaque image de la transition, sur toute
+     la surface de la carte ; un déplacement, lui, ne coûte qu'un décalage
+     de calque. Les cartes portent donc leur ombre au repos. */
   .surface-card {
     background: #fff;
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-soft);
-    transition:
-      transform 0.55s var(--ease-out-expo),
-      box-shadow 0.55s var(--ease-out-expo);
+    transition: transform 0.55s var(--ease-out-expo);
   }
   .surface-card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-lift);
+  }
+
+  /* Carte plate sur fond crème : le filet, et une ombre douce qui ne bouge
+     pas au survol. */
+  .card-ring {
+    box-shadow:
+      inset 0 0 0 1px var(--ink-10),
+      var(--shadow-soft);
   }
 
   .night-panel {

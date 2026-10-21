@@ -54,17 +54,17 @@ export function LandingIndex({
               href={{ pathname, params: { slug: item.slug } }}
               className={cn(
                 "group relative isolate flex h-full flex-col overflow-hidden rounded-card p-6 sm:p-8",
-                "transition-[transform,box-shadow] duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5",
+                "transition-transform duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5",
                 featured
-                  ? "night-panel text-white shadow-lift hover:shadow-float"
-                  : "bg-white shadow-soft hover:text-white hover:shadow-float",
+                  ? "night-panel text-white shadow-lift"
+                  : "bg-white shadow-lift hover:text-white",
               )}
             >
               {/* Le bleu monte du bas au survol, comme sur les cartes service. */}
               {!featured ? (
                 <span
                   aria-hidden
-                  className="absolute inset-x-0 top-0 -z-10 h-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-[height] duration-[600ms] ease-[var(--ease-out-expo)] group-hover:h-full"
+                  className="absolute inset-0 -z-10 origin-top scale-y-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-transform duration-[600ms] ease-[var(--ease-out-expo)] group-hover:scale-y-100"
                 />
               ) : (
                 <span aria-hidden className="grain-layer -z-10" />

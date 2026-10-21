@@ -26,15 +26,17 @@ export function ServiceCard({
   return (
     <article
       className={cn(
-        "group relative isolate flex min-h-[19rem] flex-col overflow-hidden rounded-card bg-white p-6 shadow-soft sm:p-8",
-        "transition-[transform,box-shadow] duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 hover:text-white hover:shadow-float",
+        "group relative isolate flex min-h-[19rem] flex-col overflow-hidden rounded-card bg-white p-6 shadow-lift sm:p-8",
+        "transition-transform duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 hover:text-white",
         className,
       )}
     >
-      {/* Le bleu monte du bas de la carte au survol. */}
+      {/* Le bleu descend du haut de la carte au survol. `scaleY` et non
+          une hauteur : animer une hauteur refait la mise en page à chaque
+          image, une mise à l'échelle ne coûte qu'un calque. */}
       <span
         aria-hidden
-        className="absolute inset-x-0 top-0 -z-10 h-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-[height] duration-[600ms] ease-[var(--ease-out-expo)] group-hover:h-full"
+        className="absolute inset-0 -z-10 origin-top scale-y-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-transform duration-[600ms] ease-[var(--ease-out-expo)] group-hover:scale-y-100"
       />
 
       <span className="absolute top-6 right-6 font-display text-[0.8125rem] font-extrabold text-[var(--ink-45)] transition-colors duration-500 group-hover:text-white/55 sm:top-8 sm:right-8">

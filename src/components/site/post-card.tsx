@@ -35,8 +35,8 @@ export function PostCard({
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-card bg-white shadow-soft",
-        "transition-[transform,box-shadow] duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 hover:shadow-lift",
+        "group relative flex flex-col overflow-hidden rounded-card bg-white shadow-lift",
+        "transition-transform duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5",
         className,
       )}
     >
