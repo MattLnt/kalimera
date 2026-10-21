@@ -29,9 +29,11 @@ export function BrowserMockup({
       )}
     >
       <div className="flex items-center gap-1.5 border-b border-black/5 bg-[#F4F6F9] px-3 py-2.5">
-        <span className="size-2 shrink-0 rounded-full bg-[#D7DDE6]" />
-        <span className="size-2 shrink-0 rounded-full bg-[#D7DDE6]" />
-        <span className="size-2 shrink-0 rounded-full bg-[#D7DDE6]" />
+        {/* Les trois pastilles de macOS, à leurs teintes réelles. Un dégradé
+            très léger imite le bombé du bouton système. */}
+        <span className="size-[11px] shrink-0 rounded-full bg-[linear-gradient(180deg,#FF6159,#F04A43)] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.12)]" />
+        <span className="size-[11px] shrink-0 rounded-full bg-[linear-gradient(180deg,#FFC130,#F5A623)] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.12)]" />
+        <span className="size-[11px] shrink-0 rounded-full bg-[linear-gradient(180deg,#2ACB42,#1DAD33)] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.12)]" />
         <span className="ml-2 flex h-[18px] flex-1 items-center truncate rounded-full bg-white px-2.5 text-[0.625rem] text-[var(--ink-45)] shadow-[inset_0_0_0_1px_rgba(8,9,11,0.07)]">
           {url}
         </span>

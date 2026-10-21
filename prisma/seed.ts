@@ -1,5 +1,7 @@
 import { config as loadEnv } from "dotenv";
 
+import { statSync } from "node:fs";
+
 import { PrismaPg } from "@prisma/adapter-pg";
 
 // Même ordre de priorité que la CLI Prisma : .env.local puis .env.
@@ -8,6 +10,7 @@ loadEnv({ quiet: true });
 import { hash } from "bcryptjs";
 
 import { PrismaClient } from "../src/generated/prisma/client";
+import { COVER_SIZE, covers } from "./seed-data/covers";
 import { landings } from "./seed-data/landings";
 import { obsolete } from "./seed-data/obsolete";
 import { posts } from "./seed-data/posts";
@@ -190,6 +193,46 @@ async function main() {
     });
   }
   console.log(`  ✓ ${projects.length} projets`);
+
+  // ----- captures d'écran des réalisations
+  //
+  // Les fichiers vivent dans public/work : on crée une ligne Media par
+  // capture, puis on la rattache au projet. Le poids est lu sur le disque
+  // plutôt que codé en dur, pour qu'il reste juste si une image est reprise.
+  for (const cover of covers) {
+    const project = await prisma.project.findUnique({
+      where: { key: cover.projectKey },
+      select: { id: true },
+    });
+    if (!project) continue;
+
+    const url = `/work/${cover.file}`;
+    const publicId = `local:work/${cover.file}`;
+    const bytes = statSync(`public/work/${cover.file}`).size;
+
+    const data = {
+      url,
+      width: COVER_SIZE.width,
+      height: COVER_SIZE.height,
+      format: "jpg",
+      bytes,
+      altFr: cover.altFr,
+      altEn: cover.altEn,
+      altEs: cover.altEs,
+    };
+
+    const media = await prisma.media.upsert({
+      where: { publicId },
+      update: data,
+      create: { publicId, ...data },
+    });
+
+    await prisma.project.update({
+      where: { id: project.id },
+      data: { coverImageId: media.id },
+    });
+  }
+  console.log(`  ✓ ${covers.length} captures d'écran`);
 
   // ----- journal
   for (const post of posts) {
