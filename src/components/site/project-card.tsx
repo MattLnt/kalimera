@@ -44,12 +44,17 @@ export function ProjectCard({
     >
       <span aria-hidden className="grain-layer -z-10" />
 
+      {/* Le modèle de prix, au survol. La valeur tenait dans un cercle de
+          30 px, taillé pour un score à deux chiffres : « 59 €/mois » en
+          débordait et chevauchait le bord de la pastille. Elle vit désormais
+          dans une pilule qui s'adapte à son contenu, et la pastille ne peut
+          plus dépasser la largeur de la carte. */}
       {project.metrics[0] ? (
-        <div className="absolute top-6 right-6 z-10 flex translate-y-[-6px] items-center gap-2 rounded-full bg-white/14 py-1.5 pr-3 pl-2 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] transition-[opacity,translate] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0 group-hover:opacity-100 sm:top-8 sm:right-8">
-          <span className="grid size-[30px] place-items-center rounded-full bg-[#1FBF6B] font-display text-[0.6875rem] font-extrabold text-[#04281A]">
+        <div className="absolute top-6 right-6 z-10 flex max-w-[calc(100%-3rem)] translate-y-[-6px] items-center gap-2 rounded-full bg-white/14 py-1.5 pr-3 pl-1.5 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] transition-[opacity,translate] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0 group-hover:opacity-100 sm:top-8 sm:right-8">
+          <span className="shrink-0 rounded-full bg-[#1FBF6B] px-2.5 py-1 font-display text-[0.6875rem] leading-none font-extrabold whitespace-nowrap text-[#04281A]">
             {project.metrics[0].value}
           </span>
-          <span className="font-display text-[0.6875rem] font-semibold text-white/85">
+          <span className="truncate font-display text-[0.6875rem] font-semibold whitespace-nowrap text-white/85">
             {project.metrics[0].label}
           </span>
         </div>
