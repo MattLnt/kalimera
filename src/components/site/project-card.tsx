@@ -36,7 +36,7 @@ export function ProjectCard({
     <article
       className={cn(
         "group relative isolate flex flex-col overflow-hidden rounded-card px-6 pt-6 text-white shadow-lift sm:px-8 sm:pt-8",
-        "transition-transform duration-[600ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5",
+        "transition-transform duration-[320ms] ease-[var(--ease-hover)] hover:-translate-y-1.5",
         size === "wide" ? "min-h-[26rem]" : "min-h-[24rem]",
         accentClass(project.accent),
         className,

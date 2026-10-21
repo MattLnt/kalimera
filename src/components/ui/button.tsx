@@ -55,7 +55,7 @@ export function Button({
 }: ButtonProps) {
   const classes = cn(
     "group inline-flex cursor-pointer items-center gap-2.5 rounded-full border-0 font-display font-bold tracking-[-0.01em]",
-    "transition-[transform,background-color] duration-[400ms] ease-[var(--ease-out-expo)] hover:-translate-y-0.5",
+    "transition-[transform,background-color] duration-[260ms] ease-[var(--ease-hover)] hover:-translate-y-[3px]",
     size === "md"
       ? "py-2.5 pr-2.5 pl-6 text-[0.9375rem]"
       : "py-[0.45rem] pr-2 pl-[1.1rem] text-sm",
@@ -68,7 +68,7 @@ export function Button({
       key="arrow"
       aria-hidden
       className={cn(
-        "grid shrink-0 place-items-center rounded-full transition-[background-color,color,transform] duration-[400ms] ease-[var(--ease-out-expo)] group-hover:rotate-45",
+        "grid shrink-0 place-items-center rounded-full transition-[background-color,color,transform] duration-[260ms] ease-[var(--ease-hover)] group-hover:rotate-45",
         size === "md" ? "size-8" : "size-7",
         circleVariants[variant],
       )}

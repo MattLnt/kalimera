@@ -54,7 +54,7 @@ export function LandingIndex({
               href={{ pathname, params: { slug: item.slug } }}
               className={cn(
                 "group relative isolate flex h-full flex-col overflow-hidden rounded-card p-6 sm:p-8",
-                "transition-transform duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5",
+                "transition-transform duration-[320ms] ease-[var(--ease-hover)] hover:-translate-y-1.5",
                 featured
                   ? "night-panel text-white shadow-lift"
                   : "bg-white shadow-lift hover:text-white",
@@ -64,7 +64,7 @@ export function LandingIndex({
               {!featured ? (
                 <span
                   aria-hidden
-                  className="absolute inset-0 -z-10 origin-top scale-y-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-transform duration-[600ms] ease-[var(--ease-out-expo)] group-hover:scale-y-100"
+                  className="absolute inset-0 -z-10 origin-top scale-y-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-transform duration-[420ms] ease-[var(--ease-hover)] group-hover:scale-y-100"
                 />
               ) : (
                 <span aria-hidden className="grain-layer -z-10" />

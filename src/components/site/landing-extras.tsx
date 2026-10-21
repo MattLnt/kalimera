@@ -48,7 +48,7 @@ export async function WhyUs({ compact = false }: { compact?: boolean }) {
             const Icon = WHY_ICONS[index];
             return (
               <Reveal key={card.n} delay={(index % 3) as 0 | 1 | 2}>
-                <article className="group h-full rounded-card bg-canvas card-ring p-5 transition-transform duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 sm:p-6">
+                <article className="group h-full rounded-card bg-canvas card-ring p-5 transition-transform duration-[320ms] ease-[var(--ease-hover)] hover:-translate-y-1.5 sm:p-6">
                   <span className="grid size-10 place-items-center rounded-[11px] bg-aegean-100 text-aegean-700 transition-colors duration-500 group-hover:bg-aegean-600 group-hover:text-white">
                     <Icon className="size-5" />
                   </span>

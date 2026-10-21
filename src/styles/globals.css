@@ -37,8 +37,15 @@
   --shadow-lift: 0 2px 4px rgba(7, 33, 63, 0.05), 0 18px 40px -12px rgba(7, 33, 63, 0.14);
   --shadow-float: 0 4px 8px rgba(7, 33, 63, 0.06), 0 34px 70px -20px rgba(7, 33, 63, 0.22);
 
-  /* Courbe d'animation commune */
+  /* Courbe des entrées : elle se précipite, ce qui convient à un élément
+     qui apparaît. Elle fait 40 % du chemin dans les 10 premiers pour-cent
+     du temps. */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Courbe des survols. La même précipitation, sur un déplacement de
+     quelques pixels, ne se lit pas comme un mouvement mais comme un
+     à-coup suivi d'une traîne. Celle-ci démarre doucement — 3 % du chemin
+     au dixième du temps — et répartit le mouvement sur le milieu. */
+  --ease-hover: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @layer base {
@@ -169,7 +176,7 @@
     background: #fff;
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-soft);
-    transition: transform 0.55s var(--ease-out-expo);
+    transition: transform 0.32s var(--ease-hover);
   }
   .surface-card-hover:hover {
     transform: translateY(-4px);

@@ -27,7 +27,7 @@ export function ServiceCard({
     <article
       className={cn(
         "group relative isolate flex min-h-[19rem] flex-col overflow-hidden rounded-card bg-white p-6 shadow-lift sm:p-8",
-        "transition-transform duration-[550ms] ease-[var(--ease-out-expo)] hover:-translate-y-1.5 hover:text-white",
+        "transition-transform duration-[320ms] ease-[var(--ease-hover)] hover:-translate-y-1.5 hover:text-white",
         className,
       )}
     >
@@ -36,7 +36,7 @@ export function ServiceCard({
           image, une mise à l'échelle ne coûte qu'un calque. */}
       <span
         aria-hidden
-        className="absolute inset-0 -z-10 origin-top scale-y-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-transform duration-[600ms] ease-[var(--ease-out-expo)] group-hover:scale-y-100"
+        className="absolute inset-0 -z-10 origin-top scale-y-0 bg-linear-[150deg,var(--color-aegean-600),var(--color-aegean-900)] transition-transform duration-[420ms] ease-[var(--ease-hover)] group-hover:scale-y-100"
       />
 
       <span className="absolute top-6 right-6 font-display text-[0.8125rem] font-extrabold text-[var(--ink-45)] transition-colors duration-500 group-hover:text-white/55 sm:top-8 sm:right-8">
