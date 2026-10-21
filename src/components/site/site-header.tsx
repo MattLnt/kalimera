@@ -174,17 +174,20 @@ export function SiteHeader({ nav }: { nav: NavData }) {
           open && "text-white",
         )}
       >
-        {/* Fond plein, sans `backdrop-filter`. Un flou d'arrière-plan doit être
-            recalculé dès que ce qu'il y a derrière change — et derrière cette
-            barre, il y a toute la page qui défile. C'est le choix qui rend le
-            menu de Côté BURO fluide, et le seul qui coûte zéro. */}
+        {/* Le verre revient ici, et ici seulement.
+            Un `backdrop-filter` se recalcule dès que ce qu'il y a derrière
+            change : sur la barre c'est une bande de 1280 × 56 px, contre
+            quatre fois plus pour le panneau — qui reste donc opaque, puisque
+            c'est lui qu'on survole. La couche vit à part, derrière le contenu
+            (`z-[-1]`) : le fond qui apparaît sous une entrée au survol ne la
+            salit pas, donc survoler le menu ne refloute rien. */}
         <span
           aria-hidden
           className={cn(
-            "absolute inset-0 z-[-1] rounded-full transition-[background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]",
+            "absolute inset-0 z-[-1] rounded-full backdrop-blur-[22px] transition-[background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]",
             open
               ? "bg-white/10 shadow-none"
-              : "bg-white shadow-[0_1px_1px_rgba(7,33,63,0.04),0_10px_30px_-12px_rgba(7,33,63,0.18)]",
+              : "bg-white/72 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_10px_30px_-12px_rgba(7,33,63,0.18)] backdrop-saturate-150",
           )}
         />
         <Link
