@@ -348,12 +348,19 @@
     }
   }
 
+  /* Pas de `filter: blur()` ici, volontairement. Le fond est déjà un dégradé
+     radial qui s'éteint à 68 % : un flou par-dessus ne se voit pas, mais
+     `orb-drift` met l'orbe à l'échelle en boucle infinie, et mettre à
+     l'échelle une surface floutée force le navigateur à recalculer un flou de
+     60 px sur 790 px à chaque image. La page entière y perdait sa cadence, et
+     tout ce qu'on survolait paraissait saccadé. Sans filtre, l'animation ne
+     coûte plus qu'un déplacement de calque. */
   .orb {
     position: absolute;
     border-radius: 999px;
-    filter: blur(60px);
     pointer-events: none;
     z-index: 0;
+    will-change: transform;
   }
   @keyframes orb-drift {
     to {
