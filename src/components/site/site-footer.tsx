@@ -61,6 +61,12 @@ export async function SiteFooter({ dbLocale }: { dbLocale: DbLocale }) {
             </h2>
             <ul className="grid gap-2.5">
               <li>
+                <FooterLink href="/sectors">{t("nav.sectors")}</FooterLink>
+              </li>
+              <li>
+                <FooterLink href="/locations">{t("nav.locations")}</FooterLink>
+              </li>
+              <li>
                 <FooterLink href="/studio">{t("nav.studio")}</FooterLink>
               </li>
               <li>
@@ -140,7 +146,14 @@ function FooterLink({
   href,
   children,
 }: {
-  href: "/studio" | "/work" | "/journal" | "/legal" | "/privacy";
+  href:
+    | "/studio"
+    | "/sectors"
+    | "/locations"
+    | "/work"
+    | "/journal"
+    | "/legal"
+    | "/privacy";
   children: React.ReactNode;
 }) {
   return (

@@ -17,7 +17,16 @@
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "language": "Langue",
-    "skipToContent": "Aller au contenu"
+    "skipToContent": "Aller au contenu",
+    "sectors": "Secteurs",
+    "locations": "Villes & marchés",
+    "build": "Ce qu'on construit",
+    "allServices": "Voir toutes nos expertises",
+    "allSectors": "Voir tous les secteurs",
+    "markets": "Villes & marchés",
+    "megaBuildLead": "Des plateformes métier aux sites sur mesure. Tout est codé, rien n'est assemblé.",
+    "megaSectorsLead": "Les métiers pour lesquels nous avons déjà livré, et les marchés que nous servons.",
+    "closeSubmenu": "Fermer le sous-menu"
   },
   "home": {
     "hero": {
@@ -199,7 +208,7 @@
   },
   "footer": {
     "about": "Studio de développement indépendant. Plateformes métier, SaaS et sites sur mesure — conçus et codés en interne, sans WordPress ni Shopify.",
-    "servicesTitle": "Services",
+    "servicesTitle": "Ce qu'on construit",
     "studioTitle": "Studio",
     "contactTitle": "Contact",
     "careers": "Carrières",
@@ -228,5 +237,16 @@
     "privacyLink": "Notre politique de confidentialité",
     "accept": "Accepter",
     "refuse": "Refuser"
+  },
+  "landings": {
+    "sectorChip": "Secteur",
+    "sectorsTitle": "Secteurs d'activité",
+    "sectorsIntro": "Les métiers pour lesquels nous avons déjà livré : courtage, fiduciaires, immobilier, recrutement financier, commerce B2B et services locaux.",
+    "locationChip": "Marché",
+    "locationsTitle": "Villes & marchés",
+    "locationsIntro": "Où nous sommes établis, et où nous avons livré. Aix-en-Provence et Marseille pour la proximité, Belgique, Luxembourg et Suisse romande pour les plateformes B2B.",
+    "proof": "Les réalisations qui le prouvent",
+    "relatedServices": "Les services concernés",
+    "faq": "Questions fréquentes"
   }
 }

@@ -17,7 +17,16 @@
     "openMenu": "Abrir el menú",
     "closeMenu": "Cerrar el menú",
     "language": "Idioma",
-    "skipToContent": "Ir al contenido"
+    "skipToContent": "Ir al contenido",
+    "sectors": "Sectores",
+    "locations": "Ciudades y mercados",
+    "build": "Lo que construimos",
+    "allServices": "Ver todas nuestras especialidades",
+    "allSectors": "Ver todos los sectores",
+    "markets": "Ciudades y mercados",
+    "megaBuildLead": "De las plataformas de negocio a las webs a medida. Todo está programado, nada está ensamblado.",
+    "megaSectorsLead": "Las profesiones para las que ya hemos entregado y los mercados que servimos.",
+    "closeSubmenu": "Cerrar el submenú"
   },
   "home": {
     "hero": {
@@ -199,7 +208,7 @@
   },
   "footer": {
     "about": "Estudio de desarrollo independiente. Plataformas de negocio, SaaS y webs a medida: diseñados y programados internamente, sin WordPress ni Shopify.",
-    "servicesTitle": "Servicios",
+    "servicesTitle": "Lo que construimos",
     "studioTitle": "Estudio",
     "contactTitle": "Contacto",
     "careers": "Empleo",
@@ -228,5 +237,16 @@
     "privacyLink": "Nuestra política de privacidad",
     "accept": "Aceptar",
     "refuse": "Rechazar"
+  },
+  "landings": {
+    "sectorChip": "Sector",
+    "sectorsTitle": "Sectores en los que trabajamos",
+    "sectorsIntro": "Las profesiones para las que ya hemos entregado: corretaje, asesorías, inmobiliaria, selección financiera, comercio B2B y servicios locales.",
+    "locationChip": "Mercado",
+    "locationsTitle": "Ciudades y mercados",
+    "locationsIntro": "Dónde estamos establecidos y dónde hemos entregado. Aix-en-Provence y Marsella por proximidad; Bélgica, Luxemburgo y la Suiza francófona para plataformas B2B.",
+    "proof": "Los proyectos que lo demuestran",
+    "relatedServices": "Los servicios implicados",
+    "faq": "Preguntas frecuentes"
   }
 }

@@ -6,6 +6,7 @@ import {
   FolderKanban,
   Image as ImageIcon,
   LayoutGrid,
+  Map,
   LogOut,
   Mail,
   Quote,
@@ -21,6 +22,7 @@ import { cn } from "@/lib/utils";
 const nav = [
   { href: "/admin", label: "Tableau de bord", icon: LayoutGrid, exact: true },
   { href: "/admin/services", label: "Services", icon: LayoutGrid },
+  { href: "/admin/landings", label: "Secteurs & villes", icon: Map },
   { href: "/admin/projects", label: "Projets", icon: FolderKanban },
   { href: "/admin/posts", label: "Journal", icon: FileText },
   { href: "/admin/testimonials", label: "Témoignages", icon: Quote },

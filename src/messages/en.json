@@ -17,7 +17,16 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "language": "Language",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "sectors": "Sectors",
+    "locations": "Cities & markets",
+    "build": "What we build",
+    "allServices": "See all our expertise",
+    "allSectors": "See all sectors",
+    "markets": "Cities & markets",
+    "megaBuildLead": "From business platforms to bespoke sites. Everything is coded, nothing is assembled.",
+    "megaSectorsLead": "The professions we have already delivered for, and the markets we serve.",
+    "closeSubmenu": "Close submenu"
   },
   "home": {
     "hero": {
@@ -199,7 +208,7 @@
   },
   "footer": {
     "about": "Independent development studio. Business platforms, SaaS and bespoke sites — designed and coded in-house, with no WordPress or Shopify.",
-    "servicesTitle": "Services",
+    "servicesTitle": "What we build",
     "studioTitle": "Studio",
     "contactTitle": "Contact",
     "careers": "Careers",
@@ -228,5 +237,16 @@
     "privacyLink": "Our privacy policy",
     "accept": "Accept",
     "refuse": "Decline"
+  },
+  "landings": {
+    "sectorChip": "Sector",
+    "sectorsTitle": "Sectors we work in",
+    "sectorsIntro": "The professions we have already delivered for: insurance broking, accountancy firms, real estate, financial recruitment, B2B trade and local services.",
+    "locationChip": "Market",
+    "locationsTitle": "Cities & markets",
+    "locationsIntro": "Where we are based, and where we have delivered. Aix-en-Provence and Marseille for proximity; Belgium, Luxembourg and French-speaking Switzerland for B2B platforms.",
+    "proof": "The work that proves it",
+    "relatedServices": "The services involved",
+    "faq": "Frequently asked questions"
   }
 }

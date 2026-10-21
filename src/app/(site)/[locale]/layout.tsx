@@ -9,6 +9,7 @@ import { Analytics } from "@/components/site/analytics";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
+import { getNavData } from "@/components/site/nav-data";
 import { SiteHeader } from "@/components/site/site-header";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { inter, manrope } from "@/lib/fonts";
@@ -85,6 +86,8 @@ export default async function SiteLayout({
 
   const t = await getTranslations({ locale, namespace: "nav" });
   const meta = await getTranslations({ locale, namespace: "meta" });
+  // Le menu déroulant est un composant client : ses données sont lues ici.
+  const nav = await getNavData(toDbLocale(locale));
 
   // Un seul graphe pour les trois entités : les `@id` s'y résolvent entre eux.
   const base = getSiteUrl();
@@ -107,7 +110,7 @@ export default async function SiteLayout({
           {t("skipToContent")}
         </a>
         <NextIntlClientProvider>
-          <SiteHeader />
+          <SiteHeader nav={nav} />
           <main id="contenu" className="flex-1">
             {children}
           </main>

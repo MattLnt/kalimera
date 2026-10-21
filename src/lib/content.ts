@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { Locale as DbLocale } from "@/generated/prisma/enums";
+import type { Locale as DbLocale, LandingKind } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -249,5 +249,68 @@ export async function getAlternateSlugs(
   return prisma.postTranslation.findMany({
     where: { postId: id },
     select: { locale: true, slug: true },
+  });
+}
+
+// ------------------------------------------------------- pages d'atterrissage
+
+
+/**
+ * Les pages sectorielles et géographiques. Elles portent les requêtes que les
+ * prospects tapent réellement, là où les pages services décrivent une offre.
+ */
+export async function getLandings(locale: DbLocale, kind: LandingKind) {
+  const landings = await prisma.landing.findMany({
+    where: { published: true, kind },
+    orderBy: { position: "asc" },
+    include: { translations: translationForLocale(locale) },
+  });
+  return landings.filter((landing) => landing.translations.length > 0);
+}
+
+export async function getLandingBySlug(
+  locale: DbLocale,
+  kind: LandingKind,
+  slug: string,
+) {
+  const translation = await prisma.landingTranslation.findUnique({
+    where: { locale_slug: { locale, slug } },
+    include: {
+      landing: {
+        include: {
+          translations: true,
+          faqs: { orderBy: { position: "asc" } },
+          services: {
+            where: { published: true },
+            orderBy: { position: "asc" },
+            include: { translations: translationForLocale(locale) },
+          },
+          projects: {
+            where: { published: true },
+            orderBy: { position: "asc" },
+            include: {
+              coverImage: true,
+              metrics: { orderBy: { position: "asc" } },
+              translations: translationForLocale(locale),
+            },
+          },
+        },
+      },
+    },
+  });
+
+  // Le slug est unique par langue toutes familles confondues : on vérifie le
+  // type, sinon /secteurs/aix-en-provence répondrait au lieu de renvoyer 404.
+  if (!translation || !translation.landing.published) return null;
+  if (translation.landing.kind !== kind) return null;
+  return translation;
+}
+
+export async function getLandingSlugs(kind?: LandingKind) {
+  return prisma.landingTranslation.findMany({
+    where: {
+      landing: { published: true, ...(kind ? { kind } : {}) },
+    },
+    select: { locale: true, slug: true, landingId: true },
   });
 }

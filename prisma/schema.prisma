@@ -68,20 +68,21 @@ model Service {
 
   translations ServiceTranslation[]
   projects     Project[]            @relation("ProjectServices")
+  landings     Landing[]            @relation("LandingServices")
 
   @@index([published, position])
   @@map("services")
 }
 
 model ServiceTranslation {
-  id        String  @id @default(cuid())
-  serviceId String
-  locale    Locale
-  slug      String
-  title     String
-  summary   String
+  id             String  @id @default(cuid())
+  serviceId      String
+  locale         Locale
+  slug           String
+  title          String
+  summary        String
   /// Corps de la page service, en Markdown.
-  body      String  @default("")
+  body           String  @default("")
   seoTitle       String?
   seoDescription String?
 
@@ -117,6 +118,7 @@ model Project {
 
   gallery      Media[]              @relation("ProjectGallery")
   services     Service[]            @relation("ProjectServices")
+  landings     Landing[]            @relation("LandingProjects")
   metrics      ProjectMetric[]
   translations ProjectTranslation[]
 
@@ -125,17 +127,17 @@ model Project {
 }
 
 model ProjectTranslation {
-  id        String  @id @default(cuid())
-  projectId String
-  locale    Locale
-  slug      String
-  title     String
+  id             String  @id @default(cuid())
+  projectId      String
+  locale         Locale
+  slug           String
+  title          String
   /// Sur-titre de la carte, ex. « Site vitrine · Hôtellerie ».
-  category  String
-  summary   String
-  challenge String  @default("")
-  solution  String  @default("")
-  outcome   String  @default("")
+  category       String
+  summary        String
+  challenge      String  @default("")
+  solution       String  @default("")
+  outcome        String  @default("")
   seoTitle       String?
   seoDescription String?
 
@@ -183,14 +185,14 @@ model Post {
 }
 
 model PostTranslation {
-  id      String @id @default(cuid())
-  postId  String
-  locale  Locale
-  slug    String
-  title   String
-  excerpt String
+  id             String  @id @default(cuid())
+  postId         String
+  locale         Locale
+  slug           String
+  title          String
+  excerpt        String
   /// Corps de l'article, en Markdown.
-  body    String @default("")
+  body           String  @default("")
   /// Libellé de catégorie traduit, ex. « Performance ».
   categoryLabel  String  @default("")
   seoTitle       String?
@@ -277,4 +279,81 @@ model ContactMessage {
 
   @@index([status, createdAt])
   @@map("contact_messages")
+}
+
+// ---------------------------------------------------------------- atterrissage
+
+/// Deux familles de pages d'atterrissage, servies par des routes distinctes.
+enum LandingKind {
+  /// Page sectorielle : « plateformes pour le courtage en assurance ».
+  SECTOR
+  /// Page géographique : « développement web à Aix-en-Provence ».
+  LOCATION
+}
+
+/// Page conçue pour une intention de recherche précise, secteur ou ville.
+/// Elle relie une promesse, des services et les réalisations qui la prouvent —
+/// c'est ce qui la fait convertir, et ce qui justifie son indexation séparée.
+model Landing {
+  id         String      @id @default(cuid())
+  key        String      @unique
+  kind       LandingKind @default(SECTOR)
+  icon       String      @default("Layers")
+  /// Pastilles affichées sur la carte et sous le titre.
+  highlights String[]    @default([])
+  position   Int         @default(0)
+  published  Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  /// Services mis en avant sur la page.
+  services Service[] @relation("LandingServices")
+  /// Réalisations citées en preuve. Sans preuve, la page convertit mal.
+  projects Project[] @relation("LandingProjects")
+
+  translations LandingTranslation[]
+  faqs         LandingFaq[]
+
+  @@index([published, kind, position])
+  @@map("landings")
+}
+
+model LandingTranslation {
+  id             String  @id @default(cuid())
+  landingId      String
+  locale         Locale
+  slug           String
+  title          String
+  /// Chapeau affiché sous le titre.
+  lead           String
+  /// Corps de la page, en Markdown.
+  body           String  @default("")
+  seoTitle       String?
+  seoDescription String?
+
+  landing Landing @relation(fields: [landingId], references: [id], onDelete: Cascade)
+
+  @@unique([landingId, locale])
+  @@unique([locale, slug])
+  @@map("landing_translations")
+}
+
+/// Question fréquente d'une page d'atterrissage. Alimente le bloc visible et
+/// les données structurées `FAQPage`, éligibles au résultat enrichi Google.
+/// Les trois langues sont sur la même ligne, comme pour `ProjectMetric`.
+model LandingFaq {
+  id         String @id @default(cuid())
+  landingId  String
+  position   Int    @default(0)
+  questionFr String
+  questionEn String @default("")
+  questionEs String @default("")
+  answerFr   String
+  answerEn   String @default("")
+  answerEs   String @default("")
+
+  landing Landing @relation(fields: [landingId], references: [id], onDelete: Cascade)
+
+  @@index([landingId, position])
+  @@map("landing_faqs")
 }

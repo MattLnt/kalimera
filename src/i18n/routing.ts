@@ -30,6 +30,30 @@ export const routing = defineRouting({
       en: "/work/[slug]",
       es: "/proyectos/[slug]",
     },
+    /**
+     * Pages sectorielles. Le segment porte le mot-clé métier, pas un terme
+     * interne : /fr/secteurs/courtage-assurance se lit et s'indexe.
+     */
+    "/sectors": { fr: "/secteurs", en: "/sectors", es: "/sectores" },
+    "/sectors/[slug]": {
+      fr: "/secteurs/[slug]",
+      en: "/sectors/[slug]",
+      es: "/sectores/[slug]",
+    },
+    /**
+     * Pages géographiques. Le segment contient la requête elle-même :
+     * /fr/developpement-web/aix-en-provence.
+     */
+    "/locations": {
+      fr: "/developpement-web",
+      en: "/web-development",
+      es: "/desarrollo-web",
+    },
+    "/locations/[slug]": {
+      fr: "/developpement-web/[slug]",
+      en: "/web-development/[slug]",
+      es: "/desarrollo-web/[slug]",
+    },
     "/journal": { fr: "/journal", en: "/journal", es: "/diario" },
     "/journal/[slug]": {
       fr: "/journal/[slug]",

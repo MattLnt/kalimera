@@ -8,9 +8,11 @@ loadEnv({ quiet: true });
 import { hash } from "bcryptjs";
 
 import { PrismaClient } from "../src/generated/prisma/client";
+import { landings } from "./seed-data/landings";
 import { obsolete } from "./seed-data/obsolete";
 import { posts } from "./seed-data/posts";
 import { projects } from "./seed-data/projects";
+import { serviceExtras } from "./seed-data/services-extra";
 import { services } from "./seed-data/services";
 import { Locale } from "../src/generated/prisma/enums";
 
@@ -87,13 +89,17 @@ async function main() {
 
     for (const locale of [Locale.FR, Locale.EN, Locale.ES]) {
       const key = locale.toLowerCase() as "fr" | "en" | "es";
+      // Le corps publié combine la description de l'offre et les sections qui
+      // répondent aux objections : c'est ce qui donne à la page la longueur
+      // utile pour se positionner.
+      const body = service.body[key] + (serviceExtras[service.key]?.[key] ?? "");
       await prisma.serviceTranslation.upsert({
         where: { serviceId_locale: { serviceId: record.id, locale } },
         update: {
           slug: service.slug[key],
           title: service.title[key],
           summary: service.summary[key],
-          body: service.body[key],
+          body,
         },
         create: {
           serviceId: record.id,
@@ -101,7 +107,7 @@ async function main() {
           slug: service.slug[key],
           title: service.title[key],
           summary: service.summary[key],
-          body: service.body[key],
+          body,
         },
       });
     }
@@ -226,6 +232,89 @@ async function main() {
     }
   }
   console.log(`  ✓ ${posts.length} articles`);
+
+  // ----- pages d'atterrissage
+  //
+  // Elles sont écrites après les services et les projets : chaque page relie
+  // les deux par clé, et la liaison échouerait si les cibles n'existaient pas.
+  for (const [index, landing] of landings.entries()) {
+    const [serviceIds, projectIds] = await Promise.all([
+      prisma.service.findMany({
+        where: { key: { in: landing.serviceKeys } },
+        select: { id: true },
+      }),
+      prisma.project.findMany({
+        where: { key: { in: landing.projectKeys } },
+        select: { id: true },
+      }),
+    ]);
+
+    const serviceRefs = serviceIds.map((item) => ({ id: item.id }));
+    const projectRefs = projectIds.map((item) => ({ id: item.id }));
+
+    const record = await prisma.landing.upsert({
+      where: { key: landing.key },
+      update: {
+        kind: landing.kind,
+        icon: landing.icon,
+        highlights: [...landing.highlights],
+        position: index,
+        published: true,
+        // `set` remplace la liste existante ; `connect` ne saurait pas retirer
+        // une liaison devenue obsolète.
+        services: { set: serviceRefs },
+        projects: { set: projectRefs },
+      },
+      create: {
+        key: landing.key,
+        kind: landing.kind,
+        icon: landing.icon,
+        highlights: [...landing.highlights],
+        position: index,
+        published: true,
+        services: { connect: serviceRefs },
+        projects: { connect: projectRefs },
+      },
+    });
+
+    for (const locale of [Locale.FR, Locale.EN, Locale.ES]) {
+      const key = locale.toLowerCase() as "fr" | "en" | "es";
+      await prisma.landingTranslation.upsert({
+        where: { landingId_locale: { landingId: record.id, locale } },
+        update: {
+          slug: landing.slug[key],
+          title: landing.title[key],
+          lead: landing.lead[key],
+          body: landing.body[key],
+        },
+        create: {
+          landingId: record.id,
+          locale,
+          slug: landing.slug[key],
+          title: landing.title[key],
+          lead: landing.lead[key],
+          body: landing.body[key],
+        },
+      });
+    }
+
+    // Les FAQ sont réécrites en bloc : plus simple et plus sûr qu'un
+    // rapprochement par position, qui dérive dès que l'ordre change.
+    await prisma.landingFaq.deleteMany({ where: { landingId: record.id } });
+    await prisma.landingFaq.createMany({
+      data: landing.faqs.map((faq, position) => ({
+        landingId: record.id,
+        position,
+        questionFr: faq.question.fr,
+        questionEn: faq.question.en,
+        questionEs: faq.question.es,
+        answerFr: faq.answer.fr,
+        answerEn: faq.answer.en,
+        answerEs: faq.answer.es,
+      })),
+    });
+  }
+  console.log(`  ✓ ${landings.length} pages d'atterrissage`);
 
   // ----- témoignages
   //
