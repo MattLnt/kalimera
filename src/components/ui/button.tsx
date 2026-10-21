@@ -5,6 +5,10 @@ import { cn } from "@/lib/utils";
 type Variant = "dark" | "blue" | "white" | "soft" | "line";
 
 /**
+ * Le bouton ne se déplace plus au survol : tout le mouvement est porté par la
+ * pastille de la flèche. Un déplacement de quelques pixels se lisait mal, et
+ * dans l'en-tête il se faisait au-dessus de la barre floutée, où il accrochait.
+ *
  * Les ombres sont portées au repos et ne bougent plus au survol : une ombre
  * portée se repeint à chaque image, et ce repaint entraînait tout le contenu
  * du bouton avec elle — la flèche paraissait accrocher alors que sa rotation
@@ -55,7 +59,7 @@ export function Button({
 }: ButtonProps) {
   const classes = cn(
     "group inline-flex cursor-pointer items-center gap-2.5 rounded-full border-0 font-display font-bold tracking-[-0.01em]",
-    "transition-[transform,background-color] duration-[260ms] ease-[var(--ease-hover)] hover:-translate-y-[3px]",
+    "transition-[background-color] duration-[260ms] ease-[var(--ease-hover)]",
     size === "md"
       ? "py-2.5 pr-2.5 pl-6 text-[0.9375rem]"
       : "py-[0.45rem] pr-2 pl-[1.1rem] text-sm",

@@ -242,10 +242,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
           <LanguageSwitcher tone={open ? "dark" : "light"} />
         </div>
 
-        {/* `will-change-transform` : seul bouton du site à se déplacer
-            au-dessus d'une couche floutée. Sur son propre calque, le
-            compositeur le bouge sans rien redemander au flou en dessous. */}
-        <Button asChild size="sm" className="hidden will-change-transform sm:inline-flex">
+        <Button asChild size="sm" className="hidden sm:inline-flex">
           <Link href="/contact" onClick={() => setOpen(false)}>
             {t("cta")}
           </Link>
