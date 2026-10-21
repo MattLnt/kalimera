@@ -265,10 +265,26 @@
   /* Apparition au défilement, pilotée par le composant Reveal. */
   .reveal {
     opacity: 0;
-    transform: translateY(26px);
+    transform: translateY(16px);
     transition:
-      opacity 0.85s var(--ease-out-expo),
-      transform 0.85s var(--ease-out-expo);
+      opacity 0.55s var(--ease-out-expo),
+      transform 0.55s var(--ease-out-expo);
+    /* Prévient le navigateur du changement : la composition se fait sur le
+       GPU, ce qui évite les à-coups sur une page longue. */
+    will-change: opacity, transform;
+  }
+  .reveal[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* Sans JavaScript, le contenu doit rester lisible. */
+  @media (scripting: none) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
   }
   .reveal[data-visible="true"] {
     opacity: 1;

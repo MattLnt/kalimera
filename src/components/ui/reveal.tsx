@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-const delays = ["", "delay-[70ms]", "delay-[140ms]", "delay-[210ms]", "delay-[280ms]"] as const;
+const delays = ["", "delay-[55ms]", "delay-[110ms]", "delay-[165ms]", "delay-[220ms]"] as const;
 
 /**
  * Révèle son contenu quand il entre dans le viewport, une seule fois.
@@ -36,7 +36,10 @@ export function Reveal({
           observer.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+      // Marge basse positive : l'élément est considéré visible un peu avant
+      // d'entrer réellement dans l'écran. Sans cela, un défilement rapide
+      // laisse voir le contenu encore transparent, et le site paraît lent.
+      { threshold: 0, rootMargin: "0px 0px 12% 0px" },
     );
 
     observer.observe(node);

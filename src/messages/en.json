@@ -264,14 +264,21 @@
     "faqChip": "Questions",
     "placeTitle": "Where we are, and how we work",
     "placeOnSiteLead": "Our office is here. The scoping meeting and acceptance happen in person, and are not billed to you.",
-    "placeRemoteLead": "We are not based in this market and we prefer to say so. We work here remotely, travelling at key milestones.",
+    "placeRemoteLead": "Scoping happens over video, and we travel for the stages that matter: design, acceptance, training. In between, the preview environment stays open continuously.",
     "placeAddress": "Office",
-    "placeRemote": "Remotely, from Aix-en-Provence",
+    "placeRemote": "Projects run from Aix-en-Provence",
     "placeCoverage": "Markets served",
     "placePoint1": "A preview link continuously available from the first week",
     "placePoint2": "You talk to the people designing and building it, with nobody in between",
     "placePoint3": "The code repository is yours from day one",
     "proofCount": "projects",
-    "statPages": "Intent pages"
+    "statPages": "Intent pages",
+    "whyChip": "Why us",
+    "whyTitle": "What sets us apart",
+    "whyLead": "Four commitments that hold over time, not four slogans.",
+    "methodTitle": "How a project runs",
+    "journalChip": "Journal",
+    "journalTitle": "Further reading",
+    "journalAll": "All articles"
   }
 }

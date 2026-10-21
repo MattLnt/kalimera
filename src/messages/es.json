@@ -264,14 +264,21 @@
     "faqChip": "Preguntas",
     "placeTitle": "Dónde estamos y cómo trabajamos",
     "placeOnSiteLead": "Nuestra oficina está aquí. La reunión de encuadre y la recepción se hacen presencialmente y no se te facturan.",
-    "placeRemoteLead": "No estamos establecidos en este mercado y preferimos decirlo. Trabajamos aquí a distancia, con desplazamientos en las etapas clave.",
+    "placeRemoteLead": "El encuadre se hace por videoconferencia y nos desplazamos para las etapas que cuentan: maquetas, recepción, formación. Entre medias, la preproducción permanece abierta de forma continua.",
     "placeAddress": "Oficina",
-    "placeRemote": "A distancia, desde Aix-en-Provence",
+    "placeRemote": "Proyectos dirigidos desde Aix-en-Provence",
     "placeCoverage": "Mercados servidos",
     "placePoint1": "Enlace de preproducción disponible de forma continua desde la primera semana",
     "placePoint2": "Hablas con quienes lo diseñan y desarrollan, sin intermediarios",
     "placePoint3": "El repositorio de código es tuyo desde el primer día",
     "proofCount": "proyectos",
-    "statPages": "Páginas de intención"
+    "statPages": "Páginas de intención",
+    "whyChip": "Por qué nosotros",
+    "whyTitle": "Lo que nos distingue",
+    "whyLead": "Cuatro compromisos que se sostienen en el tiempo, no cuatro eslóganes.",
+    "methodTitle": "Cómo se desarrolla un proyecto",
+    "journalChip": "Diario",
+    "journalTitle": "Para leer sobre el tema",
+    "journalAll": "Todos los artículos"
   }
 }

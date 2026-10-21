@@ -4,10 +4,12 @@ import { ContentSections, variantFor } from "@/components/site/content-sections"
 import { FaqList } from "@/components/site/faq-list";
 import { JsonLd } from "@/components/site/json-ld";
 import {
-  PlacePanel,
-  SectionHead,
-  StackSection,
-} from "@/components/site/landing-sections";
+  MethodBand,
+  RelatedPosts,
+  TechBand,
+  WhyUs,
+} from "@/components/site/landing-extras";
+import { PlacePanel, SectionHead } from "@/components/site/landing-sections";
 import { HeroStats, PageHero, type HeroStat } from "@/components/site/page-hero";
 import { ProjectCard } from "@/components/site/project-card";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
@@ -202,13 +204,11 @@ export async function LandingDetail({
     ) : null;
 
   const stackSection = (
-    <StackSection
-      key="stack"
-      items={stack}
-      title={t("stackTitle")}
-      lead={t("stackLead")}
-    />
+    <TechBand key="stack" items={stack} title={t("stackTitle")} lead={t("stackLead")} />
   );
+
+  const why = <WhyUs key="why" />;
+  const method = <MethodBand key="method" />;
 
   const place = !isSector ? (
     <PlacePanel
@@ -226,13 +226,15 @@ export async function LandingDetail({
 
   // L'ordre des blocs dépend de la page : une page secteur peut ouvrir sur la
   // preuve ou sur le propos, une page de marché sur le lieu ou sur le propos.
+  // L'ordre des blocs dépend de la page : chacune se parcourt autrement, sans
+  // qu'on ait à maintenir onze gabarits séparés.
   const body = isSector
     ? v.mirrored
-      ? [proof, content, stackSection, services]
-      : [content, proof, services, stackSection]
+      ? [proof, content, stackSection, services, why, method]
+      : [content, proof, services, method, stackSection, why]
     : v.mirrored
-      ? [place, content, proof, stackSection, services]
-      : [content, place, services, proof, stackSection];
+      ? [place, content, proof, stackSection, method, services, why]
+      : [content, place, services, why, proof, stackSection, method];
 
   return (
     <>
@@ -265,6 +267,8 @@ export async function LandingDetail({
           </div>
         </section>
       ) : null}
+
+      <RelatedPosts locale={locale} />
 
       <CtaPanel />
     </>

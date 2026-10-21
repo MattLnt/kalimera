@@ -264,14 +264,21 @@
     "faqChip": "Questions",
     "placeTitle": "Où nous sommes, et comment nous travaillons",
     "placeOnSiteLead": "Notre établissement est ici. Le rendez-vous de cadrage et la recette se font sur place, et ne vous sont pas facturés.",
-    "placeRemoteLead": "Nous ne sommes pas établis sur ce marché et nous préférons l'écrire. Nous y travaillons à distance, avec des déplacements aux étapes clés.",
+    "placeRemoteLead": "Le cadrage se fait en visioconférence, et nous nous déplaçons pour les étapes qui comptent : maquettes, recette, formation. Entre les deux, la préproduction reste ouverte en continu.",
     "placeAddress": "Établissement",
-    "placeRemote": "À distance, depuis Aix-en-Provence",
+    "placeRemote": "Projets menés depuis Aix-en-Provence",
     "placeCoverage": "Marchés servis",
     "placePoint1": "Lien de préproduction accessible en continu dès la première semaine",
     "placePoint2": "Vous parlez aux personnes qui conçoivent et développent, sans intermédiaire",
     "placePoint3": "Le dépôt de code vous appartient dès le premier jour",
     "proofCount": "réalisations",
-    "statPages": "Pages d'intention"
+    "statPages": "Pages d'intention",
+    "whyChip": "Pourquoi nous",
+    "whyTitle": "Ce qui nous distingue",
+    "whyLead": "Quatre engagements qui tiennent sur la durée, pas quatre slogans.",
+    "methodTitle": "Comment se déroule un projet",
+    "journalChip": "Journal",
+    "journalTitle": "À lire sur le sujet",
+    "journalAll": "Tous les articles"
   }
 }

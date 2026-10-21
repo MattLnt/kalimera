@@ -89,7 +89,9 @@ export function PlacePanel({
           <div className="relative z-2 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
             <div>
               <Chip tone="dark">{onSite ? addressLabel : remoteLabel}</Chip>
-              <h2 className="display-2 mt-4 text-white">{title}</h2>
+              <h2 className="mt-4 font-display text-[clamp(1.6rem,2.6vw,2.35rem)] leading-[1.06] font-extrabold tracking-[-0.038em] text-white">
+                {title}
+              </h2>
               <p className="text-lead text-lead-light mt-4">{lead}</p>
 
               <div className="mt-7 flex items-start gap-3.5 rounded-card bg-white/8 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]">
@@ -165,7 +167,16 @@ export function SectionHead({
   return (
     <div className={cn("mb-8 max-w-[52ch]", className)}>
       {chip ? <Chip tone={tone}>{chip}</Chip> : null}
-      <h2 className={cn("display-2 mt-4", tone === "dark" && "text-white")}>{title}</h2>
+      {/* Même échelle que les titres de ContentSections : le seul très grand
+          titre de la page est celui du hero. */}
+      <h2
+        className={cn(
+          "mt-4 font-display text-[clamp(1.5rem,2.4vw,2.15rem)] leading-[1.08] font-extrabold tracking-[-0.035em]",
+          tone === "dark" && "text-white",
+        )}
+      >
+        {title}
+      </h2>
       {lead ? (
         <p className={cn("text-lead mt-4", tone === "dark" && "text-lead-light")}>
           {lead}
