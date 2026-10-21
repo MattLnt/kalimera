@@ -9,6 +9,7 @@ import { Analytics } from "@/components/site/analytics";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
+import { SmoothScroll } from "@/components/site/smooth-scroll";
 import { getNavData } from "@/components/site/nav-data";
 import { SiteHeader } from "@/components/site/site-header";
 import { routing, type AppLocale } from "@/i18n/routing";
@@ -103,6 +104,7 @@ export default async function SiteLayout({
       <body className="flex min-h-dvh flex-col">
         <JsonLd data={siteGraph} />
         <Analytics />
+        <SmoothScroll />
         <a
           href="#contenu"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-300 focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:font-display focus:text-sm focus:font-bold focus:text-white"

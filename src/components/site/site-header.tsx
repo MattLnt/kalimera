@@ -118,7 +118,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
   /** Latence à la sortie : traverser le vide ne doit pas tout refermer. */
   const scheduleClose = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setMega(null), 160);
+    closeTimer.current = setTimeout(() => setMega(null), 110);
   };
   const cancelClose = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -162,6 +162,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
     >
       <nav
         aria-label="Principal"
+        onMouseEnter={cancelClose}
         className={cn(
           "relative z-10 mx-auto flex max-w-[1280px] items-center gap-4 rounded-full py-[9px] pr-[9px] pl-[22px] transition-[background-color,box-shadow,color] duration-500 ease-[var(--ease-out-expo)]",
           open
@@ -251,15 +252,19 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         </button>
       </nav>
 
-      {/* Hors du <nav> arrondi : le panneau doit pouvoir le déborder. */}
+      {/* Hors du <nav> arrondi : le panneau doit pouvoir le déborder. Le
+          conteneur inclut l'espace qui le sépare de la barre, sinon une
+          trajectoire en diagonale traverse une zone morte et referme tout. */}
       {mega ? (
         <div
           ref={megaRef}
           onMouseEnter={cancelClose}
           onMouseLeave={scheduleClose}
-          className="relative z-9 mx-auto mt-2 hidden max-w-[1280px] animate-[menu-open_0.32s_var(--ease-out-expo)_both] overflow-hidden rounded-[26px] bg-white/92 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150 lg:block"
+          className="relative z-9 mx-auto hidden max-w-[1280px] pt-2 lg:block"
         >
-          <MegaPanel columns={columns[mega]} onNavigate={() => setMega(null)} />
+          <div className="animate-[menu-open_0.18s_var(--ease-out-expo)_both] overflow-hidden rounded-[26px] bg-white/92 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)] backdrop-blur-[22px] backdrop-saturate-150">
+            <MegaPanel columns={columns[mega]} onNavigate={() => setMega(null)} />
+          </div>
         </div>
       ) : null}
 
@@ -314,6 +319,8 @@ function MobileMenu({
     <div
       ref={panelRef}
       id="mobile-menu"
+      // Le panneau defile nativement : Lenis ne doit pas s'en meler.
+      data-lenis-prevent
       role="dialog"
       aria-modal="true"
       aria-label={t("openMenu")}

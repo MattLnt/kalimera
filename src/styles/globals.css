@@ -51,6 +51,9 @@
   }
 
   html {
+    /* Repli quand Lenis ne tourne pas (mouvement réduit, JS absent). Dès
+       qu'il prend la main, il pose .lenis sur <html> et reprend la classe
+       ci-dessous pour rendre la position au moteur. */
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
   }
@@ -327,7 +330,7 @@
   @keyframes menu-open {
     from {
       opacity: 0;
-      transform: scale(1.02);
+      transform: translateY(-6px);
     }
     to {
       opacity: 1;
@@ -363,6 +366,19 @@
   .orb-drift-slow {
     animation: orb-drift 26s ease-in-out infinite alternate-reverse;
   }
+}
+
+/* Lenis interpole lui-même : laisser le navigateur lisser en plus produit
+   un double amortissement, et les sauts d'ancre deviennent flottants. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+html.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+html.lenis-stopped {
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
