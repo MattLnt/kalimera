@@ -4,12 +4,22 @@ import { cn } from "@/lib/utils";
 
 type Variant = "dark" | "blue" | "white" | "soft" | "line";
 
+/**
+ * Les ombres sont portées au repos et ne bougent plus au survol : une ombre
+ * portée se repeint à chaque image, et ce repaint entraînait tout le contenu
+ * du bouton avec elle — la flèche paraissait accrocher alors que sa rotation
+ * ne coûte rien. Même règle que les cartes.
+ *
+ * `soft` perd son `backdrop-blur` : il se posait sur un dégradé lisse, où il
+ * ne se voyait pas, et changer le fond d'un élément flouté oblige à refaire
+ * le flou à chaque image du survol.
+ */
 const variants: Record<Variant, string> = {
-  dark: "bg-ink text-white shadow-soft hover:shadow-lift",
-  blue: "bg-aegean-600 text-white shadow-soft hover:bg-aegean-700 hover:shadow-lift",
-  white: "bg-white text-ink shadow-soft hover:shadow-lift",
-  soft: "bg-white/12 text-white backdrop-blur-md hover:bg-white/20",
-  line: "bg-transparent text-ink shadow-[inset_0_0_0_1px_var(--ink-10)] hover:bg-white hover:shadow-lift",
+  dark: "bg-ink text-white shadow-lift",
+  blue: "bg-aegean-600 text-white shadow-lift hover:bg-aegean-700",
+  white: "bg-white text-ink shadow-lift",
+  soft: "bg-white/12 text-white hover:bg-white/20",
+  line: "bg-transparent text-ink shadow-[inset_0_0_0_1px_var(--ink-10)] hover:bg-white",
 };
 
 const circleVariants: Record<Variant, string> = {
@@ -45,7 +55,7 @@ export function Button({
 }: ButtonProps) {
   const classes = cn(
     "group inline-flex cursor-pointer items-center gap-2.5 rounded-full border-0 font-display font-bold tracking-[-0.01em]",
-    "transition-[transform,box-shadow,background-color] duration-[400ms] ease-[var(--ease-out-expo)] hover:-translate-y-0.5",
+    "transition-[transform,background-color] duration-[400ms] ease-[var(--ease-out-expo)] hover:-translate-y-0.5",
     size === "md"
       ? "py-2.5 pr-2.5 pl-6 text-[0.9375rem]"
       : "py-[0.45rem] pr-2 pl-[1.1rem] text-sm",
@@ -58,7 +68,7 @@ export function Button({
       key="arrow"
       aria-hidden
       className={cn(
-        "grid shrink-0 place-items-center rounded-full transition-[background-color,transform] duration-[400ms] ease-[var(--ease-out-expo)] group-hover:rotate-45",
+        "grid shrink-0 place-items-center rounded-full transition-[background-color,color,transform] duration-[400ms] ease-[var(--ease-out-expo)] group-hover:rotate-45",
         size === "md" ? "size-8" : "size-7",
         circleVariants[variant],
       )}
