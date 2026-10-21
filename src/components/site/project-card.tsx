@@ -1,6 +1,7 @@
 import type { ProjectKind } from "@/generated/prisma/enums";
 import { Link } from "@/i18n/navigation";
 import { accentClass } from "@/components/ui/decor";
+import { TechIcon } from "@/components/site/tech-icons";
 import { Tag } from "@/components/ui/chip";
 import { BrowserMockup, PhoneMockup } from "@/components/site/screen-mockup";
 import { cn } from "@/lib/utils";
@@ -68,7 +69,12 @@ export function ProjectCard({
         </h3>
         <div className="flex flex-wrap gap-1.5">
           {project.stack.slice(0, 3).map((item) => (
-            <Tag key={item} tone="dark" className="text-[0.6875rem]">
+            <Tag
+              key={item}
+              tone="dark"
+              className="inline-flex items-center gap-1.5 text-[0.6875rem]"
+            >
+              <TechIcon name={item} tone="dark" className="size-3.5" />
               {item}
             </Tag>
           ))}

@@ -1,20 +1,18 @@
 import { getTranslations } from "next-intl/server";
 
+import { ContentSections, variantFor } from "@/components/site/content-sections";
 import { FaqList } from "@/components/site/faq-list";
 import { JsonLd } from "@/components/site/json-ld";
 import {
-  LandingAside,
   PlacePanel,
   SectionHead,
   StackSection,
-  extractHeadings,
 } from "@/components/site/landing-sections";
 import { HeroStats, PageHero, type HeroStat } from "@/components/site/page-hero";
 import { ProjectCard } from "@/components/site/project-card";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
 import { ServiceCard } from "@/components/site/service-card";
 import { Tag } from "@/components/ui/chip";
-import { Prose } from "@/components/ui/prose";
 import { Reveal } from "@/components/ui/reveal";
 import { getPathname } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -53,10 +51,11 @@ const ON_SITE_KEYS = new Set(["aix-en-provence", "marseille"]);
 /**
  * Page sectorielle ou géographique.
  *
- * Les deux familles partagent les mêmes briques mais pas la même composition :
- * une page secteur ouvre sur la preuve, parce que c'est ce qu'un prospect de
- * ce métier vient vérifier ; une page de marché ouvre sur le lieu et la
- * couverture, parce que la première question y est « où êtes-vous ».
+ * Deux pages ne se ressemblent pas, et c'est délibéré : la variante tirée de
+ * la clé de la page décide à la fois de la mise en page des sections de
+ * contenu et de **l'ordre des blocs**. Une page peut donc ouvrir sur la
+ * preuve et finir sur les expertises, une autre faire l'inverse, sans qu'on
+ * ait à maintenir onze gabarits séparés.
  */
 export async function LandingDetail({
   translation,
@@ -71,9 +70,9 @@ export async function LandingDetail({
   const { landing } = translation;
 
   const faqs = landing.faqs.map((faq) => localized(faq, locale));
-  const headings = extractHeadings(translation.body);
   const isSector = kind === "SECTOR";
   const onSite = ON_SITE_KEYS.has(landing.key);
+  const v = variantFor(landing.key);
 
   // Les technologies viennent des projets liés : la liste reste vraie sans
   // être entretenue, et les doublons entre projets sont fusionnés.
@@ -140,16 +139,18 @@ export async function LandingDetail({
     ...(faqs.length > 0 ? [faqSchema(faqs)] : []),
   );
 
-  const proofSection =
+  const content = (
+    <ContentSections key="content" markdown={translation.body} seed={landing.key} />
+  );
+
+  const proof =
     landing.projects.length > 0 ? (
-      <section className="py-[clamp(3rem,8vh,5rem)]">
+      <section key="proof" className="py-[clamp(2.75rem,6vh,4.5rem)]">
         <div className="page-shell">
           <SectionHead chip={t("proofChip")} title={t("proof")} lead={t("proofLead")} />
           <div
             className={
-              landing.projects.length === 1
-                ? "grid gap-3"
-                : "grid gap-3 lg:grid-cols-2"
+              landing.projects.length === 1 ? "grid gap-3" : "grid gap-3 lg:grid-cols-2"
             }
           >
             {landing.projects.map((project, index) => (
@@ -165,16 +166,22 @@ export async function LandingDetail({
       </section>
     ) : null;
 
-  const servicesSection =
+  const services =
     landing.services.length > 0 ? (
-      <section className="pb-[clamp(3rem,8vh,5rem)]">
+      <section key="services" className="py-[clamp(2.75rem,6vh,4.5rem)]">
         <div className="page-shell">
           <SectionHead
             chip={t("servicesChip")}
             title={t("relatedServices")}
             lead={t("relatedServicesLead")}
           />
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            className={
+              v.gridCols === 3
+                ? "grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+                : "grid gap-3 sm:grid-cols-2"
+            }
+          >
             {landing.services.map((service, index) => (
               <Reveal key={service.id} delay={(index % 3) as 0 | 1 | 2}>
                 <ServiceCard
@@ -193,6 +200,39 @@ export async function LandingDetail({
         </div>
       </section>
     ) : null;
+
+  const stackSection = (
+    <StackSection
+      key="stack"
+      items={stack}
+      title={t("stackTitle")}
+      lead={t("stackLead")}
+    />
+  );
+
+  const place = !isSector ? (
+    <PlacePanel
+      key="place"
+      onSite={onSite}
+      title={t("placeTitle")}
+      lead={onSite ? t("placeOnSiteLead") : t("placeRemoteLead")}
+      addressLabel={t("placeAddress")}
+      remoteLabel={t("placeRemote")}
+      coverageLabel={t("placeCoverage")}
+      coverage={siteConfig.markets.map((market) => market.label)}
+      points={[t("placePoint1"), t("placePoint2"), t("placePoint3")]}
+    />
+  ) : null;
+
+  // L'ordre des blocs dépend de la page : une page secteur peut ouvrir sur la
+  // preuve ou sur le propos, une page de marché sur le lieu ou sur le propos.
+  const body = isSector
+    ? v.mirrored
+      ? [proof, content, stackSection, services]
+      : [content, proof, services, stackSection]
+    : v.mirrored
+      ? [place, content, proof, stackSection, services]
+      : [content, place, services, proof, stackSection];
 
   return (
     <>
@@ -215,45 +255,10 @@ export async function LandingDetail({
         ) : null}
       </PageHero>
 
-      {/* Une page secteur ouvre sur la preuve ; une page de marché sur le lieu. */}
-      {isSector ? proofSection : null}
-
-      {!isSector ? (
-        <PlacePanel
-          onSite={onSite}
-          title={t("placeTitle")}
-          lead={onSite ? t("placeOnSiteLead") : t("placeRemoteLead")}
-          addressLabel={t("placeAddress")}
-          remoteLabel={t("placeRemote")}
-          coverageLabel={t("placeCoverage")}
-          coverage={siteConfig.markets.map((market) => market.label)}
-          points={[t("placePoint1"), t("placePoint2"), t("placePoint3")]}
-        />
-      ) : null}
-
-      <section className="py-[clamp(3rem,8vh,5rem)]">
-        <div className="page-shell grid gap-6 lg:grid-cols-[20rem_1fr] lg:gap-10">
-          <LandingAside
-            headings={headings}
-            tocLabel={t("toc")}
-            ctaTitle={t("asideCtaTitle")}
-            ctaBody={t("asideCtaBody")}
-            ctaLabel={t("asideCtaLabel")}
-          />
-
-          <Reveal className="surface-card p-6 sm:p-10 lg:p-12">
-            <Prose content={translation.body} className="max-w-none" />
-          </Reveal>
-        </div>
-      </section>
-
-      <StackSection items={stack} title={t("stackTitle")} lead={t("stackLead")} />
-
-      {isSector ? servicesSection : proofSection}
-      {isSector ? null : servicesSection}
+      {body}
 
       {faqs.length > 0 ? (
-        <section className="pb-[clamp(3rem,8vh,5rem)]">
+        <section className="py-[clamp(2.75rem,6vh,4.5rem)]">
           <div className="page-shell">
             <SectionHead chip={t("faqChip")} title={t("faq")} />
             <FaqList items={faqs} />

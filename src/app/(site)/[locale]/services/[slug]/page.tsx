@@ -3,16 +3,12 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { JsonLd } from "@/components/site/json-ld";
-import {
-  LandingAside,
-  SectionHead,
-  extractHeadings,
-} from "@/components/site/landing-sections";
+import { ContentSections } from "@/components/site/content-sections";
+import { SectionHead } from "@/components/site/landing-sections";
 import { HeroStats, PageHero } from "@/components/site/page-hero";
 import { ProjectCard } from "@/components/site/project-card";
 import { CtaPanel } from "@/components/site/sections/cta-panel";
 import { Button } from "@/components/ui/button";
-import { Prose } from "@/components/ui/prose";
 import { Reveal } from "@/components/ui/reveal";
 import { TechStrip } from "@/components/site/tech-icons";
 import { getPathname, Link } from "@/i18n/navigation";
@@ -126,20 +122,7 @@ export default async function ServiceDetailPage({
         <TechStrip items={service.stack} tone="dark" className="mt-7" />
       </PageHero>
 
-      <section className="py-[clamp(3rem,8vh,5rem)]">
-        <div className="page-shell grid gap-6 lg:grid-cols-[20rem_1fr] lg:gap-10">
-          <LandingAside
-            headings={extractHeadings(translation.body)}
-            tocLabel={tl("toc")}
-            ctaTitle={tl("asideCtaTitle")}
-            ctaBody={tl("asideCtaBody")}
-            ctaLabel={tl("asideCtaLabel")}
-          />
-          <Reveal className="surface-card p-6 sm:p-10 lg:p-12">
-            <Prose content={translation.body} className="max-w-none" />
-          </Reveal>
-        </div>
-      </section>
+      <ContentSections markdown={translation.body} seed={service.key} />
 
       {service.projects.length > 0 ? (
         <section className="pb-[clamp(3rem,8vh,5rem)]">

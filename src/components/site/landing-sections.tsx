@@ -1,93 +1,10 @@
-import { ArrowUpRight, Check, MapPin, Plane } from "lucide-react";
+import { Check, MapPin, Plane } from "lucide-react";
 
 import { TechStrip } from "@/components/site/tech-icons";
-import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
-import { Arches, Orbs } from "@/components/ui/decor";
-import { Link } from "@/i18n/navigation";
+import { Orbs } from "@/components/ui/decor";
 import { siteConfig } from "@/lib/site";
-import { slugify } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-
-/* -------------------------------------------------------------------- aside */
-
-export type Heading = { id: string; label: string };
-
-/** Extrait les titres de niveau 2 du Markdown, pour le sommaire latéral. */
-export function extractHeadings(markdown: string): Heading[] {
-  return markdown
-    .split("\n")
-    .filter((line) => line.startsWith("## "))
-    .map((line) => {
-      const label = line.replace(/^##\s+/, "").trim();
-      return { id: slugify(label), label };
-    });
-}
-
-/**
- * Colonne de gauche collante : sommaire de la page et appel à l'action.
- *
- * Le sommaire n'est pas décoratif. Sur une page de deux mille mots, il dit en
- * un coup d'œil ce que la page couvre — et c'est souvent ce qui décide un
- * visiteur à rester plutôt qu'à repartir devant un bloc de texte.
- */
-export function LandingAside({
-  headings,
-  tocLabel,
-  ctaTitle,
-  ctaBody,
-  ctaLabel,
-}: {
-  headings: Heading[];
-  tocLabel: string;
-  ctaTitle: string;
-  ctaBody: string;
-  ctaLabel: string;
-}) {
-  return (
-    <aside className="lg:sticky lg:top-28 lg:self-start">
-      {headings.length > 2 ? (
-        <nav aria-label={tocLabel} className="surface-card mb-3 p-5 sm:p-6">
-          <h2 className="mb-3 font-display text-[0.6875rem] font-bold tracking-[0.08em] text-[var(--ink-45)] uppercase">
-            {tocLabel}
-          </h2>
-          <ul className="grid gap-0.5">
-            {headings.map((heading) => (
-              <li key={heading.id}>
-                <a
-                  href={`#${heading.id}`}
-                  className="group flex items-start gap-2 rounded-[10px] px-2 py-1.5 text-[0.875rem] leading-[1.4] text-[var(--ink-65)] transition-colors duration-200 hover:bg-aegean-50 hover:text-ink"
-                >
-                  <span
-                    aria-hidden
-                    className="mt-[0.45em] size-1.5 shrink-0 rounded-full bg-aegean-200 transition-colors duration-200 group-hover:bg-aegean-600"
-                  />
-                  {heading.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      ) : null}
-
-      <div className="night-panel relative overflow-hidden rounded-card p-6 sm:p-7">
-        <Arches count={5} className="h-[55%] opacity-30" />
-        <span aria-hidden className="grain-layer" />
-
-        <div className="relative z-1">
-          <h2 className="display-4 text-white">{ctaTitle}</h2>
-          <p className="mt-2 text-[0.875rem] leading-[1.5] text-white/65">{ctaBody}</p>
-          <Button asChild variant="white" size="sm" className="mt-5 w-full justify-between">
-            <Link href="/contact">
-              {ctaLabel}
-              <ArrowUpRight aria-hidden className="size-4" />
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </aside>
-  );
-}
 
 /* --------------------------------------------------------------------- stack */
 

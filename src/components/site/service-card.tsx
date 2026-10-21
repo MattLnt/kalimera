@@ -1,6 +1,7 @@
 import { createElement } from "react";
 
 import { serviceIcons, isServiceIconName } from "@/components/site/service-icons";
+import { TechIcon } from "@/components/site/tech-icons";
 import { Tag } from "@/components/ui/chip";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -66,8 +67,11 @@ export function ServiceCard({
         {service.stack.map((item) => (
           <Tag
             key={item}
-            className="group-hover:bg-white/14 group-hover:text-white"
+            className="inline-flex items-center gap-1.5 group-hover:bg-white/14 group-hover:text-white"
           >
+            {/* Pas d'icône pour « Back-office » ou « Multilingue » : le
+                composant ne rend rien plutôt qu'un symbole générique. */}
+            <TechIcon name={item} className="size-3.5" />
             {item}
           </Tag>
         ))}
