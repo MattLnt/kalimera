@@ -10,7 +10,7 @@ export async function Hero() {
   const t = await getTranslations("home.hero");
 
   return (
-    <header className="night-panel relative mx-(--page-gutter) flex min-h-[min(92vh,880px)] items-end overflow-hidden rounded-panel px-6 pt-[clamp(110px,16vh,170px)] pb-[clamp(26px,4vh,44px)] sm:px-10 lg:px-16">
+    <header className="night-panel relative flex min-h-[min(92vh,880px)] items-end overflow-hidden px-6 sm:mx-(--page-gutter) sm:rounded-panel pt-[clamp(110px,16vh,170px)] pb-[clamp(26px,4vh,44px)] sm:px-10 lg:px-16">
       <Orbs />
       <Arches />
       <span aria-hidden className="grain-layer" />

@@ -20,7 +20,7 @@ export async function StatsPanel() {
   return (
     <Reveal
       as="section"
-      className="night-panel relative mx-(--page-gutter) overflow-hidden rounded-panel p-8 shadow-lift sm:p-12 lg:p-16"
+      className="night-panel relative overflow-hidden p-8 shadow-lift sm:mx-(--page-gutter) sm:rounded-panel sm:p-12 lg:p-16"
     >
       <Arches count={10} className="h-[70%] opacity-40" />
       <div className="relative z-1 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

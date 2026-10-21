@@ -40,13 +40,18 @@ export function BrowserMockup({
       </div>
 
       {cover ? (
-        <div className="relative aspect-16/10 w-full">
+        // Le cadre prend le rapport de la capture elle-même : à ratio imposé,
+        // `object-cover` rognait les côtés et coupait le logo du site.
+        <div
+          className="relative w-full"
+          style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
+        >
           <Image
-            src={optimized(cover.url, { width: 900 })}
+            src={optimized(cover.url, { width: 1200 })}
             alt={cover.alt}
             fill
             sizes="(max-width: 880px) 100vw, 50vw"
-            className="object-cover object-top"
+            className="object-contain object-top"
           />
         </div>
       ) : (

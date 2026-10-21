@@ -9,7 +9,7 @@ export default function NotFound() {
   const nav = useTranslations("common");
 
   return (
-    <section className="night-panel relative mx-(--page-gutter) my-(--page-gutter) overflow-hidden rounded-panel px-6 py-[clamp(6rem,18vh,10rem)] text-center sm:px-12">
+    <section className="night-panel relative overflow-hidden px-6 sm:mx-(--page-gutter) sm:my-(--page-gutter) sm:rounded-panel py-[clamp(6rem,18vh,10rem)] text-center sm:px-12">
       <Orbs />
       <Arches className="h-[50%] opacity-40" />
       <span aria-hidden className="grain-layer" />

@@ -11,7 +11,7 @@ export async function CtaPanel() {
   const t = await getTranslations("home.cta");
 
   return (
-    <section className="night-panel relative mx-(--page-gutter) mb-(--page-gutter) overflow-hidden rounded-panel px-6 py-[clamp(3rem,8vh,6rem)] text-center shadow-lift sm:px-12">
+    <section className="night-panel relative overflow-hidden px-6 sm:mx-(--page-gutter) sm:mb-(--page-gutter) sm:rounded-panel py-[clamp(3rem,8vh,6rem)] text-center shadow-lift sm:px-12">
       <Arches className="h-[55%] opacity-45" />
       <span aria-hidden className="grain-layer" />
 

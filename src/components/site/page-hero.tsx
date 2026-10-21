@@ -55,7 +55,7 @@ export function PageHero({
   const scale = titleScale(title);
 
   return (
-    <header className="night-panel relative mx-(--page-gutter) overflow-hidden rounded-panel px-6 pt-[clamp(8rem,15vh,11rem)] pb-[clamp(2.5rem,6vh,4rem)] sm:px-10 lg:px-16">
+    <header className="night-panel relative overflow-hidden px-6 sm:mx-(--page-gutter) sm:rounded-panel pt-[clamp(8rem,15vh,11rem)] pb-[clamp(2.5rem,6vh,4rem)] sm:px-10 lg:px-16">
       <Orbs />
       <Arches className="h-[50%] opacity-40" />
       <span aria-hidden className="grain-layer" />

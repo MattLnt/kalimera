@@ -295,12 +295,16 @@ function MobileMenu({
   nav: NavData;
   t: (key: string) => string;
 }) {
+  const [expanded, setExpanded] = useState<NavKey | null>(null);
+
   if (!open) return null;
 
   /**
-   * Sous-liste en pastilles sous l'entrée concernée. Les pages d'intention
-   * sont ainsi atteignables en un geste depuis le mobile, sans accordéon à
-   * déplier — et elles reçoivent un lien depuis chaque page du site.
+   * Destinations repliées sous l'entrée concernée.
+   *
+   * Une seule section est ouverte à la fois : sur un écran de téléphone, les
+   * dix-huit pages d'intention affichées d'un bloc noyaient les cinq entrées
+   * principales, qui sont ce qu'on vient chercher dans un menu.
    */
   const subGroups = (menu?: MegaKey) => {
     if (menu === "build") {
@@ -341,25 +345,50 @@ function MobileMenu({
                 className="animate-[menu-item_0.6s_var(--ease-out-expo)_both] border-b border-white/10"
                 style={{ animationDelay: `${0.06 + index * 0.06}s` }}
               >
-                <Link
-                  href={link.href}
-                  onClick={onNavigate}
-                  className="group flex items-baseline gap-4 py-5 text-white"
-                >
-                  <span className="font-display text-xs font-bold text-white/35 tabular-nums">
-                    0{index + 1}
-                  </span>
-                  <span className="font-display text-[clamp(1.9rem,9vw,3.1rem)] leading-[1.05] font-extrabold tracking-[-0.045em] transition-colors duration-300 group-hover:text-aegean-200">
-                    {t(link.key)}
-                  </span>
-                  <ArrowUpRight
-                    aria-hidden
-                    className="ml-auto size-6 self-center text-white/35 transition-[transform,color] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-white"
-                  />
-                </Link>
+                <div className="flex items-center gap-3">
+                  <Link
+                    href={link.href}
+                    onClick={onNavigate}
+                    className="group flex flex-1 items-baseline gap-4 py-5 text-white"
+                  >
+                    <span className="font-display text-xs font-bold text-white/35 tabular-nums">
+                      0{index + 1}
+                    </span>
+                    <span className="font-display text-[clamp(1.75rem,8vw,2.75rem)] leading-[1.05] font-extrabold tracking-[-0.045em] transition-colors duration-300 group-hover:text-aegean-200">
+                      {t(link.key)}
+                    </span>
+                    {groups.length === 0 ? (
+                      <ArrowUpRight
+                        aria-hidden
+                        className="ml-auto size-6 self-center text-white/35 transition-[transform,color] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-white"
+                      />
+                    ) : null}
+                  </Link>
 
-                {groups.length > 0 ? (
-                  <ul className="mb-5 flex flex-wrap gap-1.5">
+                  {/* Le libellé reste un lien ; seul le chevron déplie. Afficher
+                      les dix-huit destinations d'emblée rendait le menu
+                      illisible. */}
+                  {groups.length > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => setExpanded(expanded === link.key ? null : link.key)}
+                      aria-expanded={expanded === link.key}
+                      aria-label={t(link.key)}
+                      className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+                    >
+                      <ChevronDown
+                        aria-hidden
+                        className={cn(
+                          "size-5 transition-transform duration-300",
+                          expanded === link.key && "rotate-180",
+                        )}
+                      />
+                    </button>
+                  ) : null}
+                </div>
+
+                {groups.length > 0 && expanded === link.key ? (
+                  <ul className="mb-5 grid animate-[menu-open_0.25s_var(--ease-out-expo)_both] gap-px overflow-hidden rounded-field bg-white/10">
                     {groups.flatMap((group) =>
                       group.entries.map((entry) => (
                         <li key={`${group.pathname}-${entry.slug}`}>
@@ -369,9 +398,10 @@ function MobileMenu({
                               params: { slug: entry.slug },
                             }}
                             onClick={onNavigate}
-                            className="block rounded-full bg-white/10 px-3.5 py-2 font-display text-[0.8125rem] font-semibold text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+                            className="flex items-center justify-between gap-3 bg-aegean-950/40 px-4 py-3.5 font-display text-[0.9375rem] font-semibold text-white/80 transition-colors hover:bg-aegean-950/10 hover:text-white"
                           >
                             {entry.title}
+                            <ArrowUpRight aria-hidden className="size-4 shrink-0 text-white/30" />
                           </Link>
                         </li>
                       )),
