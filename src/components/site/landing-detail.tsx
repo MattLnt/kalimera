@@ -99,7 +99,11 @@ export async function LandingDetail({
   });
 
   const stats: HeroStat[] = [
-    { value: String(landing.projects.length), label: t("statProjects") },
+    // Une page sans réalisation rattachée n'affiche pas « 0 projets » : le
+    // chiffre dirait l'inverse de ce que la page vient défendre.
+    ...(landing.projects.length > 0
+      ? [{ value: String(landing.projects.length), label: t("statProjects") }]
+      : []),
     { value: String(landing.services.length), label: t("statServices") },
     {
       value: isSector ? String(siteConfig.markets.length) : String(stack.length || 3),

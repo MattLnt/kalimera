@@ -48,7 +48,11 @@ export const MegaPanel = memo(function MegaPanel({
     <div
       className={cn(
         "grid gap-x-10 gap-y-6 p-5",
-        columns.length > 1 && "lg:grid-cols-[1fr_1fr]",
+        // Une colonne scindée en deux listes prend deux parts de largeur,
+        // sinon ses libellés — longs sur les pages sectorielles — se
+        // retrouvent tronqués à moitié.
+        columns.length > 1 &&
+          (columns[0].split ? "lg:grid-cols-[2fr_1fr]" : "lg:grid-cols-[1fr_1fr]"),
       )}
     >
       {columns.map((column) => (

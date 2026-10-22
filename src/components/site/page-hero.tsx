@@ -97,18 +97,23 @@ export type HeroStat = { value: string; label: string };
  *
  * Ils occupent la moitié droite du panneau, qui restait vide, et donnent au
  * visiteur la mesure de la page avant qu'il n'ait lu une ligne. Les valeurs
- * sont dérivées du contenu réel : une page sans réalisation affichera donc
- * un zéro, ce qui est le signal qu'il manque la preuve.
+ * sont dérivées du contenu réel, et une page sans réalisation rattachée ne
+ * montre pas de compteur de projets plutôt que d'afficher un zéro. Le nombre
+ * de chiffres devient alors impair : le dernier occupe les deux colonnes,
+ * sans quoi une case resterait vide en bas à droite.
  */
 export function HeroStats({ stats }: { stats: HeroStat[] }) {
   if (stats.length === 0) return null;
 
   return (
     <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-card bg-white/12 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14)]">
-      {stats.map((stat) => (
+      {stats.map((stat, index) => (
         <div
           key={stat.label}
-          className="flex flex-col bg-aegean-950/55 px-5 py-5 backdrop-blur-sm"
+          className={cn(
+            "flex flex-col bg-aegean-950/55 px-5 py-5 backdrop-blur-sm",
+            stats.length % 2 === 1 && index === stats.length - 1 && "col-span-2",
+          )}
         >
           <dd className="font-display text-[clamp(1.6rem,2.4vw,2.1rem)] leading-none font-extrabold tracking-[-0.045em] text-white">
             {stat.value}

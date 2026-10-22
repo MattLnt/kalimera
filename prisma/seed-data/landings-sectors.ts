@@ -4,9 +4,14 @@ import { t } from "./locale";
  * Pages sectorielles.
  *
  * Chacune répond à une intention de recherche précise et s'adosse aux
- * réalisations qui la prouvent : `projectKeys` n'est pas décoratif, c'est ce
- * qui fait la différence entre une page qui convertit et une page de
- * remplissage. On ne crée donc pas de page sectorielle sans preuve.
+ * réalisations qui la prouvent quand il en existe une : `projectKeys` n'est
+ * pas décoratif, et une page adossée à un projet livré convertit mieux.
+ *
+ * Certaines pages décrivent en revanche ce que le studio sait faire dans un
+ * métier où il n'a pas encore livré. Elles sont écrites dans ce registre —
+ * ce que nous construisons, ce que coûte le problème — et ne laissent jamais
+ * entendre une référence qui n'existe pas. Le bloc « réalisations » et le
+ * compteur de projets disparaissent d'eux-mêmes quand `projectKeys` est vide.
  *
  * Les FAQ alimentent le bloc visible et le `FAQPage` des données structurées,
  * éligible au résultat enrichi déroulant dans Google.
@@ -326,6 +331,264 @@ export const sectors = [
           "Oui, aux agendas courants, pour que les créneaux affichés correspondent à votre disponibilité réelle et qu'une réservation bloque le créneau immédiatement. C'est la condition pour éviter les doubles réservations.",
           "Yes, to the common calendars, so the slots shown match your real availability and a booking blocks the slot immediately. That is the condition for avoiding double bookings.",
           "Sí, con las agendas habituales, para que las franjas mostradas correspondan a tu disponibilidad real y una reserva bloquee la franja de inmediato. Es la condición para evitar reservas duplicadas.",
+        ),
+      },
+    ],
+  },
+  {
+    key: "hotellerie-restauration",
+    icon: "Sparkles",
+    highlights: ["Réservation directe", "Sans commission", "Multilingue"],
+    serviceKeys: ["sites-sur-mesure", "design-ux-ui", "maintenance-performance"],
+    projectKeys: [],
+    slug: t("hotellerie-restauration", "hospitality-restaurants", "hosteleria-restauracion"),
+    title: t(
+      "Sites et réservation pour l'hôtellerie et la restauration",
+      "Sites and booking for hotels and restaurants",
+      "Webs y reservas para hostelería y restauración",
+    ),
+    lead: t(
+      "Reprendre les réservations en direct aux plateformes, et leurs 15 à 25 % de commission, avec un site qui se trouve et qui se réserve.",
+      "Take bookings back from the platforms, and their 15 to 25 % commission, with a site that gets found and gets booked.",
+      "Recuperar las reservas directas frente a las plataformas, y su 15-25 % de comisión, con una web que se encuentra y se reserva.",
+    ),
+    body: t(
+      "## La commission des plateformes est votre premier poste de coût\n\nUne nuitée vendue par une plateforme de réservation vous coûte entre 15 et 25 % de commission. Sur un établissement qui fait 400 000 € de chiffre d'affaires, c'est 60 000 à 100 000 € qui partent chaque année. Un site qui capte ne serait-ce qu'un quart des réservations en direct se rembourse en quelques mois.\n\n## Ce que nous construisons pour un hôtel ou un restaurant\n\n- **Réservation en direct**, avec disponibilités réelles et confirmation immédiate\n- **Connexion au channel manager** et au PMS, pour que les calendriers ne divergent jamais\n- **Paiement d'acompte ou empreinte bancaire**, qui fait chuter les absences\n- **Offres directes** que les plateformes n'ont pas le droit d'afficher : surclassement, petit-déjeuner inclus, départ tardif\n- **Carte et menus** modifiables sans nous appeler, y compris le menu du jour\n- **Multilingue réel**, une URL par langue — déterminant sur une clientèle internationale\n\n## Le référencement local décide d'une grande partie du chiffre\n\nUn voyageur qui cherche un hôtel sur la Côte d'Azur passe par Google avant de passer par vous. Nous déclarons les données structurées d'établissement, les horaires, la zone, les tarifs à partir de, et nous rendons la fiche Google cohérente avec le site. Nous suivons aussi les clics sur le numéro de téléphone comme une conversion : en restauration, l'essentiel des réservations arrive encore par appel, et sans cette mesure une campagne paraît ne rien rapporter.\n\n## Budget et délai\n\nÀ partir de 9 000 € et six semaines pour un site avec réservation en direct. Un établissement multilingue connecté à un channel manager démarre à 16 000 €.",
+      "## Platform commission is your largest cost line\n\nA room night sold through a booking platform costs you 15 to 25 % in commission. On a property turning over €400,000, that is €60,000 to €100,000 leaving every year. A site that captures even a quarter of bookings directly pays for itself within months.\n\n## What we build for a hotel or a restaurant\n\n- **Direct booking**, with real availability and immediate confirmation\n- **Channel manager and PMS connection**, so calendars never drift apart\n- **Deposit or card imprint**, which cuts no-shows sharply\n- **Direct-only offers** platforms are not allowed to display: upgrade, breakfast included, late checkout\n- **Menus you edit yourself**, including the daily menu\n- **Genuine multilingual**, one URL per language — decisive with international guests\n\n## Local search decides a large share of revenue\n\nA traveller looking for a hotel on the French Riviera goes through Google before coming to you. We declare business structured data, opening hours, area and from-prices, and we make the Google listing consistent with the site. We also track phone-number clicks as a conversion: in hospitality most bookings still arrive by call, and without that measurement a campaign looks like it returns nothing.\n\n## Budget and timeline\n\nFrom €9,000 and six weeks for a site with direct booking. A multilingual property connected to a channel manager starts at €16,000.",
+      "## La comisión de las plataformas es tu mayor partida de coste\n\nUna noche vendida por una plataforma de reservas te cuesta entre el 15 y el 25 % de comisión. En un establecimiento que factura 400.000 €, son entre 60.000 y 100.000 € que se van cada año. Una web que capte aunque sea un cuarto de las reservas en directo se amortiza en pocos meses.\n\n## Lo que construimos para un hotel o un restaurante\n\n- **Reserva directa**, con disponibilidad real y confirmación inmediata\n- **Conexión al channel manager** y al PMS, para que los calendarios nunca se separen\n- **Pago de señal o preautorización**, que reduce mucho las ausencias\n- **Ofertas exclusivas del canal directo**, que las plataformas no pueden mostrar\n- **Carta y menús** editables sin llamarnos, incluido el menú del día\n- **Multilingüe real**, una URL por idioma — decisivo con clientela internacional\n\n## El posicionamiento local decide buena parte de la facturación\n\nUn viajero que busca hotel en la Costa Azul pasa por Google antes de pasar por ti. Declaramos los datos estructurados del establecimiento, horarios, zona y precios desde, y hacemos coherente la ficha de Google con la web. También medimos los clics en el teléfono como conversión: en restauración la mayoría de reservas sigue llegando por llamada.\n\n## Presupuesto y plazo\n\nDesde 9.000 € y seis semanas para una web con reserva directa. Un establecimiento multilingüe conectado a un channel manager empieza en 16.000 €.",
+    ),
+    faqs: [
+      {
+        question: t(
+          "Le site peut-il se connecter à notre channel manager ?",
+          "Can the site connect to our channel manager?",
+          "¿La web puede conectarse a nuestro channel manager?",
+        ),
+        answer: t(
+          "Oui, dès lors qu'il expose une API ou un format d'échange — c'est le cas des principaux. Les disponibilités et les tarifs restent pilotés depuis l'outil que vos équipes connaissent déjà, et le site s'y synchronise. Sans cette connexion, deux calendriers finissent toujours par diverger, et une surréservation coûte plus cher qu'une intégration.",
+          "Yes, as soon as it exposes an API or exchange format — the main ones do. Availability and rates stay driven from the tool your teams already know, and the site synchronises with it. Without that connection two calendars always drift apart, and one overbooking costs more than the integration.",
+          "Sí, siempre que exponga una API o un formato de intercambio — los principales lo hacen. La disponibilidad y las tarifas se siguen gestionando desde la herramienta que tu equipo ya conoce. Sin esa conexión, dos calendarios acaban siempre separándose.",
+        ),
+      },
+      {
+        question: t(
+          "Peut-on afficher des offres réservées au site ?",
+          "Can we show offers reserved for the direct channel?",
+          "¿Podemos mostrar ofertas exclusivas del canal directo?",
+        ),
+        answer: t(
+          "Oui, et c'est tout l'intérêt. Les contrats de parité tarifaire des plateformes portent sur le prix de la chambre, pas sur ce que vous y ajoutez : petit-déjeuner inclus, surclassement, départ tardif, avantage fidélité. Ces offres ne peuvent exister que sur votre canal direct, et ce sont elles qui font basculer un client qui compare.",
+          "Yes, and that is the whole point. Platform rate-parity clauses cover the room price, not what you add to it: breakfast included, upgrade, late checkout, loyalty benefit. Those offers can only exist on your direct channel, and they are what tips a comparing customer.",
+          "Sí, y ahí está el interés. Las cláusulas de paridad cubren el precio de la habitación, no lo que añades: desayuno incluido, mejora de categoría, salida tardía. Esas ofertas solo pueden existir en tu canal directo.",
+        ),
+      },
+    ],
+  },
+  {
+    key: "gestion-locative",
+    icon: "LayoutDashboard",
+    highlights: ["Espace propriétaire", "Planning prestataires", "Calendrier unifié"],
+    serviceKeys: ["plateformes-metier", "saas-abonnement", "applications-web"],
+    projectKeys: [],
+    slug: t("gestion-locative", "rental-management", "gestion-de-alquileres"),
+    title: t(
+      "Outils pour la gestion locative et la conciergerie",
+      "Tools for rental management and short-let concierges",
+      "Herramientas para gestión de alquileres y conciergería",
+    ),
+    lead: t(
+      "Calendriers, prestataires, propriétaires et revenus dans un seul outil, quand gestion longue durée et courte durée cohabitent.",
+      "Calendars, suppliers, owners and revenue in one tool, when long lets and short lets live side by side.",
+      "Calendarios, proveedores, propietarios e ingresos en una sola herramienta.",
+    ),
+    body: t(
+      "## Trois métiers, trois logiciels, et des tableurs entre les deux\n\nUne société de gestion locative suit des baux, des quittances et des travaux. Une conciergerie courte durée suit des calendriers, des ménages et des voyageurs. Dès qu'une même structure fait les deux, les outils du marché ne se parlent plus et la coordination retombe sur des tableurs partagés — qui tiennent jusqu'au jour où un ménage est oublié entre deux départs.\n\n## Ce que nous développons\n\n- **Calendrier unifié** des biens, quelle que soit la plateforme d'origine des réservations\n- **Planning des prestataires** — ménage, blanchisserie, maintenance — avec confirmation depuis le téléphone\n- **Espace propriétaire** : relevés, revenus, taux d'occupation, interventions, sans appeler l'agence\n- **Quittances et appels de loyer** générés et envoyés automatiquement\n- **États des lieux photo**, horodatés, opposables\n- **Répartition des revenus** entre propriétaire et gestionnaire, calculée et traçable\n\n## L'espace propriétaire est l'argument commercial\n\nC'est ce qui vous distingue d'un concurrent qui envoie un relevé PDF par trimestre. Un propriétaire qui voit son taux d'occupation et ses revenus à jour appelle moins, renouvelle plus, et vous recommande. C'est la fonctionnalité qui se vend le plus facilement, et celle qu'aucun logiciel générique ne personnalise à votre marque.\n\n## Budget et délai\n\nÀ partir de 22 000 € et dix semaines pour une première version avec espace propriétaire et planning prestataires.",
+      "## Three jobs, three pieces of software, and spreadsheets in between\n\nA rental management company tracks leases, receipts and works. A short-let concierge tracks calendars, cleaning and guests. As soon as one business does both, off-the-shelf tools stop talking to each other and coordination falls back on shared spreadsheets — which hold up until the day a clean is missed between two departures.\n\n## What we build\n\n- **Unified calendar** across properties, whatever platform the booking came from\n- **Supplier scheduling** — cleaning, laundry, maintenance — confirmed from a phone\n- **Owner portal**: statements, revenue, occupancy, interventions, without calling the agency\n- **Rent receipts and calls** generated and sent automatically\n- **Photo condition reports**, time-stamped and enforceable\n- **Revenue splits** between owner and manager, calculated and traceable\n\n## The owner portal is the commercial argument\n\nIt is what sets you apart from a competitor sending a quarterly PDF. An owner who can see occupancy and revenue up to date calls less, renews more and refers you. It is the easiest feature to sell, and the one no generic software will put your brand on.\n\n## Budget and timeline\n\nFrom €22,000 and ten weeks for a first version with owner portal and supplier scheduling.",
+      "## Tres oficios, tres programas y hojas de cálculo en medio\n\nUna gestora de alquileres sigue contratos, recibos y obras. Una conciergería de corta estancia sigue calendarios, limpiezas y viajeros. En cuanto una misma empresa hace ambas cosas, las herramientas del mercado dejan de entenderse y la coordinación acaba en hojas compartidas — que aguantan hasta el día en que se olvida una limpieza entre dos salidas.\n\n## Lo que desarrollamos\n\n- **Calendario unificado** de los inmuebles, venga la reserva de donde venga\n- **Planificación de proveedores** — limpieza, lavandería, mantenimiento — confirmada desde el móvil\n- **Área de propietario**: liquidaciones, ingresos, ocupación, intervenciones\n- **Recibos y cobros de alquiler** generados y enviados automáticamente\n- **Estados de entrada y salida con fotos**, con sello de tiempo\n- **Reparto de ingresos** entre propietario y gestor, calculado y trazable\n\n## El área de propietario es el argumento comercial\n\nEs lo que te distingue de un competidor que envía un PDF trimestral. Un propietario que ve su ocupación y sus ingresos al día llama menos, renueva más y te recomienda.\n\n## Presupuesto y plazo\n\nDesde 22.000 € y diez semanas para una primera versión con área de propietario y planificación de proveedores.",
+    ),
+    faqs: [
+      {
+        question: t(
+          "Peut-on récupérer les réservations des plateformes de location ?",
+          "Can we pull in bookings from the letting platforms?",
+          "¿Se pueden recuperar las reservas de las plataformas de alquiler?",
+        ),
+        answer: t(
+          "Oui, par synchronisation de calendrier, et par API quand la plateforme en expose une. Le calendrier unifié devient la référence : c'est lui qui déclenche le ménage, la blanchisserie et l'accueil, quelle que soit l'origine de la réservation. C'est précisément ce qu'aucun outil de plateforme ne fait, puisque chacun ne connaît que ses propres séjours.",
+          "Yes, through calendar synchronisation, and through APIs where a platform exposes one. The unified calendar becomes the reference: it triggers cleaning, laundry and check-in, whatever the booking's origin. That is exactly what no platform tool does, since each one only knows its own stays.",
+          "Sí, mediante sincronización de calendario y por API cuando la plataforma la expone. El calendario unificado pasa a ser la referencia: es el que dispara la limpieza, la lavandería y la recepción.",
+        ),
+      },
+      {
+        question: t(
+          "Le propriétaire voit-il les mêmes chiffres que nous ?",
+          "Does the owner see the same figures we do?",
+          "¿El propietario ve las mismas cifras que nosotros?",
+        ),
+        answer: t(
+          "Il voit ce que vous décidez de lui montrer, et la règle se définit à la conception : revenus bruts, commission, charges, net versé. L'expérience montre qu'un espace propriétaire transparent réduit les appels et les litiges — un propriétaire qui comprend le calcul le conteste beaucoup moins.",
+          "They see what you decide to show, and the rule is set at design time: gross revenue, commission, charges, net paid. Experience shows a transparent owner portal reduces calls and disputes — an owner who understands the calculation contests it far less.",
+          "Ve lo que decidas mostrarle, y la regla se define en el diseño: ingresos brutos, comisión, gastos, neto abonado. Un propietario que entiende el cálculo lo discute mucho menos.",
+        ),
+      },
+    ],
+  },
+  {
+    key: "coaching-sportif",
+    icon: "Zap",
+    highlights: ["Abonnements", "Application mobile", "Suivi de progression"],
+    serviceKeys: ["applications-web", "applications-mobiles", "saas-abonnement"],
+    projectKeys: ["mh-defense"],
+    slug: t("coaching-sportif", "fitness-coaching", "coaching-deportivo"),
+    title: t(
+      "Applications pour le coaching sportif et les studios",
+      "Apps for fitness coaching and studios",
+      "Aplicaciones para coaching deportivo y estudios",
+    ),
+    lead: t(
+      "Passer de la séance vendue à l'unité à l'abonnement, avec une application web pour s'inscrire et une application mobile pour s'entraîner.",
+      "Move from one-off sessions to subscriptions, with a web app to sign up and a mobile app to train.",
+      "Pasar de la sesión suelta a la suscripción, con una aplicación web para inscribirse y una móvil para entrenar.",
+    ),
+    body: t(
+      "## Le revenu d'un coach tient à la régularité, pas au nombre de séances\n\nVendre des séances à l'unité plafonne vite : chaque mois recommence à zéro. L'abonnement change l'économie du métier — revenu prévisible, valeur de l'entreprise, et un client qui s'engage dure plus longtemps. Encore faut-il que s'abonner, réserver et suivre sa progression tienne dans une application que l'on ouvre sans y penser.\n\n## Ce que nous avons construit\n\n**MH Defense**, à Sarrians, est un studio de self-défense féminine porté par une championne du monde de karaté. Le site propose trois formules d'abonnement à remise progressive, un cours d'essai gratuit, la réservation en ligne et un espace personnel. C'est le même socle que celui d'une activité de coaching.\n\n## Le web et le mobile ne servent pas à la même chose\n\nL'application web porte ce qui se fait assis : s'abonner, payer, construire un programme, consulter son historique. L'application mobile porte ce qui se fait debout : pointer une séance, enregistrer des charges, recevoir un rappel, consulter le programme du jour hors connexion dans une salle sans réseau. Les deux partagent les mêmes comptes et les mêmes données ; nous écrivons le mobile en React Native, publié sur les deux magasins.\n\n## Ce que nous mettons en place\n\n- **Abonnements** mensuels ou par cycle, prélèvement automatique, relance des échecs\n- **Réservation de créneaux**, individuels ou cours collectifs avec places limitées\n- **Programmes personnalisés**, avec séries, charges et progression\n- **Notifications** de rappel de séance et de relance d'inactivité\n- **Suivi de progression**, mesures et photos, visible par le coach et par le client\n- **Espace coach** : agenda, clients, paiements, taux de présence\n\n## Budget et délai\n\nÀ partir de 18 000 € et huit semaines pour l'application web avec abonnements. Comptez 25 000 € de plus et dix à quatorze semaines pour l'application mobile publiée sur iOS et Android.",
+      "## A coach's income rests on regularity, not on session count\n\nSelling sessions one at a time plateaus fast: every month starts from zero. Subscriptions change the economics — predictable revenue, business value, and a client who commits stays longer. Provided that subscribing, booking and tracking progress fit in an app people open without thinking.\n\n## What we have built\n\n**MH Defense**, in Sarrians, is a women's self-defence studio led by a karate world champion. The site offers three membership plans with progressive discounts, a free trial class, online booking and a personal area. It is the same foundation a coaching business needs.\n\n## Web and mobile do not serve the same purpose\n\nThe web app carries what you do sitting down: subscribe, pay, build a programme, review history. The mobile app carries what you do standing up: check into a session, log weights, get a reminder, read the day's programme offline in a gym with no signal. Both share the same accounts and data; we write the mobile side in React Native, published to both stores.\n\n## What we put in place\n\n- **Subscriptions**, monthly or per cycle, with automatic collection and dunning\n- **Slot booking**, one-to-one or group classes with limited places\n- **Personalised programmes**, with sets, loads and progression\n- **Notifications** for session reminders and inactivity follow-up\n- **Progress tracking**, measurements and photos, visible to coach and client\n- **Coach area**: diary, clients, payments, attendance rate\n\n## Budget and timeline\n\nFrom €18,000 and eight weeks for the web app with subscriptions. Allow a further €25,000 and ten to fourteen weeks for the mobile app published on iOS and Android.",
+      "## Los ingresos de un entrenador dependen de la regularidad, no del número de sesiones\n\nVender sesiones sueltas se estanca rápido: cada mes empieza de cero. La suscripción cambia la economía del oficio — ingresos previsibles, valor de empresa y un cliente que se compromete y dura más.\n\n## Lo que hemos construido\n\n**MH Defense**, en Sarrians, es un estudio de defensa personal femenina dirigido por una campeona del mundo de kárate. La web ofrece tres planes de suscripción con descuento progresivo, una clase de prueba gratuita, reserva en línea y área personal. Es la misma base que necesita una actividad de coaching.\n\n## La web y el móvil no sirven para lo mismo\n\nLa aplicación web sostiene lo que se hace sentado: suscribirse, pagar, construir un programa, consultar el historial. La aplicación móvil sostiene lo que se hace de pie: fichar una sesión, registrar cargas, recibir un recordatorio, consultar el programa del día sin conexión en una sala sin cobertura. Ambas comparten cuentas y datos; el móvil se escribe en React Native y se publica en las dos tiendas.\n\n## Lo que ponemos en marcha\n\n- **Suscripciones** mensuales o por ciclo, con cobro automático y recuperación de impagos\n- **Reserva de franjas**, individuales o clases colectivas con plazas limitadas\n- **Programas personalizados**, con series, cargas y progresión\n- **Notificaciones** de recordatorio y de reactivación\n- **Seguimiento de progreso**, medidas y fotos\n- **Área del entrenador**: agenda, clientes, pagos, asistencia\n\n## Presupuesto y plazo\n\nDesde 18.000 € y ocho semanas para la aplicación web con suscripciones. Suma 25.000 € y de diez a catorce semanas para la aplicación móvil publicada en iOS y Android.",
+    ),
+    faqs: [
+      {
+        question: t(
+          "Faut-il vraiment une application mobile, ou un site suffit-il ?",
+          "Do we really need a mobile app, or is a site enough?",
+          "¿Hace falta una aplicación móvil o basta con una web?",
+        ),
+        answer: t(
+          "Un site suffit pour vendre et pour réserver. L'application mobile se justifie quand le client s'en sert pendant la séance : pointer sa présence, enregistrer des charges, consulter le programme du jour dans une salle sans réseau, recevoir un rappel. Si votre usage s'arrête à l'inscription et au paiement, nous vous le dirons plutôt que de vous vendre une application à maintenir à chaque version d'iOS.",
+          "A site is enough to sell and to book. A mobile app earns its place when the client uses it during the session: checking in, logging loads, reading the day's programme in a gym with no signal, getting a reminder. If your use stops at sign-up and payment, we will say so rather than sell you an app to maintain against every iOS release.",
+          "Una web basta para vender y reservar. La aplicación móvil se justifica cuando el cliente la usa durante la sesión: fichar, registrar cargas, consultar el programa sin conexión. Si tu uso termina en la inscripción y el pago, te lo diremos.",
+        ),
+      },
+      {
+        question: t(
+          "Comment sont gérés les abonnements et les impayés ?",
+          "How are subscriptions and failed payments handled?",
+          "¿Cómo se gestionan las suscripciones y los impagos?",
+        ),
+        answer: t(
+          "Par prélèvement récurrent via Stripe, avec relance automatique en cas d'échec et suspension d'accès au terme d'un délai que vous fixez. Les formules à remise progressive, les engagements et les périodes d'essai se paramètrent depuis l'espace coach, sans développement supplémentaire.",
+          "Through recurring collection via Stripe, with automatic dunning on failure and access suspension after a delay you set. Tiered discounts, commitments and trial periods are configured from the coach area, with no further development.",
+          "Mediante cobro recurrente con Stripe, con recuperación automática en caso de fallo y suspensión de acceso tras el plazo que fijes. Los planes con descuento, los compromisos y las pruebas se configuran desde el área del entrenador.",
+        ),
+      },
+    ],
+  },
+  {
+    key: "automobile",
+    icon: "Gauge",
+    highlights: ["Tarification par gabarit", "Prise de rendez-vous", "Galerie avant-après"],
+    serviceKeys: ["sites-sur-mesure", "e-commerce-sur-mesure", "design-ux-ui"],
+    projectKeys: ["elite-detail-tampa"],
+    slug: t("automobile", "automotive", "automocion"),
+    title: t(
+      "Sites et rendez-vous pour le secteur automobile",
+      "Sites and booking for the automotive trade",
+      "Webs y citas para el sector de la automoción",
+    ),
+    lead: t(
+      "Preparation esthetique, carrosserie, mecanique, vente : afficher ses prix et ses creneaux plutot que d'attendre un appel.",
+      "Detailing, bodywork, mechanics, sales: show your prices and your slots instead of waiting for a call.",
+      "Detailing, chapa, mecánica, venta: mostrar precios y citas en lugar de esperar una llamada.",
+    ),
+    body: t(
+      "## Un devis automobile se gagne ou se perd avant l'appel\n\nPreparation esthetique, carrosserie, mecanique, vente de vehicules : le client compare en ligne, sur son telephone, et retient celui qui annonce ses prix et ses delais. Un site qui dit « contactez-nous pour un devis » se fait depasser par celui qui affiche une grille et propose un creneau.\n\n## Ce que nous avons construit\n\n**Elite Detail Tampa**, en Floride, est un service de detailing automobile a domicile. La clientele etant anglophone, hispanophone et francophone, le site existe dans les trois langues avec une URL par langue, une grille tarifaire par gabarit de vehicule, une galerie avant-apres et la reservation de creneau. La zone d'intervention est annoncee des l'accueil, ce qui evite les demandes hors perimetre.\n\n## Ce que nous mettons en place\n\n- **Tarification par gabarit** : citadine, berline, SUV, utilitaire — le prix juste sans aller-retour\n- **Prise de rendez-vous** avec creneaux reels et rappel automatique\n- **Galerie avant-apres**, la preuve la plus efficace sur ces metiers\n- **Catalogue de vehicules** avec photos, historique et financement, pour la vente\n- **Zone d'intervention** explicite pour un service a domicile\n- **Suivi d'intervention** envoye au client, photos a l'appui\n\n## Budget et delai\n\nA partir de 9 000 € et six semaines pour un site avec grille tarifaire et prise de rendez-vous. Un catalogue de vehicules avec recherche et financement demarre a 18 000 €.",
+      "## A car-trade quote is won or lost before the phone call\n\nDetailing, bodywork, mechanics, vehicle sales: the customer compares online, on a phone, and picks whoever states prices and lead times. A site that says \"contact us for a quote\" loses to one that shows a grid and offers a slot.\n\n## What we have built\n\n**Elite Detail Tampa**, in Florida, is a mobile car-detailing service. With customers speaking English, Spanish and French, the site exists in all three languages with one URL per language, a price grid by vehicle size, a before-and-after gallery and slot booking. The service area is stated on the homepage, which avoids out-of-range enquiries.\n\n## What we put in place\n\n- **Pricing by vehicle size**: hatchback, saloon, SUV, van — the right price with no back and forth\n- **Appointment booking** with real slots and automatic reminders\n- **Before-and-after gallery**, the most effective proof in these trades\n- **Vehicle catalogue** with photos, history and finance, for sales\n- **Explicit service area** for a mobile service\n- **Job updates** sent to the customer, with photos\n\n## Budget and timeline\n\nFrom €9,000 and six weeks for a site with a price grid and booking. A vehicle catalogue with search and finance starts at €18,000.",
+      "## Un presupuesto de automoción se gana o se pierde antes de la llamada\n\nDetailing, chapa, mecánica, venta de vehículos: el cliente compara en línea, desde el móvil, y elige a quien anuncia precios y plazos. Una web que dice «contáctanos para un presupuesto» pierde frente a la que muestra una tarifa y ofrece una cita.\n\n## Lo que hemos construido\n\n**Elite Detail Tampa**, en Florida, es un servicio de detailing a domicilio. Con clientela anglófona, hispanohablante y francófona, la web existe en tres idiomas con una URL por idioma, una tarifa por tamaño de vehículo, una galería antes y después y reserva de cita.\n\n## Lo que ponemos en marcha\n\n- **Tarifa por tamaño de vehículo**: urbano, berlina, SUV, furgoneta\n- **Reserva de cita** con franjas reales y recordatorio automático\n- **Galería antes y después**, la prueba más eficaz en estos oficios\n- **Catálogo de vehículos** con fotos, historial y financiación\n- **Zona de intervención** explícita para un servicio a domicilio\n- **Seguimiento de la intervención** enviado al cliente, con fotos\n\n## Presupuesto y plazo\n\nDesde 9.000 € y seis semanas para una web con tarifa y reserva de cita. Un catálogo de vehículos con buscador y financiación empieza en 18.000 €.",
+    ),
+    faqs: [
+      {
+        question: t(
+          "Afficher nos prix ne va-t-il pas nous faire perdre des clients ?",
+          "Will showing our prices lose us customers?",
+          "¿Mostrar los precios no nos hará perder clientes?",
+        ),
+        answer: t(
+          "Cela vous fait perdre les demandes que vous auriez refusées, et gagner celles que vous auriez ratées. Un client qui connaît le prix avant d'appeler appelle pour prendre rendez-vous, pas pour négocier. Une tarification par gabarit de véhicule donne un prix juste sans engager le devis au centime, ce qui laisse la marge de manœuvre sur les cas particuliers.",
+          "It loses you the enquiries you would have declined, and wins you the ones you would have missed. A customer who knows the price before calling calls to book, not to negotiate. Pricing by vehicle size gives a fair figure without committing you to the cent, which keeps room to manoeuvre on edge cases.",
+          "Te hace perder las solicitudes que habrías rechazado y ganar las que se te habrían escapado. Un cliente que conoce el precio antes de llamar llama para reservar, no para negociar.",
+        ),
+      },
+    ],
+  },
+  {
+    key: "sante",
+    icon: "Layers",
+    highlights: ["Prise de rendez-vous", "Hébergement conforme", "Équipe et spécialités"],
+    serviceKeys: ["sites-sur-mesure", "applications-web", "maintenance-performance"],
+    projectKeys: [],
+    slug: t("sante", "healthcare", "salud"),
+    title: t(
+      "Sites pour maisons médicales et professions de santé",
+      "Sites for health centres and healthcare professionals",
+      "Webs para centros médicos y profesionales sanitarios",
+    ),
+    lead: t(
+      "Maisons médicales, kinésithérapeutes, ostéopathes : présenter l'équipe, ouvrir le rendez-vous, et traiter la donnée de santé correctement.",
+      "Health centres, physiotherapists, osteopaths: present the team, open up booking, and handle health data properly.",
+      "Centros médicos, fisioterapeutas, osteópatas: presentar al equipo, abrir la cita y tratar el dato de salud correctamente.",
+    ),
+    body: t(
+      "## Un site de santé a une contrainte que les autres n'ont pas\n\nDès qu'une donnée permet d'identifier un patient et de le rattacher à un soin, elle devient une donnée de santé. En France, son hébergement exige une certification HDS. C'est la première question à régler, et la plupart des sites de praticiens y répondent mal : un formulaire de contact qui demande le motif de consultation collecte déjà une donnée de santé.\n\n## Comment nous traitons ce point\n\nPar défaut, nous ne stockons aucune donnée de santé. Le site présente la structure, l'équipe et les spécialités, et la prise de rendez-vous est déléguée à une plateforme déjà certifiée. Quand un besoin métier impose de conserver des données — messagerie patient, suivi de protocole — nous hébergeons chez un prestataire certifié HDS et nous l'écrivons dans le contrat. Nous ne contournons pas la règle, et nous ne la découvrons pas en cours de projet.\n\n## Ce que nous construisons\n\n- **Présentation de l'équipe** par praticien, spécialité, langues parlées et conventionnement\n- **Prise de rendez-vous**, intégrée ou déléguée à la plateforme que vous utilisez déjà\n- **Horaires, accès, parking, accessibilité** — les trois informations qu'on vient réellement chercher\n- **Informations pratiques** modifiables par le secrétariat, sans nous appeler\n- **Référencement local** : données structurées d'établissement de santé, cohérence avec la fiche Google\n- **Multilingue**, pour les zones touristiques et frontalières\n\n## Budget et délai\n\nÀ partir de 7 000 € et cinq semaines pour un site de maison médicale ou de cabinet, prise de rendez-vous déléguée comprise.",
+      "## A healthcare site has a constraint others do not\n\nAs soon as data identifies a patient and links them to care, it becomes health data. In France, hosting it requires HDS certification. That is the first question to settle, and most practitioner sites answer it badly: a contact form asking for the reason for the appointment already collects health data.\n\n## How we handle it\n\nBy default we store no health data. The site presents the practice, the team and the specialities, and appointment booking is delegated to an already-certified platform. Where a business need requires keeping data — patient messaging, protocol follow-up — we host with an HDS-certified provider and write it into the contract. We do not work around the rule, and we do not discover it mid-project.\n\n## What we build\n\n- **Team presentation** by practitioner, speciality, languages spoken and fee arrangements\n- **Appointment booking**, integrated or delegated to the platform you already use\n- **Hours, access, parking, accessibility** — the three things people actually come for\n- **Practical information** editable by reception, without calling us\n- **Local SEO**: healthcare business structured data, consistent with the Google listing\n- **Multilingual**, for tourist and border areas\n\n## Budget and timeline\n\nFrom €7,000 and five weeks for a health centre or practice site, delegated booking included.",
+      "## Una web sanitaria tiene una restricción que las demás no tienen\n\nEn cuanto un dato identifica a un paciente y lo vincula a una atención, se convierte en dato de salud. En Francia su alojamiento exige una certificación HDS. Es la primera cuestión a resolver, y la mayoría de webs de profesionales la resuelve mal: un formulario que pregunta el motivo de consulta ya recoge un dato de salud.\n\n## Cómo lo tratamos\n\nPor defecto no almacenamos ningún dato de salud. La web presenta el centro, el equipo y las especialidades, y la cita se delega en una plataforma ya certificada. Cuando una necesidad obliga a conservar datos, alojamos con un proveedor certificado y lo escribimos en el contrato.\n\n## Lo que construimos\n\n- **Presentación del equipo** por profesional, especialidad e idiomas\n- **Cita previa**, integrada o delegada en la plataforma que ya usas\n- **Horarios, acceso, aparcamiento, accesibilidad**\n- **Información práctica** editable por recepción\n- **Posicionamiento local**: datos estructurados de centro sanitario\n- **Multilingüe**, para zonas turísticas y fronterizas\n\n## Presupuesto y plazo\n\nDesde 7.000 € y cinco semanas para una web de centro médico o consulta, con cita delegada incluida.",
+    ),
+    faqs: [
+      {
+        question: t(
+          "Un formulaire de contact suffit-il pour prendre rendez-vous ?",
+          "Is a contact form enough for booking appointments?",
+          "¿Basta un formulario de contacto para pedir cita?",
+        ),
+        answer: t(
+          "Non, et c'est le piège le plus fréquent. Dès qu'un formulaire demande un motif de consultation, il collecte une donnée de santé, dont l'hébergement est réglementé. Nous déléguons donc la prise de rendez-vous à une plateforme certifiée, ou nous hébergeons chez un prestataire certifié HDS si le besoin l'impose. Dans les deux cas, c'est écrit dans le contrat avant de commencer.",
+          "No, and it is the most common trap. As soon as a form asks for a reason for the appointment, it collects health data, whose hosting is regulated. We therefore delegate booking to a certified platform, or host with an HDS-certified provider where the need requires it. Either way it is written into the contract before we start.",
+          "No, y es la trampa más habitual. En cuanto un formulario pregunta el motivo de consulta, recoge un dato de salud, cuyo alojamiento está regulado. Delegamos la cita en una plataforma certificada, o alojamos con un proveedor certificado si hace falta.",
+        ),
+      },
+    ],
+  },
+  {
+    key: "avocats-droit",
+    icon: "Database",
+    highlights: ["Pages par domaine", "Contact qualifiant", "Confidentialité"],
+    serviceKeys: ["sites-sur-mesure", "plateformes-metier", "maintenance-performance"],
+    projectKeys: [],
+    slug: t("avocats", "law-firms", "abogados"),
+    title: t(
+      "Sites et espaces clients pour les cabinets d'avocats",
+      "Sites and client portals for law firms",
+      "Webs y áreas de cliente para despachos de abogados",
+    ),
+    lead: t(
+      "Attirer le bon dossier et écarter les autres, avec des pages par domaine et un formulaire qui qualifie avant le rendez-vous.",
+      "Attract the right case and filter out the rest, with practice-area pages and a form that qualifies before the appointment.",
+      "Atraer el expediente adecuado y descartar el resto, con páginas por área y un formulario que cualifica antes de la cita.",
+    ),
+    body: t(
+      "## Un cabinet ne cherche pas du trafic, il cherche le bon dossier\n\nCent demandes hors domaine coûtent plus cher qu'elles ne rapportent : chacune occupe le secrétariat et se termine par un refus. Un site de cabinet réussi filtre autant qu'il attire. Il dit précisément les domaines traités, ceux qui ne le sont pas, et il qualifie la demande avant qu'elle n'arrive dans la boîte mail.\n\n## Ce que nous construisons\n\n- **Pages par domaine d'intervention**, écrites pour la recherche réelle du justiciable\n- **Formulaire de prise de contact qualifiant**, qui oriente ou écarte avant le rendez-vous\n- **Présentation des avocats** : barreau, spécialisations, langues de plaidoirie\n- **Espace client** quand le cabinet le souhaite : pièces, échéances, état d'avancement\n- **Publications et jurisprudence commentée**, qui font le référencement d'un cabinet mieux que tout le reste\n- **Multilingue**, décisif sur le droit des affaires transfrontalier\n\n## Confidentialité et déontologie\n\nLe secret professionnel ne tolère pas l'approximation technique. Les échanges passent en chiffrement de bout en bout du navigateur au serveur, les pièces sont servies derrière authentification et exclues de l'indexation, et le journal des accès permet de tracer qui a consulté quoi. Nous hébergeons dans l'Union européenne par défaut, et en Suisse quand le cabinet l'exige. Les contraintes déontologiques en matière de publicité sont prises en compte dans la rédaction, pas corrigées après coup.\n\n## Budget et délai\n\nÀ partir de 8 000 € et cinq semaines pour un site de cabinet avec pages par domaine. Un espace client sécurisé démarre à 20 000 €.",
+      "## A law firm is not looking for traffic, it is looking for the right case\n\nA hundred out-of-scope enquiries cost more than they return: each one occupies reception and ends in a refusal. A successful firm site filters as much as it attracts. It states precisely which areas are handled, which are not, and it qualifies the enquiry before it reaches the inbox.\n\n## What we build\n\n- **A page per practice area**, written for how clients actually search\n- **A qualifying enquiry form**, which directs or declines before the appointment\n- **Lawyer profiles**: bar, specialisations, languages of pleading\n- **Client portal** where the firm wants one: documents, deadlines, case status\n- **Publications and case commentary**, which do more for a firm's search presence than anything else\n- **Multilingual**, decisive in cross-border business law\n\n## Confidentiality and professional conduct\n\nLegal privilege does not tolerate technical approximation. Exchanges are encrypted end to end from browser to server, documents are served behind authentication and excluded from indexing, and an access log traces who viewed what. We host in the European Union by default, and in Switzerland where a firm requires it. Advertising conduct rules are taken into account when drafting, not corrected afterwards.\n\n## Budget and timeline\n\nFrom €8,000 and five weeks for a firm site with practice-area pages. A secure client portal starts at €20,000.",
+      "## Un despacho no busca tráfico, busca el expediente adecuado\n\nCien solicitudes fuera de ámbito cuestan más de lo que aportan: cada una ocupa a la secretaría y acaba en una negativa. Una web de despacho que funciona filtra tanto como atrae.\n\n## Lo que construimos\n\n- **Una página por área de práctica**, escrita para la búsqueda real del cliente\n- **Formulario de contacto cualificador**, que orienta o descarta antes de la cita\n- **Presentación de los abogados**: colegio, especializaciones, idiomas\n- **Área de cliente** cuando el despacho la quiere: documentos, plazos, estado del asunto\n- **Publicaciones y comentario de jurisprudencia**\n- **Multilingüe**, decisivo en derecho mercantil transfronterizo\n\n## Confidencialidad y deontología\n\nEl secreto profesional no tolera la aproximación técnica. Los intercambios se cifran de extremo a extremo, los documentos se sirven tras autenticación y se excluyen de la indexación, y un registro de accesos permite trazar quién consultó qué. Alojamos en la Unión Europea por defecto, y en Suiza cuando el despacho lo exige.\n\n## Presupuesto y plazo\n\nDesde 8.000 € y cinco semanas para una web de despacho con páginas por área. Un área de cliente segura empieza en 20.000 €.",
+    ),
+    faqs: [
+      {
+        question: t(
+          "Un espace client est-il compatible avec le secret professionnel ?",
+          "Is a client portal compatible with legal privilege?",
+          "¿Un área de cliente es compatible con el secreto profesional?",
+        ),
+        answer: t(
+          "Oui, à condition que l'architecture le prévoie dès le départ. Les pièces sont servies derrière authentification, exclues de l'indexation et absentes du sitemap, les échanges sont chiffrés de bout en bout, et chaque consultation est journalisée. Nous hébergeons dans l'Union européenne par défaut, et en Suisse quand le cabinet l'exige.",
+          "Yes, provided the architecture plans for it from the start. Documents are served behind authentication, excluded from indexing and absent from the sitemap, exchanges are encrypted end to end, and every access is logged. We host in the European Union by default, and in Switzerland where a firm requires it.",
+          "Sí, siempre que la arquitectura lo prevea desde el inicio. Los documentos se sirven tras autenticación, excluidos de la indexación, los intercambios se cifran de extremo a extremo y cada consulta queda registrada.",
         ),
       },
     ],

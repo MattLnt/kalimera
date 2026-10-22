@@ -142,6 +142,9 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         pathname: "/sectors/[slug]",
         allLabel: t("allSectors"),
         allHref: "/sectors",
+        // Douze secteurs sur une seule liste rendaient le panneau plus haut
+        // que l'écran.
+        split: true,
       },
       {
         heading: t("markets"),
