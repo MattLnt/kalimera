@@ -15,7 +15,7 @@ import { buildAlternates } from "@/lib/seo";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 import { breadcrumbSchema, graph } from "@/lib/structured-data";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

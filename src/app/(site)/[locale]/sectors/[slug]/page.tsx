@@ -9,7 +9,7 @@ import { getLandingBySlug, getLandingSlugs } from "@/lib/content";
 import { toAppLocale, toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const slugs = await getLandingSlugs(LandingKind.SECTOR);

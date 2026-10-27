@@ -18,7 +18,7 @@ import { buildAlternates } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/site";
 import { readingTime } from "@/lib/utils";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const slugs = await getPostSlugs();

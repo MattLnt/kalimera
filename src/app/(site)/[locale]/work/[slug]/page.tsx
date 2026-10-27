@@ -20,7 +20,7 @@ import { buildAlternates } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/site";
 import { breadcrumbSchema, creativeWorkSchema, graph } from "@/lib/structured-data";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const slugs = await getProjectSlugs();

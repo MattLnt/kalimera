@@ -20,7 +20,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { getFeaturedProjects, getPosts, getServices, getTestimonial } from "@/lib/content";
 import { toDbLocale } from "@/lib/locale";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export default async function HomePage({
   params,

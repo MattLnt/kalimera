@@ -10,7 +10,7 @@ import { getPosts } from "@/lib/content";
 import { toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

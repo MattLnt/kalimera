@@ -12,7 +12,7 @@ import { toDbLocale } from "@/lib/locale";
 import { buildAlternates } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,
