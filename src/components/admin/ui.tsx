@@ -2,18 +2,61 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-/** En-tête de page d'administration : titre, sous-titre et action à droite. */
+/**
+ * En-tête de page d'administration : titre, sous-titre et action à droite.
+ *
+ * Sur une page principale (sans lien retour), c'est un bandeau bleu nuit —
+ * le panneau sombre du site, avec son grain et son arche. Les fiches de
+ * détail gardent un en-tête clair, plus discret, sous leur lien retour.
+ * `children` se place dans le bandeau, sous le titre : les chiffres du
+ * tableau de bord, par exemple.
+ */
 export function AdminHeader({
   title,
   subtitle,
   action,
   back,
+  eyebrow,
+  children,
 }: {
   title: string;
   subtitle?: string;
   action?: React.ReactNode;
   back?: { href: string; label: string };
+  eyebrow?: string;
+  children?: React.ReactNode;
 }) {
+  if (!back) {
+    return (
+      <header className="night-panel relative isolate mb-6 overflow-hidden rounded-[30px] px-6 py-7 shadow-lift sm:px-9 sm:py-9">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -top-28 right-[-6%] size-[26rem] rounded-full bg-[radial-gradient(circle,rgba(98,169,242,0.4),transparent_68%)]"
+        />
+        <span aria-hidden className="arch-deco" style={{ width: "26%", right: "-4%", bottom: "-70%" }} />
+        <span aria-hidden className="grain-layer" />
+        <div className="relative z-2 flex flex-wrap items-end justify-between gap-5">
+          <div className="min-w-0">
+            {eyebrow ? (
+              <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-3.5 pl-2.5 font-display text-[0.6875rem] font-semibold text-white backdrop-blur-sm">
+                <span aria-hidden className="size-[7px] rounded-full bg-aegean-400" />
+                {eyebrow}
+              </span>
+            ) : null}
+            <h1 className="font-display text-[clamp(1.75rem,3.2vw,2.5rem)] leading-[1.05] font-extrabold tracking-[-0.045em] text-white">
+              {title}
+            </h1>
+            {subtitle ? (
+              <p className="mt-2 max-w-[60ch] text-[0.9375rem] text-white/65 first-letter:uppercase">{subtitle}</p>
+            ) : null}
+          </div>
+          {action}
+        </div>
+        {children ? <div className="relative z-2 mt-7">{children}</div> : null}
+      </header>
+    );
+  }
+
   return (
     <header className="mb-7">
       {back ? (
@@ -180,38 +223,56 @@ export function Pill({
   );
 }
 
-/** Chiffre clé du tableau de bord. */
+/**
+ * Chiffre clé. `tone="dark"` pour le poser en verre dépoli dans un bandeau
+ * bleu nuit, comme les chiffres des héros du site.
+ */
 export function StatCard({
   label,
   value,
   hint,
   icon,
   href,
+  tone = "light",
 }: {
   label: string;
   value: string;
   hint?: string;
   icon?: React.ReactNode;
   href?: string;
+  tone?: "light" | "dark";
 }) {
+  const dark = tone === "dark";
   const body = (
     <>
       <div className="flex items-center justify-between gap-3">
-        <span className="font-display text-[0.75rem] font-bold text-[var(--ink-45)]">{label}</span>
+        <span className={cn("font-display text-[0.75rem] font-bold", dark ? "text-white/60" : "text-[var(--ink-45)]")}>{label}</span>
         {icon ? (
-          <span className="grid size-8 place-items-center rounded-[10px] bg-aegean-50 text-aegean-700">{icon}</span>
+          <span
+            className={cn(
+              "grid size-8 place-items-center rounded-[10px]",
+              dark ? "bg-white/10 text-aegean-200" : "bg-aegean-50 text-aegean-700",
+            )}
+          >
+            {icon}
+          </span>
         ) : null}
       </div>
-      <p className="mt-2 font-display text-[1.625rem] leading-none font-extrabold tracking-[-0.04em]">{value}</p>
-      {hint ? <p className="mt-2 text-[0.8125rem] text-[var(--ink-45)]">{hint}</p> : null}
+      <p className={cn("mt-2 font-display text-[1.625rem] leading-none font-extrabold tracking-[-0.04em]", dark && "text-white")}>
+        {value}
+      </p>
+      {hint ? <p className={cn("mt-2 text-[0.8125rem]", dark ? "text-white/50" : "text-[var(--ink-45)]")}>{hint}</p> : null}
     </>
   );
+  const box = dark
+    ? "flex h-full flex-col rounded-[20px] border border-white/10 bg-white/[0.07] p-5 backdrop-blur-sm transition-colors"
+    : "surface-card flex h-full flex-col p-5";
   return href ? (
-    <Link href={href} className="surface-card surface-card-hover flex h-full flex-col p-5">
+    <Link href={href} className={cn(box, dark ? "hover:bg-white/[0.12]" : "surface-card-hover")}>
       {body}
     </Link>
   ) : (
-    <div className="surface-card flex h-full flex-col p-5">{body}</div>
+    <div className={box}>{body}</div>
   );
 }
 

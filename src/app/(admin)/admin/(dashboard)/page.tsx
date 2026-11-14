@@ -104,37 +104,43 @@ export default async function AdminHomePage() {
             </ActionLink>
           </div>
         }
-      />
+        eyebrow="Tableau de bord"
+      >
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <StatCard
+            tone="dark"
+            label="En négociation"
+            value={formatMoneyShort(pipeline)}
+            hint={`Pondéré : ${formatMoneyShort(weighted)}`}
+            icon={<BriefcaseBusiness className="size-4" />}
+            href="/admin/deals"
+          />
+          <StatCard
+            tone="dark"
+            label="Devis en attente"
+            value={formatMoneyShort(pendingTotal)}
+            hint={`${pendingQuotes.length} devis à signer`}
+            icon={<FileSignature className="size-4" />}
+            href="/admin/quotes"
+          />
+          <StatCard
+            tone="dark"
+            label="À encaisser"
+            value={formatMoneyShort(due)}
+            hint={overdue.length ? `${overdue.length} facture${overdue.length > 1 ? "s" : ""} en retard` : "Aucun retard"}
+            icon={<Receipt className="size-4" />}
+            href="/admin/invoices"
+          />
+          <StatCard
+            tone="dark"
+            label="Encaissé ce mois"
+            value={formatMoneyShort(paymentsThisMonth._sum.amountCents ?? 0)}
+            icon={<Wallet className="size-4" />}
+            href="/admin/invoices?filter=paid"
+          />
+        </div>
 
-      <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard
-          label="En négociation"
-          value={formatMoneyShort(pipeline)}
-          hint={`Pondéré : ${formatMoneyShort(weighted)}`}
-          icon={<BriefcaseBusiness className="size-4" />}
-          href="/admin/deals"
-        />
-        <StatCard
-          label="Devis en attente"
-          value={formatMoneyShort(pendingTotal)}
-          hint={`${pendingQuotes.length} devis à signer`}
-          icon={<FileSignature className="size-4" />}
-          href="/admin/quotes"
-        />
-        <StatCard
-          label="À encaisser"
-          value={formatMoneyShort(due)}
-          hint={overdue.length ? `${overdue.length} facture${overdue.length > 1 ? "s" : ""} en retard` : "Aucun retard"}
-          icon={<Receipt className="size-4" />}
-          href="/admin/invoices"
-        />
-        <StatCard
-          label="Encaissé ce mois"
-          value={formatMoneyShort(paymentsThisMonth._sum.amountCents ?? 0)}
-          icon={<Wallet className="size-4" />}
-          href="/admin/invoices?filter=paid"
-        />
-      </div>
+      </AdminHeader>
 
       <div className="grid items-stretch gap-4 lg:grid-cols-[1.3fr_1fr]">
         <div className="flex flex-col gap-4">
