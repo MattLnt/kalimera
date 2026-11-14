@@ -49,6 +49,15 @@ const nextConfig: NextConfig = {
   // Le client Prisma est généré dans src/generated : il doit rester externe au
   // bundle serveur pour que son moteur se charge correctement.
   serverExternalPackages: ["@prisma/client", "@prisma/adapter-pg", "puppeteer-core", "@sparticuz/chromium"],
+  // Le Chromium allégé qui rend les PDF de devis et factures : son dossier
+  // `bin` (fichiers compressés, lus à l'exécution) échappe au traçage
+  // automatique. On l'embarque, mais seulement dans les routes qui génèrent
+  // des PDF — les autres fonctions restent légères.
+  outputFileTracingIncludes: {
+    "/documents/**": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+    "/admin/quotes/**": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+    "/admin/invoices/**": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+  },
   poweredByHeader: false,
   async headers() {
     return [
