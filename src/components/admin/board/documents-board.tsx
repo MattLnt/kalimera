@@ -80,7 +80,7 @@ export function DocumentsBoard({ kind, rows, order }: { kind: "quote" | "invoice
       label: kind === "quote" ? "Validité" : "Échéance",
       width: "110px",
       align: "center",
-      render: (row) => <span className={row.late ? "text-[0.8125rem] font-bold text-red-600 tabular-nums" : "text-[0.8125rem] text-[var(--ink-65)] tabular-nums"}>{row.due}</span>,
+      render: (row) => <span className={row.late ? "text-[0.8125rem] font-bold text-[#0B3A75] tabular-nums" : "text-[0.8125rem] text-[var(--ink-65)] tabular-nums"}>{row.due}</span>,
     },
     ...(kind === "invoice"
       ? [

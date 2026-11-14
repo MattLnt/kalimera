@@ -54,13 +54,13 @@ export function TaskList({
             <div className="min-w-0 flex-1">
               <p className={cn("text-[0.9375rem]", done && "text-[var(--ink-45)] line-through")}>
                 {task.priority === "HIGH" && !done ? (
-                  <span className="mr-1.5 inline-block size-2 rounded-full bg-red-500 align-middle" title="Priorité haute" />
+                  <span className="mr-1.5 inline-block size-2 rounded-full bg-[#0B3A75] align-middle" title="Priorité haute" />
                 ) : null}
                 {task.title}
               </p>
               <p className="flex flex-wrap items-center gap-x-2 text-xs text-[var(--ink-45)]">
                 {task.dueAt ? (
-                  <span className={cn("inline-flex items-center gap-1", late && "font-bold text-red-600")}>
+                  <span className={cn("inline-flex items-center gap-1", late && "font-bold text-[#0B3A75]")}>
                     <CalendarClock className="size-3" />
                     {formatDate(task.dueAt)}
                   </span>
@@ -79,7 +79,7 @@ export function TaskList({
             </div>
             <form action={deleteTask} className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
               <input type="hidden" name="id" value={task.id} />
-              <button type="submit" aria-label="Supprimer la tâche" className="grid size-7 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-red-50 hover:text-red-700">
+              <button type="submit" aria-label="Supprimer la tâche" className="grid size-7 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-[#EEF3FA] hover:text-[#0B3A75]">
                 <Trash2 className="size-3.5" />
               </button>
             </form>

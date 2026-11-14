@@ -90,7 +90,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <Pill className={toneClasses[noteKind[note.kind].tone]}>{noteKind[note.kind].label}</Pill>
             <span className="font-display text-[0.9375rem] font-bold">{note.title || "Sans titre"}</span>
-            {note.pinned ? <Pin className="size-3.5 text-amber-600" /> : null}
+            {note.pinned ? <Pin className="size-3.5 text-aegean-600" /> : null}
             <span className="ml-auto text-xs text-[var(--ink-45)]">
               {formatDateTime(note.occurredAt)}
               {note.durationMin ? ` · ${note.durationMin} min` : ""}
@@ -246,7 +246,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
         {/* ---------------------------------------------------- fil */}
         <div className="flex flex-col gap-4">
           {client.summary ? (
-            <div className="rounded-[20px] bg-amber-50 px-5 py-4 text-[0.9375rem] leading-relaxed whitespace-pre-wrap text-amber-950">
+            <div className="rounded-[20px] bg-[#E9F6F7] px-5 py-4 text-[0.9375rem] leading-relaxed whitespace-pre-wrap text-[#0A4B52]">
               {client.summary}
             </div>
           ) : null}
@@ -257,7 +257,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
                 {pinned.map((note) => (
                   <li key={note.id}>
                     <Link href={`/admin/notes/${note.id}`} className="flex items-center gap-2 rounded-field px-3 py-2 hover:bg-aegean-50">
-                      <Pin className="size-3.5 text-amber-600" />
+                      <Pin className="size-3.5 text-aegean-600" />
                       <span className="font-display text-[0.9375rem] font-bold">{note.title || noteKind[note.kind].label}</span>
                       <span className="ml-auto text-xs text-[var(--ink-45)]">{formatDate(note.occurredAt)}</span>
                     </Link>
@@ -363,7 +363,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
                       ) : null}
                       <form action={deleteContact}>
                         <input type="hidden" name="id" value={contact.id} />
-                        <button type="submit" className="cursor-pointer text-xs text-red-700 hover:underline">Retirer</button>
+                        <button type="submit" className="cursor-pointer text-xs text-[#0B3A75] hover:underline">Retirer</button>
                       </form>
                     </div>
                   </div>

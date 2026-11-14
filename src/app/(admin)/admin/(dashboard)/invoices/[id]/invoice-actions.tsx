@@ -21,7 +21,7 @@ function Submit({ label, busy }: { label: string; busy: string }) {
 }
 
 function Feedback({ state }: { state: InvoiceActionState }) {
-  if (state.error) return <p role="alert" className="rounded-field bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>;
+  if (state.error) return <p role="alert" className="rounded-field bg-[#EEF3FA] px-3 py-2 text-sm text-[#0B3A75]">{state.error}</p>;
   if (state.ok)
     return (
       <p className="flex items-start gap-2 rounded-field bg-green-50 px-3 py-2 text-sm text-green-800">

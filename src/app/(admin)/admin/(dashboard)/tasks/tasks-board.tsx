@@ -100,7 +100,7 @@ export function TasksBoard({ tasks, today }: { tasks: BoardTaskRow[]; today: str
           type="button"
           aria-label="Supprimer la tâche"
           onClick={() => patch(task.id, { status: "__deleted" }, () => deleteTaskQuick(task.id))}
-          className="grid size-8 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] opacity-0 transition-opacity group-hover/row:opacity-100 hover:bg-red-50 hover:text-red-700"
+          className="grid size-8 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] opacity-0 transition-opacity group-hover/row:opacity-100 hover:bg-[#EEF3FA] hover:text-[#0B3A75]"
         >
           <Trash2 className="size-4" />
         </button>
@@ -176,7 +176,7 @@ export function TasksKanban({ tasks, today }: { tasks: BoardTaskRow[]; today: st
                           {priority.label}
                         </span>
                         {task.dueAt ? (
-                          <span className={cn("rounded-[6px] bg-black/[0.05] px-1.5 py-0.5 font-semibold", late && "bg-red-100 text-red-700")}>
+                          <span className={cn("rounded-[6px] bg-black/[0.05] px-1.5 py-0.5 font-semibold", late && "bg-[#DCE5F1] text-[#0B3A75]")}>
                             {new Date(`${task.dueAt}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "short" })}
                           </span>
                         ) : null}

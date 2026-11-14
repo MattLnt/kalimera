@@ -116,7 +116,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
                 type="submit"
                 className={cn(
                   "cursor-pointer rounded-[12px] px-3 py-2.5 font-display text-[0.8125rem] font-bold whitespace-nowrap",
-                  deal.stage === "LOST" ? "bg-red-600 text-white" : "text-red-700 hover:bg-red-50",
+                  deal.stage === "LOST" ? "bg-[#64748B] text-white" : "text-[#0B3A75] hover:bg-[#EEF3FA]",
                 )}
               >
                 {deal.stage === "LOST" ? "Perdu · rouvrir" : "Perdu"}
@@ -193,7 +193,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
                   </span>
                   <form action={deleteMilestone} className="opacity-0 transition-opacity group-hover:opacity-100">
                     <input type="hidden" name="id" value={milestone.id} />
-                    <button type="submit" aria-label="Supprimer l'étape" className="grid size-7 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-red-50 hover:text-red-700">
+                    <button type="submit" aria-label="Supprimer l'étape" className="grid size-7 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-[#EEF3FA] hover:text-[#0B3A75]">
                       <Trash2 className="size-3.5" />
                     </button>
                   </form>
@@ -256,7 +256,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
               </div>
               <div>
                 <dt className="text-xs text-[var(--ink-45)]">Livraison</dt>
-                <dd className={cn("font-display font-bold", deal.dueDate && deal.dueDate < new Date() && !deal.deliveredAt && "text-red-600")}>
+                <dd className={cn("font-display font-bold", deal.dueDate && deal.dueDate < new Date() && !deal.deliveredAt && "text-[#0B3A75]")}>
                   {formatDate(deal.deliveredAt ?? deal.dueDate)}
                 </dd>
               </div>
@@ -266,7 +266,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
                 {deal.description}
               </p>
             ) : null}
-            {deal.lostReason ? <p className="mt-3 text-[0.875rem] text-red-700">Perdu : {deal.lostReason}</p> : null}
+            {deal.lostReason ? <p className="mt-3 text-[0.875rem] text-[#0B3A75]">Perdu : {deal.lostReason}</p> : null}
           </Panel>
 
           <Panel

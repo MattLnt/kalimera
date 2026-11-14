@@ -30,7 +30,7 @@ function Submit({ label, busy, tone = "primary" }: { label: string; busy: string
 }
 
 function Feedback({ state }: { state: QuoteActionState }) {
-  if (state.error) return <p role="alert" className="mt-3 rounded-field bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>;
+  if (state.error) return <p role="alert" className="mt-3 rounded-field bg-[#EEF3FA] px-3 py-2 text-sm text-[#0B3A75]">{state.error}</p>;
   if (state.ok)
     return (
       <p className="mt-3 flex items-start gap-2 rounded-field bg-green-50 px-3 py-2 text-sm text-green-800">

@@ -109,13 +109,13 @@ export function StatusBadge({ published }: { published: boolean }) {
     <span
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-display text-[0.6875rem] font-bold",
-        published ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800",
+        published ? "bg-green-100 text-green-800" : "bg-[#DDF2F4] text-[#0A6B74]",
       )}
     >
       <span
         className={cn(
           "size-1.5 rounded-full",
-          published ? "bg-green-600" : "bg-amber-500",
+          published ? "bg-green-600" : "bg-[#94A3B8]",
         )}
       />
       {published ? "Publié" : "Brouillon"}
@@ -230,13 +230,13 @@ export function Pill({
  */
 /**
  * Couleurs des indicateurs, les mêmes que les statuts : bleu = en cours,
- * orange = en attente, vert = acquis, rouge = problème, gris = neutre.
+ * bleu-vert = en attente, vert = acquis, bleu nuit = urgent, gris = neutre.
  */
 const statColors = {
   blue: { tile: "#1F7AE0", soft: "#E3EFFC", ink: "#155399" },
-  orange: { tile: "#D97706", soft: "#FCEFDC", ink: "#9B5505" },
+  teal: { tile: "#0E9AA7", soft: "#DDF2F4", ink: "#0A6B74" },
   green: { tile: "#059669", soft: "#DCF1EA", ink: "#046C4E" },
-  red: { tile: "#DC2626", soft: "#FCE3E3", ink: "#A01C1C" },
+  navy: { tile: "#0B3A75", soft: "#DCE5F1", ink: "#0B3A75" },
   slate: { tile: "#64748B", soft: "#ECEFF3", ink: "#475569" },
 } as const;
 export type StatColor = keyof typeof statColors;
@@ -295,7 +295,7 @@ export function StatCard({
           <span
             className={cn(
               "rounded-full px-2.5 py-0.5 font-display text-[0.75rem] font-bold",
-              trend.direction === "up" ? "bg-[#DDF5EB] text-[#0B6B47]" : trend.direction === "down" ? "bg-[#FDE3E3] text-[#A31919]" : "bg-black/5 text-[var(--ink-65)]",
+              trend.direction === "up" ? "bg-[#DCF1EA] text-[#046C4E]" : trend.direction === "down" ? "bg-[#DCE5F1] text-[#0B3A75]" : "bg-black/5 text-[var(--ink-65)]",
             )}
           >
             {trend.direction === "up" ? "↑ " : trend.direction === "down" ? "↓ " : ""}

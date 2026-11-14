@@ -119,7 +119,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
               </div>
               <div>
                 <dt className="text-[var(--ink-45)]">Échéance</dt>
-                <dd className={overdue ? "font-display font-bold text-red-600" : "font-display font-bold"}>{formatDate(invoice.dueDate)}</dd>
+                <dd className={overdue ? "font-display font-bold text-[#0B3A75]" : "font-display font-bold"}>{formatDate(invoice.dueDate)}</dd>
               </div>
               {invoice.quote ? (
                 <div>
@@ -176,7 +176,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
                       </span>
                       <form action={deletePayment} className="opacity-0 transition-opacity group-hover:opacity-100">
                         <input type="hidden" name="paymentId" value={payment.id} />
-                        <button type="submit" aria-label="Supprimer ce virement" className="grid size-7 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-red-50 hover:text-red-700">
+                        <button type="submit" aria-label="Supprimer ce virement" className="grid size-7 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-[#EEF3FA] hover:text-[#0B3A75]">
                           <X className="size-3.5" />
                         </button>
                       </form>
@@ -205,7 +205,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
           {invoice.status === "DRAFT" ? (
             <form action={deleteInvoice}>
               <input type="hidden" name="id" value={invoice.id} />
-              <button type="submit" className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-red-700 hover:bg-red-50">
+              <button type="submit" className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-[#0B3A75] hover:bg-[#EEF3FA]">
                 <Trash2 className="size-4" />
                 Supprimer le brouillon
               </button>

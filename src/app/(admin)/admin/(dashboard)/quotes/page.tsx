@@ -56,7 +56,7 @@ export default async function QuotesPage() {
         }
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-          <StatCard color="orange" icon={<Hourglass className="size-4" />} label="En attente de réponse" value={formatMoneyShort(eur(pending))} hint={`${pending.length} devis envoyé${pending.length > 1 ? "s" : ""}`} />
+          <StatCard color="teal" icon={<Hourglass className="size-4" />} label="En attente de réponse" value={formatMoneyShort(eur(pending))} hint={`${pending.length} devis envoyé${pending.length > 1 ? "s" : ""}`} />
           <StatCard color="green" icon={<BadgeCheck className="size-4" />} label={`Acceptés en ${now.getFullYear()}`} value={formatMoneyShort(eur(signed))} hint={`${signed.length} devis`} />
           <StatCard color="green"
             icon={<Percent className="size-4" />}

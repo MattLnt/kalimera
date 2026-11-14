@@ -331,7 +331,7 @@ export function MoneyCell({ cents, onChange, currency = "EUR" }: { cents: number
 
 export function DateCell({ value, onChange, late }: { value: string; onChange?: (value: string) => void; late?: boolean }) {
   return (
-    <div className={cn("h-full w-full", late && "text-red-600 [&_span]:font-bold")}>
+    <div className={cn("h-full w-full", late && "text-[#0B3A75] [&_span]:font-bold")}>
       <DatePicker value={value} onChange={(next) => next !== value && onChange?.(next)} bare />
     </div>
   );

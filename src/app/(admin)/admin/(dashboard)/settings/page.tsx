@@ -52,7 +52,7 @@ export default async function SettingsPage() {
               <li key={service.label} className="flex items-center gap-3">
                 <span
                   aria-hidden
-                  className={`size-2.5 rounded-full ${service.ok ? "bg-green-500" : "bg-amber-500"}`}
+                  className={`size-2.5 rounded-full ${service.ok ? "bg-green-500" : "bg-[#0E9AA7]"}`}
                 />
                 <span className="text-[0.9375rem]">{service.label}</span>
                 <span className="ml-auto font-display text-xs font-bold text-[var(--ink-45)]">

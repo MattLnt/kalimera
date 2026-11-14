@@ -68,7 +68,7 @@ export default async function AdminProjectsPage() {
                     {fr?.title ?? project.key}
                     {project.featured ? (
                       <Star
-                        className="size-3.5 shrink-0 fill-amber-400 text-amber-400"
+                        className="size-3.5 shrink-0 fill-aegean-500 text-aegean-500"
                         aria-label="Mis en avant"
                       />
                     ) : null}

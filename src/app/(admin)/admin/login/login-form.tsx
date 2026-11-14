@@ -87,7 +87,7 @@ export function LoginForm({
       </div>
 
       {error ? (
-        <p role="alert" className="rounded-field bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p role="alert" className="rounded-field bg-[#EEF3FA] px-4 py-3 text-sm text-[#0B3A75]">
           {error}
         </p>
       ) : null}

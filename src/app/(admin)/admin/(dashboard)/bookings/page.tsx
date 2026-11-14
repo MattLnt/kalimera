@@ -193,7 +193,7 @@ async function WeekView({ week, now, config }: { week?: string; now: Date; confi
         </header>
 
         {external.error ? (
-          <p className="border-b border-[#EDF1F6] bg-[#FFF4E5] px-5 py-2 text-[0.8125rem] font-semibold text-[#8A4204]">
+          <p className="border-b border-[#EDF1F6] bg-[#E9F6F7] px-5 py-2 text-[0.8125rem] font-semibold text-[#0A6B74]">
             Votre agenda externe n&apos;a pas pu être lu ({external.error}). Vérifiez l&apos;adresse dans Disponibilités.
           </p>
         ) : null}
@@ -209,7 +209,7 @@ async function WeekView({ week, now, config }: { week?: string; now: Date; confi
                   <p className={cn("mx-auto mt-0.5 grid size-8 place-items-center rounded-full font-display text-[1rem] font-extrabold", day === today && "bg-aegean-600 text-white")}>
                     {Number(day.slice(8))}
                   </p>
-                  {closed ? <p className="mt-0.5 font-display text-[0.625rem] font-bold text-[#A31919] uppercase">Fermé</p> : null}
+                  {closed ? <p className="mt-0.5 font-display text-[0.625rem] font-bold text-[#475569] uppercase">Fermé</p> : null}
                 </div>
               );
             })}
@@ -233,7 +233,7 @@ async function WeekView({ week, now, config }: { week?: string; now: Date; confi
               return (
                 <div
                   key={day}
-                  className={cn("relative border-l border-[#EDF1F6]", closed && "bg-[repeating-linear-gradient(135deg,transparent_0_8px,#FBEFEF_8px_16px)]")}
+                  className={cn("relative border-l border-[#EDF1F6]", closed && "bg-[repeating-linear-gradient(135deg,transparent_0_8px,#EEF1F5_8px_16px)]")}
                   style={{ height: hours.length * HOUR_PX }}
                 >
                   {hours.map((hour) => (
@@ -248,8 +248,8 @@ async function WeekView({ week, now, config }: { week?: string; now: Date; confi
                     />
                   ))}
                   {day === today && nowMinutes >= FIRST_HOUR * 60 && nowMinutes <= LAST_HOUR * 60 ? (
-                    <span className="absolute inset-x-0 z-10 h-0.5 bg-red-500" style={{ top: top(nowMinutes) }}>
-                      <span className="absolute -top-1 -left-1 size-2.5 rounded-full bg-red-500" />
+                    <span className="absolute inset-x-0 z-10 h-0.5 bg-aegean-600" style={{ top: top(nowMinutes) }}>
+                      <span className="absolute -top-1 -left-1 size-2.5 rounded-full bg-aegean-600" />
                     </span>
                   ) : null}
                   {events.map((event) => {
@@ -454,7 +454,7 @@ async function ListView({ showPast, now }: { showPast: boolean; now: Date }) {
                       <input type="hidden" name="id" value={booking.id} />
                       <button
                         type="submit"
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 font-display text-xs font-bold text-red-700 transition-colors hover:bg-red-50"
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 font-display text-xs font-bold text-[#0B3A75] transition-colors hover:bg-[#EEF3FA]"
                       >
                         <CalendarX2 className="size-3.5" />
                         Annuler et prévenir

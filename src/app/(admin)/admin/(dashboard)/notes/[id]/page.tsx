@@ -71,7 +71,7 @@ export default async function NotePage({
         <div className="flex flex-col gap-4">
           <Panel title={client.name} className={client.notes.length === 0 && !note.booking?.message ? "flex-1" : ""}>
             {client.summary ? (
-              <p className="mb-4 rounded-field bg-amber-50 px-3.5 py-3 text-[0.875rem] leading-relaxed whitespace-pre-wrap text-amber-900">
+              <p className="mb-4 rounded-field bg-[#E9F6F7] px-3.5 py-3 text-[0.875rem] leading-relaxed whitespace-pre-wrap text-[#0A4B52]">
                 {client.summary}
               </p>
             ) : null}
@@ -130,7 +130,7 @@ export default async function NotePage({
             <input type="hidden" name="id" value={note.id} />
             <button
               type="submit"
-              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-red-700 transition-colors hover:bg-red-50"
+              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-[#0B3A75] transition-colors hover:bg-[#EEF3FA]"
             >
               <Trash2 className="size-4" />
               Supprimer la note

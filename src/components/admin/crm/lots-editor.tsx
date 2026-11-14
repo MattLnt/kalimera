@@ -69,7 +69,7 @@ export function LotsEditor({
             <button type="button" disabled={index === lots.length - 1} onClick={() => move(index, 1)} aria-label="Descendre" className="grid size-8 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-black/5 disabled:opacity-30">
               <ArrowDown className="size-4" />
             </button>
-            <button type="button" onClick={() => onChange(lots.filter((_, i) => i !== index))} aria-label="Supprimer" className="grid size-8 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-red-50 hover:text-red-700">
+            <button type="button" onClick={() => onChange(lots.filter((_, i) => i !== index))} aria-label="Supprimer" className="grid size-8 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-[#EEF3FA] hover:text-[#0B3A75]">
               <Trash2 className="size-4" />
             </button>
           </div>

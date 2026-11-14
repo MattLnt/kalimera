@@ -87,7 +87,7 @@ export function MetricsEditor({
                   )
                 }
                 aria-label="Supprimer ce chiffre"
-                className="mt-1 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-red-700 transition-colors hover:bg-red-50"
+                className="mt-1 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-[#0B3A75] transition-colors hover:bg-[#EEF3FA]"
               >
                 <Trash2 className="size-4" />
               </button>

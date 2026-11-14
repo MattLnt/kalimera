@@ -47,7 +47,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
       <AdminHeader eyebrow="Pilotage" title="Tâches" subtitle="Relances, livrables, rappels. Modifiez statut, priorité ou échéance d'un clic ; glissez les cartes dans le kanban.">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard color="blue" icon={<ListTodo className="size-4" />} label="Ouvertes" value={String(open.length)} />
-          <StatCard color="red" icon={<AlarmClock className="size-4" />} label="En retard" value={String(late.length)} hint={late.length ? "À rattraper" : "Rien en retard"} />
+          <StatCard color="navy" icon={<AlarmClock className="size-4" />} label="En retard" value={String(late.length)} hint={late.length ? "À rattraper" : "Rien en retard"} />
           <StatCard color="blue" icon={<CalendarCheck2 className="size-4" />} label="Aujourd'hui" value={String(dueToday.length)} />
           <StatCard color="green" icon={<CheckCircle2 className="size-4" />} label="Faites (14 j)" value={String(done.length)} />
         </div>

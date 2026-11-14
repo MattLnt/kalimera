@@ -140,7 +140,7 @@ export function PipelineBoard({ deals, stages }: { deals: BoardDeal[]; stages: D
                             <span className="text-[var(--ink-45)]">{deal.probability} %</span>
                           ) : null}
                           {deal.dueDate ? (
-                            <span className={cn("ml-auto inline-flex items-center gap-1", late ? "font-bold text-red-600" : "text-[var(--ink-45)]")}>
+                            <span className={cn("ml-auto inline-flex items-center gap-1", late ? "font-bold text-[#0B3A75]" : "text-[var(--ink-45)]")}>
                               <CalendarClock className="size-3" />
                               {day.format(new Date(deal.dueDate))}
                             </span>

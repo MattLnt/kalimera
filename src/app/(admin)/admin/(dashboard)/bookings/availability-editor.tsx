@@ -208,7 +208,7 @@ export function AvailabilityEditor({ initial }: { initial: AvailabilityInput }) 
             {state.blackoutDates.length ? (
               <ul className="mt-4 flex flex-wrap gap-2">
                 {state.blackoutDates.map((date) => (
-                  <li key={date} className="inline-flex items-center gap-1 rounded-full bg-[#FDE3E3] py-1 pr-1 pl-3 font-display text-[0.75rem] font-bold text-[#A31919]">
+                  <li key={date} className="inline-flex items-center gap-1 rounded-full bg-[#ECEFF3] py-1 pr-1 pl-3 font-display text-[0.75rem] font-bold text-[#475569]">
                     <span className="first-letter:uppercase">{dayFmt.format(new Date(`${date}T00:00:00Z`))}</span>
                     <button type="button" aria-label="Rouvrir ce jour" onClick={() => patch({ blackoutDates: state.blackoutDates.filter((d) => d !== date) })} className="grid size-6 cursor-pointer place-items-center rounded-full hover:bg-white/60">
                       <X className="size-3.5" />

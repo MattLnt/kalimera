@@ -106,7 +106,7 @@ export default async function AdminLandingsPage() {
 
                         {/* Une page sans preuve convertit mal : on le signale ici. */}
                         {landing._count.projects === 0 ? (
-                          <span className="rounded-full bg-amber-50 px-2.5 py-1 font-display text-[0.6875rem] font-bold text-amber-700">
+                          <span className="rounded-full bg-[#E9F6F7] px-2.5 py-1 font-display text-[0.6875rem] font-bold text-[#0A6B74]">
                             Sans preuve
                           </span>
                         ) : null}

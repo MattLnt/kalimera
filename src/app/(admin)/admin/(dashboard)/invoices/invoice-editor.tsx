@@ -145,7 +145,7 @@ export function InvoiceEditor({ initialDraft, issuers, clients }: { initialDraft
           <textarea value={draft.notes} onChange={(event) => set({ notes: event.target.value })} rows={2} className="field-input resize-y" />
         </Panel>
 
-        {state.error ? <p role="alert" className="rounded-field bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p> : null}
+        {state.error ? <p role="alert" className="rounded-field bg-[#EEF3FA] px-4 py-3 text-sm text-[#0B3A75]">{state.error}</p> : null}
         <div className="sticky bottom-24 z-10 flex justify-end lg:bottom-4">
           <SaveButton />
         </div>

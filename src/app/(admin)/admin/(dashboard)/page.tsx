@@ -148,7 +148,7 @@ export default async function AdminHomePage() {
             icon={<BriefcaseBusiness className="size-4" />}
             href="/admin/deals"
           />
-          <StatCard color="orange"
+          <StatCard color="teal"
             label="Devis en attente"
             value={formatMoneyShort(pendingTotal)}
             chip={`${pendingQuotes.length} devis`}
@@ -156,7 +156,7 @@ export default async function AdminHomePage() {
             icon={<FileSignature className="size-4" />}
             href="/admin/quotes"
           />
-          <StatCard color="orange"
+          <StatCard color="teal"
             label="À encaisser"
             value={formatMoneyShort(due)}
             chip={overdue.length ? `${overdue.length} en retard` : undefined}

@@ -44,7 +44,7 @@ export function DeleteButton({
       onClick={(event) => {
         if (!window.confirm(confirmMessage)) event.preventDefault();
       }}
-      className="inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-red-700 transition-colors hover:bg-red-50 disabled:cursor-wait disabled:opacity-60"
+      className="inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-[#0B3A75] transition-colors hover:bg-[#EEF3FA] disabled:cursor-wait disabled:opacity-60"
     >
       {pending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
       {label}
@@ -142,7 +142,7 @@ export function TagListInput({
 export function FormError({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p role="alert" className="rounded-field bg-red-50 px-4 py-3 text-sm text-red-700">
+    <p role="alert" className="rounded-field bg-[#EEF3FA] px-4 py-3 text-sm text-[#0B3A75]">
       {message}
     </p>
   );

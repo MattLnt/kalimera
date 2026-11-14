@@ -134,14 +134,14 @@ export function NoteEditor({
             onClick={() => setRunning((value) => !value)}
             className={cn(
               "inline-flex cursor-pointer items-center gap-2 rounded-full px-3.5 py-2 font-display text-sm font-bold tabular-nums transition-colors",
-              running ? "bg-red-50 text-red-700" : "bg-aegean-50 text-aegean-700",
+              running ? "bg-[#EEF3FA] text-[#0B3A75]" : "bg-aegean-50 text-aegean-700",
             )}
           >
             {running ? (
               <>
                 <span className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-400 opacity-75" />
-                  <span className="relative inline-flex size-2 rounded-full bg-red-500" />
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-aegean-400 opacity-75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-aegean-500" />
                 </span>
                 {clock}
                 <Pause className="size-3.5" />
@@ -177,7 +177,7 @@ export function NoteEditor({
             title="Épingler en haut de la fiche"
             className={cn(
               "grid size-9 cursor-pointer place-items-center rounded-full transition-colors",
-              draft.pinned ? "bg-amber-100 text-amber-700" : "text-[var(--ink-45)] hover:bg-black/5",
+              draft.pinned ? "bg-[#DDF2F4] text-[#0A6B74]" : "text-[var(--ink-45)] hover:bg-black/5",
             )}
           >
             <Pin className="size-4" />

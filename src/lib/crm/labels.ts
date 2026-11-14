@@ -11,20 +11,21 @@ import type {
 
 type Tone = "neutral" | "blue" | "amber" | "green" | "red";
 
+// « amber » = bleu-vert (attente), « red » = bleu nuit (urgent) : palette froide.
 export const toneClasses: Record<Tone, string> = {
   neutral: "bg-[#ECEFF3] text-[#475569]",
   blue: "bg-[#E3EFFC] text-[#155399]",
-  amber: "bg-[#FCEFDC] text-[#9B5505]",
+  amber: "bg-[#DDF2F4] text-[#0A6B74]",
   green: "bg-[#DCF1EA] text-[#046C4E]",
-  red: "bg-[#FCE3E3] text-[#A01C1C]",
+  red: "bg-[#DCE5F1] text-[#0B3A75]",
 };
 
 export const toneDots: Record<Tone, string> = {
   neutral: "bg-[#64748B]",
   blue: "bg-[#1F7AE0]",
-  amber: "bg-[#D97706]",
+  amber: "bg-[#0E9AA7]",
   green: "bg-[#059669]",
-  red: "bg-[#DC2626]",
+  red: "bg-[#0B3A75]",
 };
 
 export const clientStatus: Record<ClientStatus, { label: string; tone: Tone }> = {

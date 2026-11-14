@@ -139,7 +139,7 @@ export function IssuerForm({ issuer }: { issuer: IssuerDraft }) {
         </Panel>
       </div>
 
-      {state.error ? <p className="rounded-field bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p> : null}
+      {state.error ? <p className="rounded-field bg-[#EEF3FA] px-4 py-3 text-sm text-[#0B3A75]">{state.error}</p> : null}
       <div className="flex justify-end">
         <SubmitButton label={issuer.id ? "Enregistrer l'identité" : "Créer l'identité"} />
       </div>

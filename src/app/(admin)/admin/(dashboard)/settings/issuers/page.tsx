@@ -58,7 +58,7 @@ export default async function IssuersPage() {
                   {issuer.headerLines}
                 </p>
                 {missing.length ? (
-                  <p className="rounded-field bg-amber-50 px-3 py-2 text-[0.75rem] text-amber-800">À compléter : {missing.join(", ")}</p>
+                  <p className="rounded-field bg-[#E9F6F7] px-3 py-2 text-[0.75rem] text-[#0A6B74]">À compléter : {missing.join(", ")}</p>
                 ) : null}
                 <div className="mt-auto flex items-center justify-between border-t border-black/5 pt-3 text-xs text-[var(--ink-45)]">
                   <span>

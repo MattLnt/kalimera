@@ -221,7 +221,7 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
                 <form action={setQuoteStatus}>
                   <input type="hidden" name="id" value={quote.id} />
                   <input type="hidden" name="status" value="DECLINED" />
-                  <button type="submit" className="cursor-pointer rounded-full px-3 py-2 font-display text-xs font-bold text-red-700 hover:bg-red-50">
+                  <button type="submit" className="cursor-pointer rounded-full px-3 py-2 font-display text-xs font-bold text-[#0B3A75] hover:bg-[#EEF3FA]">
                     Marquer refusé
                   </button>
                 </form>
@@ -251,7 +251,7 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
           {quote.status === "DRAFT" ? (
             <form action={deleteQuote}>
               <input type="hidden" name="id" value={quote.id} />
-              <button type="submit" className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-red-700 hover:bg-red-50">
+              <button type="submit" className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold text-[#0B3A75] hover:bg-[#EEF3FA]">
                 <Trash2 className="size-4" />
                 Supprimer le brouillon
               </button>

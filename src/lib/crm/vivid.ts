@@ -1,27 +1,26 @@
 /**
- * Couleurs des statuts : cinq couleurs, un seul sens, partout dans l'admin.
+ * Couleurs des statuts : une palette froide, un seul sens partout.
  *
- * - gris  : pas commencé, brouillon, classé
- * - bleu  : en cours, de notre côté
- * - ambre : en attente du client, à surveiller
- * - vert  : gagné, fait, payé
- * - rouge : problème, perdu, en retard
- *
- * Deux statuts peuvent partager une couleur : c'est le sens qui compte, le
- * libellé fait la différence.
+ * - gris clair  : annulé, perdu, classé
+ * - gris-bleu   : pas commencé, brouillon
+ * - bleu        : en cours, de notre côté
+ * - bleu-vert   : en attente du client
+ * - vert        : gagné, fait, payé
+ * - bleu nuit   : en retard, urgent (le plus foncé, donc le plus visible)
  */
 
 export type VividOption = { value: string; label: string; color: string };
 
 export const statusColors = {
+  muted: "#94A3B8",
   neutral: "#64748B",
   active: "#1F7AE0",
-  waiting: "#D97706",
+  waiting: "#0E9AA7",
   done: "#059669",
-  problem: "#DC2626",
+  urgent: "#0B3A75",
 } as const;
 
-const { neutral, active, waiting, done, problem } = statusColors;
+const { muted, neutral, active, waiting, done, urgent } = statusColors;
 
 export const dealStageOptions: VividOption[] = [
   { value: "LEAD", label: "Piste", color: neutral },
@@ -33,7 +32,7 @@ export const dealStageOptions: VividOption[] = [
   { value: "REVIEW", label: "Recette", color: waiting },
   { value: "DELIVERED", label: "Livré", color: done },
   { value: "MAINTENANCE", label: "Maintenance", color: done },
-  { value: "LOST", label: "Perdu", color: problem },
+  { value: "LOST", label: "Perdu", color: muted },
 ];
 
 export const taskStatusOptions: VividOption[] = [
@@ -45,7 +44,7 @@ export const taskStatusOptions: VividOption[] = [
 export const taskPriorityOptions: VividOption[] = [
   { value: "LOW", label: "Basse", color: neutral },
   { value: "NORMAL", label: "Normale", color: active },
-  { value: "HIGH", label: "Haute", color: problem },
+  { value: "HIGH", label: "Haute", color: urgent },
 ];
 
 export const clientStatusOptions: VividOption[] = [
@@ -53,7 +52,7 @@ export const clientStatusOptions: VividOption[] = [
   { value: "PROSPECT", label: "Prospect", color: active },
   { value: "ACTIVE", label: "Client actif", color: done },
   { value: "PAST", label: "Ancien client", color: neutral },
-  { value: "ARCHIVED", label: "Archivé", color: neutral },
+  { value: "ARCHIVED", label: "Archivé", color: muted },
 ];
 
 export const quoteStatusOptions: VividOption[] = [
@@ -61,24 +60,24 @@ export const quoteStatusOptions: VividOption[] = [
   { value: "SENT", label: "Envoyé", color: waiting },
   { value: "VIEWED", label: "Consulté", color: waiting },
   { value: "SIGNED", label: "Accepté", color: done },
-  { value: "DECLINED", label: "Refusé", color: problem },
-  { value: "EXPIRED", label: "Expiré", color: problem },
-  { value: "CANCELLED", label: "Annulé", color: neutral },
+  { value: "DECLINED", label: "Refusé", color: muted },
+  { value: "EXPIRED", label: "Expiré", color: muted },
+  { value: "CANCELLED", label: "Annulé", color: muted },
 ];
 
 export const invoiceStateOptions: VividOption[] = [
   { value: "DRAFT", label: "Brouillon", color: neutral },
   { value: "ISSUED", label: "À encaisser", color: waiting },
   { value: "PARTIAL", label: "Partiel", color: waiting },
-  { value: "OVERDUE", label: "En retard", color: problem },
+  { value: "OVERDUE", label: "En retard", color: urgent },
   { value: "PAID", label: "Payée", color: done },
-  { value: "CANCELLED", label: "Annulée", color: neutral },
+  { value: "CANCELLED", label: "Annulée", color: muted },
 ];
 
 export const messageStatusOptions: VividOption[] = [
   { value: "NEW", label: "Nouvelle", color: active },
   { value: "READ", label: "Lue", color: neutral },
-  { value: "ARCHIVED", label: "Archivée", color: neutral },
+  { value: "ARCHIVED", label: "Archivée", color: muted },
 ];
 
 export function optionOf(options: VividOption[], value: string | null | undefined) {
