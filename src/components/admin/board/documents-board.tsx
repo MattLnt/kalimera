@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { Board, type BoardColumn } from "@/components/admin/board/board";
+import { Pill } from "@/components/admin/board/pill";
 import { invoiceStateOptions, optionOf, quoteStatusOptions, type VividOption } from "@/lib/crm/vivid";
 
 export type DocumentRow = {
@@ -27,12 +28,7 @@ const money = (cents: number, currency: string) =>
   new Intl.NumberFormat("fr-FR", { style: "currency", currency, minimumFractionDigits: 2 }).format(cents / 100).replace(/ /g, " ");
 
 function StateBlock({ value, options }: { value: string; options: VividOption[] }) {
-  const option = optionOf(options, value);
-  return (
-    <span className="flex h-full min-h-11 w-full items-center justify-center px-2 font-display text-[0.8125rem] font-bold text-white" style={{ background: option.color }}>
-      {option.label}
-    </span>
-  );
+  return <Pill option={optionOf(options, value)} />;
 }
 
 /** Devis ou factures groupés par statut, avec totaux par groupe. */

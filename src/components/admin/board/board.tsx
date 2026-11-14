@@ -2,12 +2,12 @@
 
 import { ChevronDown, ChevronRight, Maximize2, Plus, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import { DatePicker } from "@/components/ui/date-picker";
 import type { VividOption } from "@/lib/crm/vivid";
-import { useFloating } from "@/lib/use-floating";
 import { cn } from "@/lib/utils";
+import { PillSelect, pillColors } from "@/components/admin/board/pill";
 
 /* -------------------------------------------------------------------------- */
 /*  Tableau groupé, à la manière des outils de gestion de projet modernes :    */
@@ -81,13 +81,20 @@ function BoardGroupView<T extends { id: string }>({
       >
         {collapsed ? <ChevronRight className="size-4" /> : <ChevronDown className="size-4" />}
         {group.label}
-        <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[0.6875rem] font-semibold text-[var(--ink-45)]">
-          {group.items.length} élément{group.items.length > 1 ? "s" : ""}
+        <span className="rounded-full px-2 py-0.5 text-[0.6875rem] font-bold" style={pillColors(group.color)}>
+          {group.items.length}
         </span>
       </button>
 
-      {collapsed ? null : (
-        <div className="overflow-hidden rounded-[14px] bg-white ring-1 ring-black/[0.07] shadow-[0_1px_2px_rgba(7,33,63,0.04)]">
+      {collapsed ? null : group.items.length === 0 ? (
+        // Groupe vide : une simple ligne d'ajout, sans tableau.
+        quickAdd ? (
+          <div className="overflow-hidden rounded-[14px] border border-dashed border-[#D5DEEA] bg-white/70">
+            <QuickAddRow groupKey={group.key} color={group.color} template="6px minmax(0,1fr)" columns={1} quickAdd={quickAdd} bare />
+          </div>
+        ) : null
+      ) : (
+        <div className="overflow-hidden rounded-[14px] bg-white shadow-[0_0_0_1px_#DFE6EF,0_1px_2px_rgba(7,33,63,0.04)]">
           {/* En-têtes de colonnes, répétés pour chaque groupe. */}
           <div className="grid border-b border-black/[0.07] bg-[#fafbfd]" style={{ gridTemplateColumns: template }}>
             <span style={{ background: group.color }} />
@@ -151,11 +158,13 @@ function QuickAddRow({
   template,
   columns,
   quickAdd,
+  bare = false,
 }: {
   groupKey: string;
   color: string;
   template: string;
   columns: number;
+  bare?: boolean;
   quickAdd: { placeholder: string; extra?: React.ReactNode; onAdd: (groupKey: string, title: string) => Promise<string | null> };
 }) {
   const [value, setValue] = useState("");
@@ -175,7 +184,7 @@ function QuickAddRow({
   };
 
   return (
-    <div className="grid border-b border-black/[0.05]" style={{ gridTemplateColumns: template }}>
+    <div className={cn("grid", !bare && "border-b border-black/[0.05]")} style={{ gridTemplateColumns: template }}>
       <span style={{ background: color }} className="opacity-30" />
       <div className="flex min-h-10 items-center gap-2 px-3" style={{ gridColumn: `span ${columns}` }}>
         <Plus className="size-4 shrink-0 text-[var(--ink-45)]" />
@@ -197,61 +206,11 @@ function QuickAddRow({
 
 /* --------------------------------------------------------------- cellules */
 
-/** Statut en bloc de couleur plein, qui ouvre la liste des statuts. */
+/** Statut en pastille, qui ouvre la liste des statuts. */
 export function StatusCell({ value, options, onChange }: { value: string; options: VividOption[]; onChange?: (value: string) => void }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const current = options.find((option) => option.value === value) ?? { label: value, color: "#9CA3AF", value };
-  const floating = useFloating(ref, open, () => setOpen(false), { width: 208, height: options.length * 40 + 16 });
-  const toggle = () => {
-    if (!open) floating.place();
-    setOpen((v) => !v);
-  };
-
-  useEffect(() => {
-    if (!open) return;
-    const close = (event: PointerEvent) => !ref.current?.contains(event.target as Node) && setOpen(false);
-    const key = (event: KeyboardEvent) => event.key === "Escape" && setOpen(false);
-    window.addEventListener("pointerdown", close);
-    window.addEventListener("keydown", key);
-    return () => {
-      window.removeEventListener("pointerdown", close);
-      window.removeEventListener("keydown", key);
-    };
-  }, [open]);
-
   return (
-    <div ref={ref} className="relative h-full w-full self-stretch">
-      <button
-        type="button"
-        disabled={!onChange}
-        onClick={toggle}
-        className="flex h-full min-h-11 w-full cursor-pointer items-center justify-center px-2 font-display text-[0.8125rem] font-bold text-white transition-[filter] hover:brightness-110 disabled:cursor-default"
-        style={{ background: current.color }}
-      >
-        <span className="truncate">{current.label}</span>
-      </button>
-      {open ? (
-        <div data-floating style={floating.style} className="z-[45] grid animate-[menu-open_0.16s_var(--ease-out-expo)_both] gap-1 rounded-[16px] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(7,33,63,0.4)] ring-1 ring-black/[0.06]">
-          {options.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                if (option.value !== value) onChange?.(option.value);
-              }}
-              className={cn(
-                "cursor-pointer rounded-[8px] px-3 py-2 font-display text-[0.8125rem] font-bold text-white transition-[filter] hover:brightness-110",
-                option.value === value && "ring-2 ring-black/20 ring-offset-1",
-              )}
-              style={{ background: option.color }}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
+    <div className="flex w-full justify-center px-2">
+      <PillSelect value={value} options={options} onChange={onChange} />
     </div>
   );
 }

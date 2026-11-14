@@ -71,6 +71,12 @@ export const invoiceStateOptions: VividOption[] = [
   { value: "CANCELLED", label: "Annulée", color: gray },
 ];
 
+export const messageStatusOptions: VividOption[] = [
+  { value: "NEW", label: "Nouvelle", color: sky },
+  { value: "READ", label: "Traitée", color: emerald },
+  { value: "ARCHIVED", label: "Archivée", color: gray },
+];
+
 export function optionOf(options: VividOption[], value: string | null | undefined) {
   return options.find((option) => option.value === value) ?? { value: value ?? "", label: value ?? "—", color: gray };
 }

@@ -70,9 +70,9 @@ export default async function InvoicesPage() {
         }
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-          <StatCard icon={<Wallet className="size-4" />} label="À encaisser (EUR)" value={formatMoneyShort(dueEur)} hint={`${open.length} facture${open.length > 1 ? "s" : ""} ouverte${open.length > 1 ? "s" : ""}`} />
-          <StatCard icon={<AlarmClock className="size-4" />} label="En retard" value={String(late.length)} hint={late.length ? "Relances à prévoir" : "Aucun retard"} />
-          <StatCard icon={<TrendingUp className="size-4" />} label={`Encaissé en ${now.getFullYear()}`} value={formatMoneyShort(collectedEur)} hint={collectedUsd ? `+ ${money(collectedUsd, "USD")}` : "Virements enregistrés"} />
+          <StatCard color="orange" icon={<Wallet className="size-4" />} label="À encaisser (EUR)" value={formatMoneyShort(dueEur)} hint={`${open.length} facture${open.length > 1 ? "s" : ""} ouverte${open.length > 1 ? "s" : ""}`} />
+          <StatCard color="red" icon={<AlarmClock className="size-4" />} label="En retard" value={String(late.length)} hint={late.length ? "Relances à prévoir" : "Aucun retard"} />
+          <StatCard color="green" icon={<TrendingUp className="size-4" />} label={`Encaissé en ${now.getFullYear()}`} value={formatMoneyShort(collectedEur)} hint={collectedUsd ? `+ ${money(collectedUsd, "USD")}` : "Virements enregistrés"} />
         </div>
       </AdminHeader>
 

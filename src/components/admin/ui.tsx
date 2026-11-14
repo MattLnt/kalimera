@@ -61,7 +61,7 @@ export function AdminHeader({
 
 /** Carte du CRM : blanche, liseré fin, ombre douce. */
 export const cardClass =
-  "rounded-[22px] bg-white ring-1 ring-black/[0.05] shadow-[0_1px_2px_rgba(7,33,63,0.04),0_14px_34px_-20px_rgba(7,33,63,0.22)]";
+  "rounded-[22px] bg-white shadow-[0_0_0_1px_#DFE6EF,0_1px_2px_rgba(7,33,63,0.04),0_16px_32px_-22px_rgba(7,33,63,0.28)]";
 
 export function Panel({
   children,
@@ -228,6 +228,17 @@ export function Pill({
  * Chiffre clé : tuile d'icône en dégradé, valeur affirmée, précision et
  * tendance facultative. `tone="dark"` reste disponible pour un fond bleu nuit.
  */
+/** Couleurs franches des indicateurs : une couleur = un sens, partout. */
+const statColors = {
+  blue: { tile: "#2A86E8", soft: "#E4F0FD", ink: "#0E4A8C" },
+  violet: { tile: "#7C4DDB", soft: "#EFE8FC", ink: "#5B2FB8" },
+  orange: { tile: "#E8740C", soft: "#FDEBD9", ink: "#9A4A05" },
+  green: { tile: "#12A06A", soft: "#DDF5EB", ink: "#0B6B47" },
+  red: { tile: "#D63A3A", soft: "#FDE3E3", ink: "#A31919" },
+  slate: { tile: "#52627A", soft: "#E9EEF4", ink: "#334155" },
+} as const;
+export type StatColor = keyof typeof statColors;
+
 export function StatCard({
   label,
   value,
@@ -236,6 +247,9 @@ export function StatCard({
   href,
   tone = "light",
   trend,
+  color = "blue",
+  chip,
+  meter,
 }: {
   label: string;
   value: string;
@@ -244,54 +258,64 @@ export function StatCard({
   href?: string;
   tone?: "light" | "dark";
   trend?: { label: string; direction: "up" | "down" | "flat" };
+  /** Couleur de l'indicateur (tuile, pastille, jauge). */
+  color?: StatColor;
+  /** Pastille mise en avant sous le chiffre (« 3 devis », « 1 en retard »). */
+  chip?: string;
+  /** Jauge de 0 à 100 au pied de la carte. */
+  meter?: number;
 }) {
   const dark = tone === "dark";
+  const c = statColors[color];
   const body = (
     <>
-      <span
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute -top-12 -right-12 size-36 rounded-full opacity-70 transition-opacity group-hover/stat:opacity-100",
-          dark ? "bg-[radial-gradient(circle,rgba(98,169,242,0.25),transparent_70%)]" : "bg-[radial-gradient(circle,rgba(42,134,232,0.10),transparent_70%)]",
-        )}
-      />
-      <div className="relative flex items-center gap-2.5">
+      <div className="flex items-center gap-2.5">
         {icon ? (
           <span
-            className={cn(
-              "grid size-9 place-items-center rounded-[11px]",
-              dark ? "bg-white/10 text-aegean-200" : "bg-gradient-to-br from-aegean-500 to-aegean-700 text-white shadow-[0_6px_14px_-6px_rgba(21,98,184,0.8)]",
-            )}
+            className={cn("grid size-9 shrink-0 place-items-center rounded-[11px]", dark ? "bg-white/10 text-aegean-200" : "text-white")}
+            style={dark ? undefined : { background: c.tile, boxShadow: `0 8px 16px -10px ${c.tile}` }}
           >
             {icon}
           </span>
         ) : null}
-        <span className={cn("font-display text-[0.8125rem] font-semibold", dark ? "text-white/60" : "text-[var(--ink-65)]")}>{label}</span>
+        <span className={cn("font-display text-[0.9375rem] font-bold tracking-[-0.01em]", dark ? "text-white/70" : "text-ink/80")}>{label}</span>
       </div>
-      <p className={cn("relative mt-4 font-display text-[clamp(1.5rem,2vw,1.875rem)] leading-none font-extrabold tracking-[-0.045em]", dark ? "text-white" : "text-ink")}>
+      <p className={cn("mt-4 font-display text-[clamp(1.75rem,2.3vw,2.25rem)] leading-none font-extrabold tracking-[-0.045em]", dark ? "text-white" : "text-ink")}>
         {value}
       </p>
-      <div className="relative mt-2.5 flex flex-wrap items-center gap-2 text-[0.8125rem]">
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-[0.8125rem]">
+        {chip ? (
+          <span className="rounded-full px-2.5 py-0.5 font-display text-[0.75rem] font-bold" style={{ background: c.soft, color: c.ink }}>
+            {chip}
+          </span>
+        ) : null}
         {trend ? (
           <span
             className={cn(
-              "rounded-full px-2 py-0.5 font-display text-[0.6875rem] font-bold",
-              trend.direction === "up" ? "bg-green-100 text-green-800" : trend.direction === "down" ? "bg-red-100 text-red-700" : "bg-black/5 text-[var(--ink-65)]",
+              "rounded-full px-2.5 py-0.5 font-display text-[0.75rem] font-bold",
+              trend.direction === "up" ? "bg-[#DDF5EB] text-[#0B6B47]" : trend.direction === "down" ? "bg-[#FDE3E3] text-[#A31919]" : "bg-black/5 text-[var(--ink-65)]",
             )}
           >
             {trend.direction === "up" ? "↑ " : trend.direction === "down" ? "↓ " : ""}
             {trend.label}
           </span>
         ) : null}
-        {hint ? <span className={dark ? "text-white/50" : "text-[var(--ink-45)]"}>{hint}</span> : null}
+        {hint ? <span className={dark ? "text-white/55" : "text-[var(--ink-65)]"}>{hint}</span> : null}
       </div>
+      {meter !== undefined && !dark ? (
+        <div className="mt-auto pt-4">
+          <div className="h-1.5 rounded-full" style={{ background: c.soft }}>
+            <div className="h-full rounded-full" style={{ width: `${Math.max(0, Math.min(100, meter))}%`, background: c.tile }} />
+          </div>
+        </div>
+      ) : null}
     </>
   );
   const box = dark
     ? "group/stat relative flex h-full flex-col overflow-hidden rounded-[22px] border border-white/10 bg-white/[0.07] p-5 backdrop-blur-sm transition-colors"
-    : cn(cardClass, "group/stat relative flex h-full flex-col overflow-hidden p-5 transition-shadow");
+    : cn(cardClass, "group/stat relative flex h-full flex-col p-5 transition-[box-shadow,transform] duration-300");
   return href ? (
-    <Link href={href} className={cn(box, dark ? "hover:bg-white/[0.12]" : "hover:shadow-[0_1px_2px_rgba(7,33,63,0.04),0_20px_40px_-20px_rgba(7,33,63,0.3)]")}>
+    <Link href={href} className={cn(box, dark ? "hover:bg-white/[0.12]" : "hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_#D5DEEA,0_22px_40px_-22px_rgba(7,33,63,0.35)]")}>
       {body}
     </Link>
   ) : (

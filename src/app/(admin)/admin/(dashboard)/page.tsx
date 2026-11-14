@@ -141,28 +141,30 @@ export default async function AdminHomePage() {
         eyebrow="Tableau de bord"
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatCard
+          <StatCard color="blue"
             label="En négociation"
             value={formatMoneyShort(pipeline)}
             hint={`Pondéré : ${formatMoneyShort(weighted)}`}
             icon={<BriefcaseBusiness className="size-4" />}
             href="/admin/deals"
           />
-          <StatCard
+          <StatCard color="violet"
             label="Devis en attente"
             value={formatMoneyShort(pendingTotal)}
-            hint={`${pendingQuotes.length} devis à signer`}
+            chip={`${pendingQuotes.length} devis`}
+            hint="à signer"
             icon={<FileSignature className="size-4" />}
             href="/admin/quotes"
           />
-          <StatCard
+          <StatCard color="orange"
             label="À encaisser"
             value={formatMoneyShort(due)}
-            hint={overdue.length ? `${overdue.length} facture${overdue.length > 1 ? "s" : ""} en retard` : "Aucun retard"}
+            chip={overdue.length ? `${overdue.length} en retard` : undefined}
+            hint={overdue.length ? undefined : "Aucun retard"}
             icon={<Receipt className="size-4" />}
             href="/admin/invoices"
           />
-          <StatCard
+          <StatCard color="green"
             label="Encaissé ce mois"
             value={formatMoneyShort(paymentsThisMonth._sum.amountCents ?? 0)}
             icon={<Wallet className="size-4" />}

@@ -74,10 +74,10 @@ export default async function ClientsPage({ searchParams }: { searchParams: Prom
         }
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatCard icon={<Users className="size-4" />} label="Fiches" value={String(rows.length)} />
-          <StatCard icon={<Sparkles className="size-4" />} label="Pistes & prospects" value={String(leads.length)} />
-          <StatCard icon={<UserCheck className="size-4" />} label="Clients actifs" value={String(active.length)} />
-          <StatCard icon={<Wallet className="size-4" />} label="Encaissé (total)" value={formatMoneyShort(rows.reduce((s, r) => s + r.paidCents, 0))} />
+          <StatCard color="slate" icon={<Users className="size-4" />} label="Fiches" value={String(rows.length)} />
+          <StatCard color="violet" icon={<Sparkles className="size-4" />} label="Pistes & prospects" value={String(leads.length)} />
+          <StatCard color="blue" icon={<UserCheck className="size-4" />} label="Clients actifs" value={String(active.length)} />
+          <StatCard color="green" icon={<Wallet className="size-4" />} label="Encaissé (total)" value={formatMoneyShort(rows.reduce((s, r) => s + r.paidCents, 0))} />
         </div>
       </AdminHeader>
 

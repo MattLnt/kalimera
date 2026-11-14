@@ -56,9 +56,9 @@ export default async function QuotesPage() {
         }
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-          <StatCard icon={<Hourglass className="size-4" />} label="En attente de réponse" value={formatMoneyShort(eur(pending))} hint={`${pending.length} devis envoyé${pending.length > 1 ? "s" : ""}`} />
-          <StatCard icon={<BadgeCheck className="size-4" />} label={`Acceptés en ${now.getFullYear()}`} value={formatMoneyShort(eur(signed))} hint={`${signed.length} devis`} />
-          <StatCard
+          <StatCard color="violet" icon={<Hourglass className="size-4" />} label="En attente de réponse" value={formatMoneyShort(eur(pending))} hint={`${pending.length} devis envoyé${pending.length > 1 ? "s" : ""}`} />
+          <StatCard color="green" icon={<BadgeCheck className="size-4" />} label={`Acceptés en ${now.getFullYear()}`} value={formatMoneyShort(eur(signed))} hint={`${signed.length} devis`} />
+          <StatCard color="blue"
             icon={<Percent className="size-4" />}
             label="Taux d'acceptation"
             value={decided.length ? `${Math.round((decided.filter((q) => q.status === "SIGNED").length / decided.length) * 100)} %` : "—"}

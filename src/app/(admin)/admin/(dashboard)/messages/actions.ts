@@ -2,31 +2,41 @@
 
 import { revalidatePath } from "next/cache";
 
-import { assertAdmin, readString } from "@/lib/admin";
+import { assertAdmin } from "@/lib/admin";
+import { linkInboundClient } from "@/lib/crm/intake";
 import { prisma } from "@/lib/prisma";
 
-export async function markMessageRead(formData: FormData) {
-  await assertAdmin();
-  const id = readString(formData, "id");
-  if (!id) return;
+const statuses = ["NEW", "READ", "ARCHIVED"] as const;
 
-  await prisma.contactMessage.update({
-    where: { id },
-    data: { status: "READ" },
-  });
+function refresh() {
   revalidatePath("/admin/messages");
-  revalidatePath("/admin");
+  revalidatePath("/admin", "layout");
 }
 
-export async function archiveMessage(formData: FormData) {
+/** Change le statut d'une demande (pastille de la boîte de réception). */
+export async function setMessageStatus(id: string, status: string) {
   await assertAdmin();
-  const id = readString(formData, "id");
-  if (!id) return;
+  if (!statuses.includes(status as (typeof statuses)[number])) return;
+  await prisma.contactMessage.update({ where: { id }, data: { status: status as (typeof statuses)[number] } });
+  refresh();
+}
 
-  await prisma.contactMessage.update({
-    where: { id },
-    data: { status: "ARCHIVED" },
+/** Crée (ou retrouve par l'e-mail) la fiche client d'une demande, et l'y rattache. */
+export async function createClientFromMessage(formData: FormData) {
+  await assertAdmin();
+  const id = String(formData.get("id") ?? "");
+  const message = await prisma.contactMessage.findUnique({ where: { id } });
+  if (!message) return;
+  const clientId = await linkInboundClient({
+    name: message.name,
+    email: message.email,
+    company: message.company,
+    phone: message.phone,
+    source: "Formulaire de contact",
+    activity: `Demande « ${message.subject} »`,
   });
-  revalidatePath("/admin/messages");
-  revalidatePath("/admin");
+  if (clientId) {
+    await prisma.contactMessage.update({ where: { id }, data: { clientId, status: message.status === "NEW" ? "READ" : message.status } });
+  }
+  refresh();
 }
