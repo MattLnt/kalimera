@@ -1,7 +1,6 @@
-import { FileSignature, Plus } from "lucide-react";
-import Link from "next/link";
+import { BadgeCheck, FileSignature, Hourglass, Percent, Plus } from "lucide-react";
 
-import { ActionLink, AdminHeader, EmptyState, FilterTabs, Pill, StatCard } from "@/components/admin/ui";
+import { ActionLink, AdminHeader, DataTable, EmptyState, FilterTabs, Pill, RowLink, StatCard } from "@/components/admin/ui";
 import type { Prisma, QuoteStatus } from "@/generated/prisma/client";
 import { money } from "@/lib/crm/documents/render";
 import { formatDate, formatMoneyShort } from "@/lib/crm/format";
@@ -56,9 +55,9 @@ export default async function QuotesPage({ searchParams }: { searchParams: Promi
         }
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-          <StatCard label="En attente de réponse" value={formatMoneyShort(sumEur(pending))} hint={`${pending.length} devis envoyé${pending.length > 1 ? "s" : ""}`} />
-          <StatCard label={`Acceptés en ${new Date().getFullYear()}`} value={formatMoneyShort(sumEur(signedThisYear))} hint={`${signedThisYear.length} devis`} />
-          <StatCard label="Taux d'acceptation" value={pending.length + signedThisYear.length ? `${Math.round((signedThisYear.length / (pending.length + signedThisYear.length)) * 100)} %` : "—"} hint="Sur les devis en cours et acceptés" />
+          <StatCard icon={<Hourglass className="size-4" />} label="En attente de réponse" value={formatMoneyShort(sumEur(pending))} hint={`${pending.length} devis envoyé${pending.length > 1 ? "s" : ""}`} />
+          <StatCard icon={<BadgeCheck className="size-4" />} label={`Acceptés en ${new Date().getFullYear()}`} value={formatMoneyShort(sumEur(signedThisYear))} hint={`${signedThisYear.length} devis`} />
+          <StatCard icon={<Percent className="size-4" />} label="Taux d'acceptation" value={pending.length + signedThisYear.length ? `${Math.round((signedThisYear.length / (pending.length + signedThisYear.length)) * 100)} %` : "—"} hint="Sur les devis en cours et acceptés" />
         </div>
       </AdminHeader>
 
@@ -71,30 +70,46 @@ export default async function QuotesPage({ searchParams }: { searchParams: Promi
           action={<ActionLink href="/admin/quotes/new">Nouveau devis</ActionLink>}
         />
       ) : (
-        <ul className="grid gap-2">
+        <DataTable
+          head={
+            <tr>
+              <th>Devis</th>
+              <th>Client</th>
+              <th>Émis par</th>
+              <th>Statut</th>
+              <th className="num">Date</th>
+              <th className="num">Montant</th>
+            </tr>
+          }
+        >
           {quotes.map((quote) => {
             const status = quoteStatus[quote.status];
             return (
-              <li key={quote.id}>
-                <Link href={`/admin/quotes/${quote.id}`} className="surface-card surface-card-hover flex flex-wrap items-center gap-4 px-5 py-4">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-aegean-50 text-aegean-700">
-                    <FileSignature className="size-5" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-display text-[0.9375rem] font-bold">
-                      {quote.number ?? "Brouillon"} · {quote.title}
+              <tr key={quote.id}>
+                <td>
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-[11px] bg-gradient-to-br from-aegean-50 to-aegean-100 text-aegean-700 ring-1 ring-aegean-200/60">
+                      <FileSignature className="size-4" />
                     </span>
-                    <span className="block truncate text-[0.8125rem] text-[var(--ink-45)]">
-                      {quote.client.name} · {quote.issuer?.label ?? "identité à choisir"} · {formatDate(quote.issueDate ?? quote.createdAt)}
-                    </span>
-                  </span>
-                  <span className="font-display text-[1rem] font-extrabold tracking-[-0.02em]">{money(quote.totalCents, quote.currency)}</span>
+                    <div className="min-w-0">
+                      <RowLink href={`/admin/quotes/${quote.id}`} className="block truncate font-mono text-[0.8125rem] font-bold text-ink">
+                        {quote.number ?? "Brouillon"}
+                      </RowLink>
+                      <span className="block max-w-[36ch] truncate text-[0.8125rem] text-[var(--ink-65)]">{quote.title}</span>
+                    </div>
+                  </div>
+                </td>
+                <td className="font-semibold">{quote.client.name}</td>
+                <td className="text-[var(--ink-65)]">{quote.issuer?.label ?? "—"}</td>
+                <td>
                   <Pill className={toneClasses[status.tone]}>{status.label}</Pill>
-                </Link>
-              </li>
+                </td>
+                <td className="num text-[var(--ink-65)]">{formatDate(quote.issueDate ?? quote.createdAt)}</td>
+                <td className="num font-display text-[0.9375rem] font-extrabold tracking-[-0.02em]">{money(quote.totalCents, quote.currency)}</td>
+              </tr>
             );
           })}
-        </ul>
+        </DataTable>
       )}
     </>
   );

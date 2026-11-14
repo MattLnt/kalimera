@@ -1,7 +1,6 @@
-import { Plus, Receipt } from "lucide-react";
-import Link from "next/link";
+import { AlarmClock, Plus, Receipt, TrendingUp, Wallet } from "lucide-react";
 
-import { ActionLink, AdminHeader, EmptyState, FilterTabs, Pill, StatCard } from "@/components/admin/ui";
+import { ActionLink, AdminHeader, DataTable, EmptyState, FilterTabs, Pill, RowLink, StatCard } from "@/components/admin/ui";
 import type { Prisma } from "@/generated/prisma/client";
 import { money } from "@/lib/crm/documents/render";
 import { formatDate, formatMoneyShort } from "@/lib/crm/format";
@@ -54,9 +53,9 @@ export default async function InvoicesPage({ searchParams }: { searchParams: Pro
         }
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-          <StatCard label="À encaisser (EUR)" value={formatMoneyShort(dueEur)} hint={`${open.length} facture${open.length > 1 ? "s" : ""} ouverte${open.length > 1 ? "s" : ""}`} />
-          <StatCard label="En retard" value={String(late.length)} hint={late.length ? "Relances à prévoir" : "Aucun retard"} />
-          <StatCard label={`Encaissé en ${new Date().getFullYear()}`} value={formatMoneyShort(collectedEur)} hint={collectedUsd ? `+ ${money(collectedUsd, "USD")}` : "Virements enregistrés"} />
+          <StatCard icon={<Wallet className="size-4" />} label="À encaisser (EUR)" value={formatMoneyShort(dueEur)} hint={`${open.length} facture${open.length > 1 ? "s" : ""} ouverte${open.length > 1 ? "s" : ""}`} />
+          <StatCard icon={<AlarmClock className="size-4" />} label="En retard" value={String(late.length)} hint={late.length ? "Relances à prévoir" : "Aucun retard"} />
+          <StatCard icon={<TrendingUp className="size-4" />} label={`Encaissé en ${new Date().getFullYear()}`} value={formatMoneyShort(collectedEur)} hint={collectedUsd ? `+ ${money(collectedUsd, "USD")}` : "Virements enregistrés"} />
         </div>
       </AdminHeader>
 
@@ -69,7 +68,19 @@ export default async function InvoicesPage({ searchParams }: { searchParams: Pro
           action={<ActionLink href="/admin/invoices/new">Facture hors devis</ActionLink>}
         />
       ) : (
-        <ul className="grid gap-2">
+        <DataTable
+          head={
+            <tr>
+              <th>Facture</th>
+              <th>Client</th>
+              <th>Émise par</th>
+              <th>Statut</th>
+              <th className="num">Échéance</th>
+              <th className="num">Encaissé</th>
+              <th className="num">Montant</th>
+            </tr>
+          }
+        >
           {invoices.map((invoice) => {
             const paid = invoice.payments.reduce((s, p) => s + p.amountCents, 0);
             const state =
@@ -78,31 +89,48 @@ export default async function InvoicesPage({ searchParams }: { searchParams: Pro
                 : invoice.status === "ISSUED" && paid > 0
                   ? "PARTIAL"
                   : invoice.status;
+            const ratio = invoice.totalCents > 0 ? Math.min(100, (paid / invoice.totalCents) * 100) : 0;
             return (
-              <li key={invoice.id}>
-                <Link href={`/admin/invoices/${invoice.id}`} className="surface-card surface-card-hover flex flex-wrap items-center gap-4 px-5 py-4">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-aegean-50 text-aegean-700">
-                    <Receipt className="size-5" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-display text-[0.9375rem] font-bold">
-                      {invoice.number ?? invoiceKind[invoice.kind]} · {invoice.title}
+              <tr key={invoice.id}>
+                <td>
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-[11px] bg-gradient-to-br from-aegean-50 to-aegean-100 text-aegean-700 ring-1 ring-aegean-200/60">
+                      <Receipt className="size-4" />
                     </span>
-                    <span className="block truncate text-[0.8125rem] text-[var(--ink-45)]">
-                      {invoice.client.name} · {invoice.issuer?.label ?? "identité à choisir"}
-                      {invoice.dueDate ? ` · échéance ${formatDate(invoice.dueDate)}` : ""}
-                    </span>
-                  </span>
-                  <span className="font-display text-[1rem] font-extrabold tracking-[-0.02em]">
-                    {invoice.kind === "CREDIT_NOTE" ? "− " : ""}
-                    {money(invoice.totalCents, invoice.currency)}
-                  </span>
+                    <div className="min-w-0">
+                      <RowLink href={`/admin/invoices/${invoice.id}`} className="block truncate font-mono text-[0.8125rem] font-bold text-ink">
+                        {invoice.number ?? invoiceKind[invoice.kind]}
+                      </RowLink>
+                      <span className="block max-w-[36ch] truncate text-[0.8125rem] text-[var(--ink-65)]">{invoice.title}</span>
+                    </div>
+                  </div>
+                </td>
+                <td className="font-semibold">{invoice.client.name}</td>
+                <td className="text-[var(--ink-65)]">{invoice.issuer?.label ?? "—"}</td>
+                <td>
                   <Pill className={toneClasses[invoiceStatus[state].tone]}>{invoice.kind === "CREDIT_NOTE" ? "Avoir" : invoiceStatus[state].label}</Pill>
-                </Link>
-              </li>
+                </td>
+                <td className={state === "OVERDUE" ? "num font-bold text-red-600" : "num text-[var(--ink-65)]"}>{formatDate(invoice.dueDate)}</td>
+                <td className="num">
+                  {invoice.kind === "CREDIT_NOTE" || invoice.status === "DRAFT" ? (
+                    <span className="text-[var(--ink-45)]">—</span>
+                  ) : (
+                    <div className="ml-auto w-24">
+                      <div className="h-1.5 overflow-hidden rounded-full bg-black/5">
+                        <div className="h-full rounded-full bg-green-500" style={{ width: `${ratio}%` }} />
+                      </div>
+                      <span className="mt-1 block text-[0.6875rem] text-[var(--ink-45)]">{Math.round(ratio)} %</span>
+                    </div>
+                  )}
+                </td>
+                <td className="num font-display text-[0.9375rem] font-extrabold tracking-[-0.02em]">
+                  {invoice.kind === "CREDIT_NOTE" ? "− " : ""}
+                  {money(invoice.totalCents, invoice.currency)}
+                </td>
+              </tr>
             );
           })}
-        </ul>
+        </DataTable>
       )}
     </>
   );

@@ -1,8 +1,11 @@
 import {
+  Activity,
   ArrowRight,
   BriefcaseBusiness,
   CalendarDays,
+  CheckSquare,
   FileSignature,
+  Hammer,
   Mail,
   PhoneCall,
   Plus,
@@ -13,6 +16,7 @@ import Link from "next/link";
 
 import { createNote } from "./notes/actions";
 
+import { PipelineFunnel, RevenueBars } from "@/components/admin/crm/charts";
 import { TaskList } from "@/components/admin/crm/task-list";
 import { ActionLink, AdminHeader, Panel, Pill, StatCard } from "@/components/admin/ui";
 import { requireUser } from "@/lib/auth";
@@ -85,6 +89,36 @@ export default async function AdminHomePage() {
   );
   const overdue = openInvoices.filter((invoice) => invoice.dueDate && invoice.dueDate < now);
 
+  // Encaissements des 12 derniers mois (en euros), mois de Paris.
+  const yearAgo = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1));
+  const [payments, stageTotals] = await Promise.all([
+    prisma.payment.findMany({
+      where: { receivedAt: { gte: yearAgo }, invoice: { currency: "EUR" } },
+      select: { amountCents: true, receivedAt: true },
+    }),
+    prisma.deal.groupBy({
+      by: ["stage"],
+      where: { stage: { in: ["LEAD", "DISCOVERY", "PROPOSAL", "NEGOTIATION", "WON"] } },
+      _count: true,
+      _sum: { amountCents: true },
+    }),
+  ]);
+  const monthKey = (date: Date) =>
+    new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit" }).format(date).slice(0, 7);
+  const months = Array.from({ length: 12 }, (_, index) => {
+    const date = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11 + index, 15));
+    const key = monthKey(date);
+    return {
+      key,
+      label: new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", month: "long", year: "numeric" }).format(date),
+      cents: payments.filter((payment) => monthKey(payment.receivedAt) === key).reduce((sum, payment) => sum + payment.amountCents, 0),
+    };
+  });
+  const funnel = (["LEAD", "DISCOVERY", "PROPOSAL", "NEGOTIATION", "WON"] as const).map((stage) => {
+    const row = stageTotals.find((item) => item.stage === stage);
+    return { key: stage, label: dealStage[stage].label, count: row?._count ?? 0, cents: row?._sum.amountCents ?? 0 };
+  });
+
   const firstName = (user?.name ?? "").split(" ")[0];
 
   return (
@@ -138,16 +172,25 @@ export default async function AdminHomePage() {
 
       </AdminHeader>
 
+      <div className="mb-4 grid items-stretch gap-4 xl:grid-cols-[1.6fr_1fr]">
+        <Panel title="Encaissements" description="Virements reçus, 12 derniers mois (EUR)" icon={<Wallet className="size-4" />} action={<Link href="/admin/invoices?filter=paid" className="font-display text-xs font-bold text-aegean-700 hover:underline">Factures payées</Link>}>
+          <RevenueBars months={months} />
+        </Panel>
+        <Panel title="Prospection" description="Projets et montants par étape" icon={<BriefcaseBusiness className="size-4" />} action={<Link href="/admin/deals" className="font-display text-xs font-bold text-aegean-700 hover:underline">Tableau</Link>}>
+          <PipelineFunnel stages={funnel} />
+        </Panel>
+      </div>
+
       <div className="grid items-stretch gap-4 lg:grid-cols-[1.3fr_1fr]">
         <div className="flex flex-col gap-4">
-          <Panel title="À faire aujourd'hui">
+          <Panel title="À faire aujourd'hui" icon={<CheckSquare className="size-4" />}>
             <TaskList tasks={tasks} showContext emptyLabel="Rien d'urgent. Profitez-en pour relancer un devis." />
             <Link href="/admin/tasks" className="mt-3 inline-flex items-center gap-1 font-display text-sm font-bold text-aegean-700 hover:underline">
               Toutes les tâches <ArrowRight className="size-3.5" />
             </Link>
           </Panel>
 
-          <Panel title="En production" className="flex-1">
+          <Panel title="En production" icon={<Hammer className="size-4" />} className="flex-1">
             {productionDeals.length === 0 ? (
               <p className="text-[0.875rem] text-[var(--ink-45)]">Aucun projet en cours de production.</p>
             ) : (
@@ -179,7 +222,7 @@ export default async function AdminHomePage() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <Panel title="Prochains appels">
+          <Panel title="Prochains appels" icon={<CalendarDays className="size-4" />}>
             {bookings.length === 0 ? (
               <p className="text-[0.875rem] text-[var(--ink-45)]">Aucun rendez-vous à venir.</p>
             ) : (
@@ -214,7 +257,7 @@ export default async function AdminHomePage() {
           </Panel>
 
           {pendingQuotes.length > 0 ? (
-            <Panel title="Devis à suivre">
+            <Panel title="Devis à suivre" icon={<FileSignature className="size-4" />}>
               <ul className="grid gap-1.5">
                 {pendingQuotes.slice(0, 5).map((quote) => (
                   <li key={quote.id}>
@@ -231,7 +274,7 @@ export default async function AdminHomePage() {
           ) : null}
 
           {messages.length > 0 ? (
-            <Panel title="Nouvelles demandes">
+            <Panel title="Nouvelles demandes" icon={<Mail className="size-4" />}>
               <ul className="grid gap-1.5">
                 {messages.map((message) => (
                   <li key={message.id}>
@@ -248,7 +291,7 @@ export default async function AdminHomePage() {
             </Panel>
           ) : null}
 
-          <Panel title="Activité récente" className="flex-1">
+          <Panel title="Activité récente" icon={<Activity className="size-4" />} className="flex-1">
             {activities.length === 0 ? (
               <p className="text-[0.875rem] text-[var(--ink-45)]">Rien pour l&apos;instant.</p>
             ) : (

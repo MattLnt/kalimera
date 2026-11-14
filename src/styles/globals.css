@@ -343,6 +343,67 @@
   }
 
   /* Menu mobile plein écran : le panneau s'ouvre, puis les liens montent. */
+  /* Tableaux de données du CRM : denses, lisibles, lignes cliquables. */
+  .crm-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.875rem;
+  }
+  .crm-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fafbfd;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-45);
+    border-bottom: 1px solid rgba(7, 33, 63, 0.07);
+    white-space: nowrap;
+  }
+  .crm-table thead th:first-child {
+    padding-left: 1.5rem;
+  }
+  .crm-table thead th:last-child {
+    padding-right: 1.5rem;
+  }
+  .crm-table tbody tr {
+    position: relative;
+    transition: background-color 0.2s;
+  }
+  .crm-table tbody tr:hover {
+    background: color-mix(in oklab, var(--color-aegean-50) 70%, transparent);
+  }
+  .crm-table tbody td {
+    padding: 0.8rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(7, 33, 63, 0.05);
+  }
+  .crm-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .crm-table tbody td:first-child {
+    padding-left: 1.5rem;
+  }
+  .crm-table tbody td:last-child {
+    padding-right: 1.5rem;
+  }
+  .crm-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  /* Les contrôles d'une ligne passent au-dessus du lien qui la couvre. */
+  .crm-table tbody td :is(button, form, a:not([class*="after:"])) {
+    position: relative;
+    z-index: 1;
+  }
+
   /* Rendu Markdown des notes du CRM. */
   .prose-admin {
     font-size: 0.9375rem;

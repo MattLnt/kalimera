@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { BadgeCheck, Hammer, Handshake, Plus, Scale } from "lucide-react";
 
 import { PipelineBoard } from "./pipeline-board";
 
@@ -52,10 +52,10 @@ export default async function DealsPage({ searchParams }: { searchParams: Promis
         eyebrow="Pipeline"
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatCard label="En négociation" value={formatMoneyShort(pipeline)} hint={`${sales.length} projet${sales.length > 1 ? "s" : ""}`} />
-          <StatCard label="Pondéré" value={formatMoneyShort(weighted)} hint="Selon la probabilité de signature" />
-          <StatCard label="En production" value={String(production.length)} hint={formatMoneyShort(production.reduce((s, d) => s + (d.amountCents ?? 0), 0))} />
-          <StatCard label={`Signés en ${year}`} value={formatMoneyShort(wonThisYear.reduce((s, d) => s + (d.amountCents ?? 0), 0))} hint={`${wonThisYear.length} projet${wonThisYear.length > 1 ? "s" : ""}`} />
+          <StatCard icon={<Handshake className="size-4" />} label="En négociation" value={formatMoneyShort(pipeline)} hint={`${sales.length} projet${sales.length > 1 ? "s" : ""}`} />
+          <StatCard icon={<Scale className="size-4" />} label="Pondéré" value={formatMoneyShort(weighted)} hint="Selon la probabilité de signature" />
+          <StatCard icon={<Hammer className="size-4" />} label="En production" value={String(production.length)} hint={formatMoneyShort(production.reduce((s, d) => s + (d.amountCents ?? 0), 0))} />
+          <StatCard icon={<BadgeCheck className="size-4" />} label={`Signés en ${year}`} value={formatMoneyShort(wonThisYear.reduce((s, d) => s + (d.amountCents ?? 0), 0))} hint={`${wonThisYear.length} projet${wonThisYear.length > 1 ? "s" : ""}`} />
         </div>
       </AdminHeader>
 

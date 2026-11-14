@@ -1,9 +1,8 @@
 import { Building2, Mail, Phone, Plus, Search } from "lucide-react";
-import Link from "next/link";
 
-import { ActionLink, AdminHeader, EmptyState, FilterTabs, Pill } from "@/components/admin/ui";
+import { ActionLink, AdminHeader, Avatar, DataTable, EmptyState, FilterTabs, Pill, RowLink } from "@/components/admin/ui";
 import type { ClientStatus, Prisma } from "@/generated/prisma/client";
-import { formatMoneyShort, formatRelative, initials } from "@/lib/crm/format";
+import { formatMoneyShort, formatRelative } from "@/lib/crm/format";
 import { clientStatus, toneClasses, toneDots } from "@/lib/crm/labels";
 import { prisma } from "@/lib/prisma";
 
@@ -105,72 +104,79 @@ export default async function ClientsPage({
           action={<ActionLink href="/admin/clients/new">Créer une fiche</ActionLink>}
         />
       ) : (
-        <ul className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+        <DataTable
+          head={
+            <tr>
+              <th>Client</th>
+              <th>Statut</th>
+              <th>Interlocuteur</th>
+              <th>Origine</th>
+              <th className="num">Projets en cours</th>
+              <th className="num">Encaissé</th>
+              <th className="num">Activité</th>
+            </tr>
+          }
+        >
           {clients.map((client) => {
             const status = clientStatus[client.status];
             const contact = client.contacts[0];
             const pipeline = client.deals.reduce((sum, deal) => sum + (deal.amountCents ?? 0), 0);
             const paid = client.invoices.reduce((sum, invoice) => sum + invoice.totalCents, 0);
             return (
-              <li key={client.id}>
-                <Link
-                  href={`/admin/clients/${client.id}`}
-                  className="surface-card surface-card-hover flex h-full flex-col gap-4 p-5"
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-gradient-to-br from-aegean-500 to-aegean-800 font-display text-sm font-bold text-white">
-                      {initials(client.name)}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-display text-[1rem] font-bold tracking-[-0.02em]">
+              <tr key={client.id}>
+                <td>
+                  <div className="flex items-center gap-3">
+                    <Avatar name={client.name} />
+                    <div className="min-w-0">
+                      <RowLink href={`/admin/clients/${client.id}`} className="block truncate font-display text-[0.9375rem] font-bold tracking-[-0.01em] text-ink">
                         {client.name}
+                      </RowLink>
+                      <span className="flex items-center gap-1 truncate text-[0.75rem] text-[var(--ink-45)]">
+                        <Building2 className="size-3 shrink-0" />
+                        {[client.city, client.country !== "FR" ? client.country : null].filter(Boolean).join(", ") || "—"}
                       </span>
-                      <span className="mt-0.5 flex items-center gap-1 truncate text-[0.8125rem] text-[var(--ink-45)]">
-                        <Building2 className="size-3.5 shrink-0" />
-                        {[client.city, client.country !== "FR" ? client.country : null].filter(Boolean).join(", ") || "Ville non renseignée"}
-                      </span>
-                    </span>
-                    <Pill className={toneClasses[status.tone]} dot={toneDots[status.tone]}>
-                      {status.label}
-                    </Pill>
+                    </div>
                   </div>
-
-                  <div className="grid gap-1 text-[0.8125rem] text-[var(--ink-65)]">
-                    {contact ? (
-                      <span className="truncate font-semibold text-ink">
+                </td>
+                <td>
+                  <Pill className={toneClasses[status.tone]} dot={toneDots[status.tone]}>
+                    {status.label}
+                  </Pill>
+                </td>
+                <td>
+                  {contact ? (
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold">
                         {contact.firstName} {contact.lastName}
-                        {contact.role ? <span className="font-normal text-[var(--ink-45)]"> · {contact.role}</span> : null}
+                      </p>
+                      <p className="flex items-center gap-1 truncate text-[0.75rem] text-[var(--ink-45)]">
+                        {contact.email ? <Mail className="size-3 shrink-0" /> : contact.phone ? <Phone className="size-3 shrink-0" /> : null}
+                        {contact.email ?? contact.phone ?? contact.role ?? ""}
+                      </p>
+                    </div>
+                  ) : (
+                    <span className="text-[var(--ink-45)]">{client.email ?? "—"}</span>
+                  )}
+                </td>
+                <td className="text-[var(--ink-65)]">{client.source ?? "—"}</td>
+                <td className="num">
+                  {client.deals.length ? (
+                    <>
+                      <span className="font-display font-bold">{formatMoneyShort(pipeline)}</span>
+                      <span className="block text-[0.75rem] text-[var(--ink-45)]">
+                        {client.deals.length} projet{client.deals.length > 1 ? "s" : ""}
                       </span>
-                    ) : null}
-                    {client.email ? (
-                      <span className="flex items-center gap-1.5 truncate">
-                        <Mail className="size-3.5 shrink-0" />
-                        {client.email}
-                      </span>
-                    ) : null}
-                    {client.phone ? (
-                      <span className="flex items-center gap-1.5">
-                        <Phone className="size-3.5 shrink-0" />
-                        {client.phone}
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-between gap-3 border-t border-black/5 pt-3 text-[0.75rem] text-[var(--ink-45)]">
-                    <span>
-                      {client.deals.length > 0
-                        ? `${client.deals.length} projet${client.deals.length > 1 ? "s" : ""} · ${formatMoneyShort(pipeline)}`
-                        : paid > 0
-                          ? `Encaissé : ${formatMoneyShort(paid)}`
-                          : "Aucun projet en cours"}
-                    </span>
-                    <span>{formatRelative(client.updatedAt)}</span>
-                  </div>
-                </Link>
-              </li>
+                    </>
+                  ) : (
+                    <span className="text-[var(--ink-45)]">—</span>
+                  )}
+                </td>
+                <td className="num font-display font-bold">{paid ? formatMoneyShort(paid) : <span className="font-normal text-[var(--ink-45)]">—</span>}</td>
+                <td className="num text-[0.8125rem] text-[var(--ink-45)]">{formatRelative(client.updatedAt)}</td>
+              </tr>
             );
           })}
-        </ul>
+        </DataTable>
       )}
     </>
   );
