@@ -172,6 +172,22 @@ const css = `
   .block { page-break-inside: avoid; break-inside: avoid; }
   .footer { font-size: 10px; color: #555; text-align: center; border-top: 1px solid #D9D9D9; padding-top: 14px; margin-top: 26px; line-height: 1.6; }
   .draft-mark { position: fixed; top: 40%; left: 0; right: 0; text-align: center; font-size: 72px; font-weight: 700; color: rgba(13, 13, 18, 0.05); transform: rotate(-24deg); pointer-events: none; }
+
+  /* À l'écran (aperçu, onglet, page client) : une feuille A4 blanche, centrée
+     sur fond gris, avec les marges du PDF. À l'impression et dans le PDF,
+     ce sont les marges de @page qui s'appliquent, sans ce cadre. */
+  @media screen {
+    html { background: #E9ECF1; }
+    body { background: transparent; padding: 24px 12px; }
+    .doc { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 18mm 16mm; background: #fff; box-shadow: 0 1px 3px rgba(13, 13, 18, 0.08), 0 12px 32px -12px rgba(13, 13, 18, 0.18); }
+    .draft-mark { position: absolute; }
+  }
+  @media screen and (max-width: 640px) {
+    body { padding: 0; }
+    .doc { padding: 22px 18px; min-height: 0; box-shadow: none; }
+    .header { flex-direction: column; }
+    .doc-meta { text-align: left; }
+  }
 `;
 
 // ------------------------------------------------------------------ blocs

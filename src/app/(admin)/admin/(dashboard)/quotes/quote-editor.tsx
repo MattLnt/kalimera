@@ -8,6 +8,7 @@ import { saveQuote, type QuoteActionState } from "./actions";
 import { generateQuoteDraft } from "./ai";
 
 import { amountToCents, centsToAmount, LotsEditor, newLotKey, type LotDraft } from "@/components/admin/crm/lots-editor";
+import { OpenDraftPreview } from "@/components/admin/crm/open-preview";
 import { Field, Panel } from "@/components/admin/ui";
 import { Select } from "@/components/ui/select";
 import { renderDocument, type DocClient, type DocIssuer } from "@/lib/crm/documents/render";
@@ -283,8 +284,8 @@ export function QuoteEditor({
       {/* Aperçu : le document à l'échelle d'une page A4. */}
       <div className="sticky top-4 hidden xl:block">
         <div className="mb-2 flex items-center justify-between px-1 text-xs font-bold text-[var(--ink-45)]">
-          <span>Aperçu du document</span>
-          <span>{issuer?.label ?? "Aucune identité"}</span>
+          <span>Aperçu du document · {issuer?.label ?? "aucune identité"}</span>
+          <OpenDraftPreview html={preview} />
         </div>
         <div className="overflow-hidden rounded-[18px] bg-white shadow-lift ring-1 ring-black/5">
           <iframe title="Aperçu du devis" srcDoc={preview} className="h-[calc(100dvh-7rem)] w-full" />

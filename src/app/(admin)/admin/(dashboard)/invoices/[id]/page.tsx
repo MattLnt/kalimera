@@ -66,6 +66,10 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
                 Modifier
               </Link>
             ) : null}
+            <a href={`/admin/invoices/${invoice.id}/preview`} target="_blank" rel="noreferrer" className={small}>
+              <ExternalLink className="size-4" />
+              Aperçu
+            </a>
             <a href={`/admin/invoices/${invoice.id}/pdf`} target="_blank" rel="noreferrer" className={small}>
               <Download className="size-4" />
               PDF

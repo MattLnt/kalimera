@@ -8,6 +8,7 @@ import { saveInvoice, type InvoiceActionState } from "./actions";
 import type { EditorClient, EditorIssuer } from "../quotes/quote-editor";
 
 import { amountToCents, centsToAmount, LotsEditor, type LotDraft } from "@/components/admin/crm/lots-editor";
+import { OpenDraftPreview } from "@/components/admin/crm/open-preview";
 import { Field, Panel } from "@/components/admin/ui";
 import { Select } from "@/components/ui/select";
 import { renderDocument } from "@/lib/crm/documents/render";
@@ -152,8 +153,8 @@ export function InvoiceEditor({ initialDraft, issuers, clients }: { initialDraft
 
       <div className="sticky top-4 hidden xl:block">
         <div className="mb-2 flex items-center justify-between px-1 text-xs font-bold text-[var(--ink-45)]">
-          <span>Aperçu du document</span>
-          <span>{issuer?.label ?? "Aucune identité"}</span>
+          <span>Aperçu du document · {issuer?.label ?? "aucune identité"}</span>
+          <OpenDraftPreview html={preview} />
         </div>
         <div className="overflow-hidden rounded-[18px] bg-white shadow-lift ring-1 ring-black/5">
           <iframe title="Aperçu de la facture" srcDoc={preview} className="h-[calc(100dvh-7rem)] w-full" />
