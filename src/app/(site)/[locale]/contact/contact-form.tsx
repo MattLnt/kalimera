@@ -8,6 +8,7 @@ import { useFormStatus } from "react-dom";
 import { submitEnquiry, type ContactState } from "./actions";
 
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 import { conversions, trackConversion } from "@/lib/analytics";
 import { siteConfig } from "@/lib/site";
 
@@ -49,7 +50,7 @@ export function ContactForm() {
 
   if (state.status === "success") {
     return (
-      <div className="surface-card p-8 text-center sm:p-12">
+      <div className="surface-card flex h-full flex-col items-center justify-center p-8 text-center sm:p-12">
         <span className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-aegean-100 text-aegean-700">
           <CheckCircle2 className="size-7" />
         </span>
@@ -62,7 +63,7 @@ export function ContactForm() {
   }
 
   return (
-    <form action={formAction} className="surface-card p-6 sm:p-10">
+    <form action={formAction} className="surface-card h-full p-6 sm:p-10">
       <input type="hidden" name="locale" value={locale} />
 
       {/* Piège à robots : masqué visuellement et retiré de l'ordre de tabulation. */}
@@ -110,33 +111,27 @@ export function ContactForm() {
         </Field>
 
         <Field label={t("subject")} error={state.errors?.subject}>
-          <select
+          <Select
             name="subject"
             required
-            defaultValue=""
-            className="field-input"
-            aria-invalid={state.errors?.subject ? "true" : undefined}
-          >
-            <option value="" disabled>
-              {t("subjectPlaceholder")}
-            </option>
-            {subjects.map((key) => (
-              <option key={key} value={t(`subjects.${key}`)}>
-                {t(`subjects.${key}`)}
-              </option>
-            ))}
-          </select>
+            placeholder={t("subjectPlaceholder")}
+            invalid={Boolean(state.errors?.subject)}
+            options={subjects.map((key) => ({
+              value: t(`subjects.${key}`),
+              label: t(`subjects.${key}`),
+            }))}
+          />
         </Field>
 
         <Field label={t("budget")} optional={t("optional")}>
-          <select name="budget" defaultValue="" className="field-input">
-            <option value="">{t("budgetPlaceholder")}</option>
-            {budgets.map((key) => (
-              <option key={key} value={t(`budgets.${key}`)}>
-                {t(`budgets.${key}`)}
-              </option>
-            ))}
-          </select>
+          <Select
+            name="budget"
+            placeholder={t("budgetPlaceholder")}
+            options={budgets.map((key) => ({
+              value: t(`budgets.${key}`),
+              label: t(`budgets.${key}`),
+            }))}
+          />
         </Field>
 
         <div className="sm:col-span-2">

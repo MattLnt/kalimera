@@ -14,6 +14,7 @@ import { GalleryPicker, ImagePicker, type PickedMedia } from "@/components/admin
 import { LocaleTabs } from "@/components/admin/locale-tabs";
 import { MetricsEditor, type MetricDraft } from "@/components/admin/metrics-editor";
 import { Field, Panel } from "@/components/admin/ui";
+import { Select } from "@/components/ui/select";
 
 export type ProjectFormData = {
   id?: string;
@@ -228,23 +229,11 @@ export function ProjectForm({
             </Field>
 
             <Field label="Type de projet" hint="Un projet mobile s'affiche dans une maquette de téléphone.">
-              <select name="kind" defaultValue={project.kind} className="field-input">
-                {kinds.map((kind) => (
-                  <option key={kind.value} value={kind.value}>
-                    {kind.label}
-                  </option>
-                ))}
-              </select>
+              <Select name="kind" defaultValue={project.kind} options={kinds} />
             </Field>
 
             <Field label="Couleur de la carte" hint="Utilisée en fond derrière la maquette.">
-              <select name="accent" defaultValue={project.accent} className="field-input">
-                {accents.map((accent) => (
-                  <option key={accent.value} value={accent.value}>
-                    {accent.label}
-                  </option>
-                ))}
-              </select>
+              <Select name="accent" defaultValue={project.accent} options={accents} />
             </Field>
 
             <Field label="Adresse du site en ligne" hint="Facultatif. Affichée dans la barre d'adresse de la maquette.">

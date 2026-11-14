@@ -1,4 +1,4 @@
-import { Clock, Mail, Phone } from "lucide-react";
+import { CalendarDays, Clock, Mail, Phone } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -6,6 +6,7 @@ import { ContactForm } from "./contact-form";
 
 import { PageHero } from "@/components/site/page-hero";
 import { Reveal } from "@/components/ui/reveal";
+import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { buildAlternates } from "@/lib/seo";
 import { ContactLink } from "@/components/site/contact-link";
@@ -39,12 +40,28 @@ export default async function ContactPage({
       <PageHero chip={t("title")} title={t("title")} lead={t("intro")} />
 
       <section className="py-[clamp(3rem,8vh,5rem)]">
-        <div className="page-shell grid items-start gap-3 lg:grid-cols-[1fr_340px]">
-          <Reveal>
+        <div className="page-shell grid items-stretch gap-3 lg:grid-cols-[1fr_340px]">
+          <Reveal className="h-full">
             <ContactForm />
           </Reveal>
 
-          <Reveal delay={1} className="grid gap-3">
+          <Reveal delay={1} className="grid gap-3 lg:auto-rows-fr">
+            <Link
+              href="/book"
+              className="surface-card surface-card-hover flex items-center gap-4 bg-aegean-600 p-6 text-white"
+            >
+              <span className="grid size-11 shrink-0 place-items-center rounded-field bg-white/15">
+                <CalendarDays className="size-5" />
+              </span>
+              <span>
+                <span className="block font-display text-xs font-semibold text-white/70">
+                  {t("bookCall")}
+                </span>
+                <span className="mt-0.5 block font-display text-[0.9375rem] font-bold tracking-[-0.02em]">
+                  {t("bookCallValue")} →
+                </span>
+              </span>
+            </Link>
             <InfoCard
               icon={<Mail className="size-5" />}
               kind="email"
@@ -59,7 +76,7 @@ export default async function ContactPage({
               value={siteConfig.phone}
               href={`tel:${siteConfig.phoneHref}`}
             />
-            <div className="surface-card flex items-start gap-4 p-6">
+            <div className="surface-card flex items-center gap-4 p-6">
               <span className="grid size-11 shrink-0 place-items-center rounded-field bg-aegean-100 text-aegean-700">
                 <Clock className="size-5" />
               </span>
@@ -92,7 +109,7 @@ function InfoCard({
     <ContactLink
       kind={kind}
       href={href}
-      className="surface-card surface-card-hover flex items-start gap-4 p-6"
+      className="surface-card surface-card-hover flex items-center gap-4 p-6"
     >
       <span className="grid size-11 shrink-0 place-items-center rounded-field bg-aegean-100 text-aegean-700">
         {icon}

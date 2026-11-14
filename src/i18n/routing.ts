@@ -61,6 +61,12 @@ export const routing = defineRouting({
       es: "/diario/[slug]",
     },
     "/contact": { fr: "/contact", en: "/contact", es: "/contacto" },
+    "/book": { fr: "/rendez-vous", en: "/book-a-call", es: "/reservar-llamada" },
+    "/book/[token]": {
+      fr: "/rendez-vous/[token]",
+      en: "/book-a-call/[token]",
+      es: "/reservar-llamada/[token]",
+    },
     "/legal": {
       fr: "/mentions-legales",
       en: "/legal-notice",

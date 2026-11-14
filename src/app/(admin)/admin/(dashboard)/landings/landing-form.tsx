@@ -13,7 +13,8 @@ import {
 } from "@/components/admin/form-controls";
 import { LocaleTabs } from "@/components/admin/locale-tabs";
 import { Field, Panel } from "@/components/admin/ui";
-import { serviceIconNames } from "@/components/site/service-icons";
+import { iconOptions } from "@/components/admin/icon-options";
+import { Select } from "@/components/ui/select";
 
 export type LandingFormData = {
   id?: string;
@@ -212,10 +213,14 @@ export function LandingForm({
               label="Famille de page"
               hint="Détermine la route : /secteurs/… ou /developpement-web/…"
             >
-              <select name="kind" defaultValue={landing.kind} className="field-input">
-                <option value="SECTOR">Secteur d&apos;activité</option>
-                <option value="LOCATION">Ville ou marché</option>
-              </select>
+              <Select
+                name="kind"
+                defaultValue={landing.kind}
+                options={[
+                  { value: "SECTOR", label: "Secteur d'activité" },
+                  { value: "LOCATION", label: "Ville ou marché" },
+                ]}
+              />
             </Field>
 
             <Field
@@ -231,13 +236,7 @@ export function LandingForm({
             </Field>
 
             <Field label="Icône" hint="Affichée sur la carte de la page.">
-              <select name="icon" defaultValue={landing.icon} className="field-input">
-                {serviceIconNames.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
+              <Select name="icon" defaultValue={landing.icon} options={iconOptions} />
             </Field>
 
             <Field label="Ordre d'affichage" hint="Le plus petit nombre s'affiche en premier.">

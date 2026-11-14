@@ -24,6 +24,7 @@ const staticPages: { path: AppPathnames; priority: number }[] = [
   { path: "/studio", priority: 0.7 },
   { path: "/journal", priority: 0.7 },
   { path: "/contact", priority: 0.8 },
+  { path: "/book", priority: 0.8 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

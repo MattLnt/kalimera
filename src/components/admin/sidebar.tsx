@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CalendarDays,
   ExternalLink,
   FileText,
   FolderKanban,
@@ -28,6 +29,7 @@ const nav = [
   { href: "/admin/testimonials", label: "Témoignages", icon: Quote },
   { href: "/admin/media", label: "Médias", icon: ImageIcon },
   { href: "/admin/messages", label: "Messages", icon: Mail, badge: true },
+  { href: "/admin/bookings", label: "Rendez-vous", icon: CalendarDays },
   { href: "/admin/settings", label: "Réglages", icon: Settings },
 ];
 

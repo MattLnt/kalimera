@@ -357,3 +357,43 @@ model LandingFaq {
   @@index([landingId, position])
   @@map("landing_faqs")
 }
+
+// -------------------------------------------------------------- rendez-vous
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+enum BookingMode {
+  /// Visioconférence : un lien est généré à la réservation.
+  VIDEO
+  /// Le studio appelle le numéro laissé par le visiteur.
+  PHONE
+}
+
+/// Appel de découverte réservé depuis le site, à la manière de Calendly.
+/// Les créneaux sont calculés dans src/lib/booking ; un créneau n'est pris
+/// que par un rendez-vous confirmé, un rendez-vous annulé le libère.
+model Booking {
+  id          String        @id @default(cuid())
+  startsAt    DateTime
+  endsAt      DateTime
+  status      BookingStatus @default(CONFIRMED)
+  mode        BookingMode   @default(VIDEO)
+  name        String
+  email       String
+  company     String?
+  phone       String?
+  topic       String?
+  message     String?
+  locale      Locale        @default(FR)
+  meetingUrl  String?
+  /// Jeton du lien de gestion envoyé au visiteur : consulter, annuler.
+  token       String        @unique
+  cancelledAt DateTime?
+  createdAt   DateTime      @default(now())
+
+  @@index([status, startsAt])
+  @@map("bookings")
+}

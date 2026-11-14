@@ -7,7 +7,8 @@ import { deleteService, saveService, type ActionState } from "./actions";
 import { DeleteButton, FormError, SubmitButton, TagListInput } from "@/components/admin/form-controls";
 import { LocaleTabs } from "@/components/admin/locale-tabs";
 import { Field, Panel } from "@/components/admin/ui";
-import { serviceIconNames } from "@/components/site/service-icons";
+import { iconOptions } from "@/components/admin/icon-options";
+import { Select } from "@/components/ui/select";
 
 export type ServiceFormData = {
   id?: string;
@@ -141,13 +142,7 @@ export function ServiceForm({ service }: { service: ServiceFormData }) {
             </Field>
 
             <Field label="Icône" hint="Affichée en haut de la carte du service.">
-              <select name="icon" defaultValue={service.icon} className="field-input">
-                {serviceIconNames.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
+              <Select name="icon" defaultValue={service.icon} options={iconOptions} />
             </Field>
 
             <TagListInput

@@ -28,6 +28,8 @@ export const conversions = {
   emailClick: "email_click",
   /** Ouverture de la prise de rendez-vous. */
   bookingOpen: "booking_open",
+  /** Rendez-vous confirmé dans le calendrier — conversion au même rang que le formulaire. */
+  bookingConfirmed: "booking_confirmed",
 } as const;
 
 export type ConversionName = (typeof conversions)[keyof typeof conversions];

@@ -32,7 +32,7 @@ export async function CtaPanel() {
             <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
           </Button>
           <Button asChild variant="soft">
-            <Link href="/contact">{t("secondary")}</Link>
+            <Link href="/book">{t("secondary")}</Link>
           </Button>
         </Reveal>
       </div>
