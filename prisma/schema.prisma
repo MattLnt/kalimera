@@ -275,7 +275,11 @@ model ContactMessage {
   message   String
   locale    Locale        @default(FR)
   status    MessageStatus @default(NEW)
+  /// Fiche client créée ou rattachée depuis ce message.
+  clientId  String?
   createdAt DateTime      @default(now())
+
+  client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
 
   @@index([status, createdAt])
   @@map("contact_messages")
@@ -392,8 +396,468 @@ model Booking {
   /// Jeton du lien de gestion envoyé au visiteur : consulter, annuler.
   token       String        @unique
   cancelledAt DateTime?
+  /// Fiche client créée ou rattachée à la réservation.
+  clientId    String?
   createdAt   DateTime      @default(now())
+
+  client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  notes  Note[]
 
   @@index([status, startsAt])
   @@map("bookings")
+}
+
+// ====================================================================== CRM
+//
+// Gestion commerciale et de production du studio : clients, projets,
+// notes d'appel, devis signés en ligne, factures et encaissements.
+// Les montants sont en centimes (entiers) : aucun arrondi flottant sur une
+// facture.
+
+enum ClientStatus {
+  /// Premier contact, pas encore qualifié.
+  LEAD
+  /// En discussion, devis possible.
+  PROSPECT
+  /// Au moins un projet signé ou en cours.
+  ACTIVE
+  /// A travaillé avec nous, plus de projet en cours.
+  PAST
+  ARCHIVED
+}
+
+model Client {
+  id           String       @id @default(cuid())
+  /// Nom d'usage : « Côté BURO ».
+  name         String
+  /// Raison sociale, telle qu'elle doit figurer sur les factures.
+  legalName    String?
+  siren        String?
+  vatNumber    String?
+  email        String?
+  phone        String?
+  website      String?
+  addressLine1 String?
+  addressLine2 String?
+  postalCode   String?
+  city         String?
+  country      String       @default("FR")
+  /// D'où vient le client : formulaire, rendez-vous, recommandation…
+  source       String?
+  status       ClientStatus @default(LEAD)
+  /// Mémo libre, affiché en tête de fiche.
+  summary      String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  contacts   ClientContact[]
+  deals      Deal[]
+  notes      Note[]
+  tasks      Task[]
+  quotes     Quote[]
+  invoices   Invoice[]
+  activities Activity[]
+  bookings   Booking[]
+  messages   ContactMessage[]
+
+  @@index([status, updatedAt])
+  @@map("crm_clients")
+}
+
+model ClientContact {
+  id        String   @id @default(cuid())
+  clientId  String
+  firstName String
+  lastName  String?
+  role      String?
+  email     String?
+  phone     String?
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@map("crm_client_contacts")
+}
+
+/// Cycle de vie d'un projet, de la piste à la maintenance.
+enum DealStage {
+  LEAD
+  DISCOVERY
+  PROPOSAL
+  NEGOTIATION
+  WON
+  IN_PROGRESS
+  REVIEW
+  DELIVERED
+  MAINTENANCE
+  LOST
+}
+
+/// Un projet client : l'affaire commerciale puis sa production.
+model Deal {
+  id          String    @id @default(cuid())
+  clientId    String
+  title       String
+  stage       DealStage @default(LEAD)
+  /// Montant estimé, en centimes HT.
+  amountCents Int?
+  /// Probabilité de signature, en pourcentage.
+  probability Int?
+  description String?
+  startDate   DateTime?
+  dueDate     DateTime?
+  deliveredAt DateTime?
+  lostReason  String?
+  /// Ordre dans la colonne du tableau.
+  position    Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  client     Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  milestones Milestone[]
+  tasks      Task[]
+  notes      Note[]
+  quotes     Quote[]
+  invoices   Invoice[]
+  activities Activity[]
+
+  @@index([stage, position])
+  @@index([clientId])
+  @@map("crm_deals")
+}
+
+/// Grande étape d'un projet : cadrage, design, développement, recette…
+model Milestone {
+  id        String    @id @default(cuid())
+  dealId    String
+  title     String
+  dueDate   DateTime?
+  doneAt    DateTime?
+  position  Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  deal Deal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@index([dealId, position])
+  @@map("crm_milestones")
+}
+
+enum TaskStatus {
+  TODO
+  DOING
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  NORMAL
+  HIGH
+}
+
+model Task {
+  id          String       @id @default(cuid())
+  title       String
+  details     String?
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(NORMAL)
+  dueAt       DateTime?
+  completedAt DateTime?
+  clientId    String?
+  dealId      String?
+  position    Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  client Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  deal   Deal?   @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@index([status, dueAt])
+  @@map("crm_tasks")
+}
+
+enum NoteKind {
+  CALL
+  MEETING
+  EMAIL
+  NOTE
+}
+
+/// Compte rendu d'appel, de réunion, ou simple note.
+model Note {
+  id          String   @id @default(cuid())
+  clientId    String
+  dealId      String?
+  bookingId   String?
+  kind        NoteKind @default(NOTE)
+  title       String?
+  /// Corps en Markdown.
+  body        String   @default("")
+  occurredAt  DateTime @default(now())
+  durationMin Int?
+  pinned      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  client  Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  deal    Deal?    @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@index([clientId, occurredAt])
+  @@map("crm_notes")
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  VIEWED
+  SIGNED
+  DECLINED
+  EXPIRED
+  CANCELLED
+}
+
+model Quote {
+  id             String      @id @default(cuid())
+  /// Attribué à l'envoi : DEV-2026-001. Un brouillon n'a pas de numéro.
+  number         String?     @unique
+  clientId       String
+  dealId         String?
+  status         QuoteStatus @default(DRAFT)
+  title          String
+  intro          String?
+  /// Conditions particulières, affichées avant la signature.
+  terms          String?
+  issueDate      DateTime?
+  validUntil     DateTime?
+  depositPercent Int         @default(30)
+  subtotalCents  Int         @default(0)
+  vatCents       Int         @default(0)
+  totalCents     Int         @default(0)
+  /// Jeton du lien public de consultation et de signature.
+  token          String      @unique
+  /// Coordonnées figées à l'envoi : le document ne change plus ensuite.
+  clientSnapshot Json?
+  issuerSnapshot Json?
+  sentAt         DateTime?
+  viewedAt       DateTime?
+  signedAt       DateTime?
+  signerName     String?
+  signerEmail    String?
+  signerIp       String?
+  signerAgent    String?
+  /// Signature dessinée, en image PNG encodée.
+  signatureImage String?
+  /// Empreinte SHA-256 du contenu signé : prouve qu'il n'a pas changé.
+  signedHash     String?
+  declinedAt     DateTime?
+  declineReason  String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  client     Client      @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  deal       Deal?       @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  lines      QuoteLine[]
+  invoices   Invoice[]
+  activities Activity[]
+
+  @@index([status, updatedAt])
+  @@index([clientId])
+  @@map("crm_quotes")
+}
+
+enum LineKind {
+  ITEM
+  SECTION
+}
+
+model QuoteLine {
+  id              String   @id @default(cuid())
+  quoteId         String
+  position        Int      @default(0)
+  kind            LineKind @default(ITEM)
+  title           String
+  description     String?
+  quantity        Float    @default(1)
+  unit            String?
+  unitPriceCents  Int      @default(0)
+  vatRate         Float    @default(20)
+  discountPercent Float    @default(0)
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId, position])
+  @@map("crm_quote_lines")
+}
+
+enum InvoiceKind {
+  /// Facture d'acompte, émise à la signature du devis.
+  DEPOSIT
+  /// Facture de solde, déduction faite des acomptes.
+  BALANCE
+  STANDARD
+  /// Avoir : annule tout ou partie d'une facture émise.
+  CREDIT_NOTE
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  CANCELLED
+}
+
+model Invoice {
+  id                String        @id @default(cuid())
+  /// Numérotation continue, attribuée à l'émission : FAC-2026-0001.
+  number            String?       @unique
+  kind              InvoiceKind   @default(STANDARD)
+  status            InvoiceStatus @default(DRAFT)
+  clientId          String
+  dealId            String?
+  quoteId           String?
+  /// Facture annulée par cet avoir.
+  creditedInvoiceId String?
+  title             String
+  notes             String?
+  issueDate         DateTime?
+  dueDate           DateTime?
+  subtotalCents     Int           @default(0)
+  vatCents          Int           @default(0)
+  totalCents        Int           @default(0)
+  token             String        @unique
+  clientSnapshot    Json?
+  issuerSnapshot    Json?
+  sentAt            DateTime?
+  paidAt            DateTime?
+  cancelledAt       DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  client     Client        @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  deal       Deal?         @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  quote      Quote?        @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  lines      InvoiceLine[]
+  payments   Payment[]
+  activities Activity[]
+
+  @@index([status, dueDate])
+  @@index([clientId])
+  @@map("crm_invoices")
+}
+
+model InvoiceLine {
+  id              String   @id @default(cuid())
+  invoiceId       String
+  position        Int      @default(0)
+  kind            LineKind @default(ITEM)
+  title           String
+  description     String?
+  quantity        Float    @default(1)
+  unit            String?
+  unitPriceCents  Int      @default(0)
+  vatRate         Float    @default(20)
+  discountPercent Float    @default(0)
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId, position])
+  @@map("crm_invoice_lines")
+}
+
+/// Virement reçu, rapproché d'une facture.
+model Payment {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  amountCents Int
+  receivedAt  DateTime
+  method      String   @default("TRANSFER")
+  reference   String?
+  createdAt   DateTime @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@map("crm_payments")
+}
+
+/// Fil d'activité : ce qui s'est passé, et quand.
+model Activity {
+  id        String   @id @default(cuid())
+  type      String
+  message   String
+  clientId  String?
+  dealId    String?
+  quoteId   String?
+  invoiceId String?
+  createdAt DateTime @default(now())
+
+  client  Client?  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  deal    Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  quote   Quote?   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  invoice Invoice? @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, createdAt])
+  @@index([createdAt])
+  @@map("crm_activities")
+}
+
+/// Compteurs de numérotation : une ligne par type de document et par année.
+model DocumentCounter {
+  key   String @id
+  value Int    @default(0)
+
+  @@map("crm_document_counters")
+}
+
+/// Identité de l'entreprise émettrice, reprise sur devis et factures.
+model CompanySettings {
+  id                    String   @id @default("default")
+  tradeName             String   @default("Kalimera")
+  legalName             String?
+  legalForm             String?
+  siren                 String?
+  siret                 String?
+  vatNumber             String?
+  /// Franchise en base : « TVA non applicable, art. 293 B du CGI ».
+  vatExempt             Boolean  @default(false)
+  defaultVatRate        Float    @default(20)
+  addressLine1          String?
+  addressLine2          String?
+  postalCode            String?
+  city                  String?
+  country               String   @default("FR")
+  email                 String?
+  phone                 String?
+  iban                  String?
+  bic                   String?
+  bankName              String?
+  paymentTermsDays      Int      @default(30)
+  quoteValidityDays     Int      @default(30)
+  defaultDepositPercent Int      @default(30)
+  quoteTerms            String?
+  invoiceFooter         String?
+  updatedAt             DateTime @updatedAt
+
+  @@map("crm_company_settings")
+}
+
+/// Règles de la prise de rendez-vous, réglables depuis l'administration.
+model BookingSettings {
+  id              String   @id @default("default")
+  durationMinutes Int      @default(30)
+  stepMinutes     Int      @default(30)
+  bufferMinutes   Int      @default(0)
+  minNoticeHours  Int      @default(12)
+  horizonDays     Int      @default(21)
+  maxPerDay       Int      @default(4)
+  /// Plages par jour de semaine : { "1": [["09:30","12:00"], …], … }.
+  weekly          Json
+  blackoutDates   String[] @default([])
+  /// Adresse iCal secrète d'un agenda externe : ses évènements bloquent les créneaux.
+  busyCalendarUrl String?
+  updatedAt       DateTime @updatedAt
+
+  @@map("crm_booking_settings")
 }

@@ -343,6 +343,74 @@
   }
 
   /* Menu mobile plein écran : le panneau s'ouvre, puis les liens montent. */
+  /* Rendu Markdown des notes du CRM. */
+  .prose-admin {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-ink);
+  }
+  .prose-admin h1,
+  .prose-admin h2,
+  .prose-admin h3 {
+    margin: 1.4em 0 0.4em;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .prose-admin h2 {
+    font-size: 1.0625rem;
+    color: var(--color-aegean-700);
+  }
+  .prose-admin > :first-child {
+    margin-top: 0;
+  }
+  .prose-admin p,
+  .prose-admin ul,
+  .prose-admin ol,
+  .prose-admin blockquote {
+    margin: 0.5em 0;
+  }
+  .prose-admin ul {
+    list-style: disc;
+    padding-left: 1.25em;
+  }
+  .prose-admin ol {
+    list-style: decimal;
+    padding-left: 1.25em;
+  }
+  .prose-admin li:has(> input[type="checkbox"]) {
+    list-style: none;
+    margin-left: -1.25em;
+  }
+  .prose-admin input[type="checkbox"] {
+    margin-right: 0.5em;
+    accent-color: var(--color-aegean-600);
+  }
+  .prose-admin blockquote {
+    border-left: 3px solid var(--color-amber-400, #fbbf24);
+    padding: 0.25em 0 0.25em 0.9em;
+    color: var(--ink-65);
+  }
+  .prose-admin strong {
+    font-weight: 700;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  /* Feuille du menu mobile de l'administration, qui monte du bas. */
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
   @keyframes menu-open {
     from {
       opacity: 0;

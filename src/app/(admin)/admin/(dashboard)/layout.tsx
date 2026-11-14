@@ -14,18 +14,24 @@ export default async function DashboardLayout({
   const user = await requireUser();
   if (!user) redirect("/admin/login");
 
-  const newMessages = await prisma.contactMessage.count({
-    where: { status: "NEW" },
-  });
+  const endOfToday = new Date();
+  endOfToday.setUTCHours(23, 59, 59, 999);
+
+  const [messages, tasks] = await Promise.all([
+    prisma.contactMessage.count({ where: { status: "NEW" } }),
+    // Pastille « Tâches » : ce qui est dû aujourd'hui ou en retard.
+    prisma.task.count({ where: { status: { not: "DONE" }, dueAt: { lte: endOfToday } } }),
+  ]);
 
   return (
     <div className="flex min-h-dvh flex-col lg:flex-row">
       <AdminSidebar
         user={{ name: user.name ?? "", email: user.email ?? "" }}
-        newMessages={newMessages}
+        counts={{ messages, tasks }}
       />
-      <main className="min-w-0 flex-1 px-4 py-6 sm:px-8 sm:py-10">
-        <div className="mx-auto max-w-5xl">{children}</div>
+      {/* En bas sur mobile, la place de la barre de navigation. */}
+      <main className="min-w-0 flex-1 px-4 pt-5 pb-28 sm:px-8 sm:pt-8 lg:py-10">
+        <div className="mx-auto max-w-6xl">{children}</div>
       </main>
     </div>
   );

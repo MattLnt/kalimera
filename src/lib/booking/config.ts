@@ -16,7 +16,7 @@ export const bookingConfig = {
   /** Pas de rendez-vous à moins de ce délai : le temps de préparer l'appel. */
   minNoticeHours: 12,
   /** Jusqu'où le calendrier s'ouvre. */
-  horizonDays: 21,
+  horizonDays: 60,
   /** Au-delà, la journée est considérée comme pleine. */
   maxPerDay: 4,
   /**

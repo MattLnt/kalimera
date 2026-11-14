@@ -1,14 +1,15 @@
-import { CalendarX2, Phone, Video } from "lucide-react";
+import { CalendarX2, Phone, PhoneCall, Video } from "lucide-react";
 import Link from "next/link";
 
 import { cancelBookingAsAdmin } from "./actions";
+import { createNote } from "../notes/actions";
 
 import { AdminHeader, EmptyState, Panel } from "@/components/admin/ui";
 import { bookingConfig } from "@/lib/booking/config";
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
-export const metadata = { title: "Rendez-vous" };
+export const metadata = { title: "Agenda" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminBookingsPage({
@@ -50,7 +51,7 @@ export default async function AdminBookingsPage({
   return (
     <>
       <AdminHeader
-        title="Rendez-vous"
+        title="Agenda"
         subtitle={`Appels réservés depuis la page Rendez-vous. Horaires : heure de Paris, créneaux de ${bookingConfig.durationMinutes} min.`}
       />
 
@@ -117,7 +118,26 @@ export default async function AdminBookingsPage({
                 </div>
 
                 {booking.status === "CONFIRMED" && booking.startsAt >= now ? (
-                  <div className="flex items-center gap-1">
+                  <div className="flex flex-wrap items-center gap-1">
+                    {booking.clientId ? (
+                    <Link
+                      href={`/admin/clients/${booking.clientId}`}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-aegean-50 px-3 py-2 font-display text-xs font-bold text-aegean-700 transition-colors hover:bg-aegean-100"
+                    >
+                      Fiche client
+                    </Link>
+                  ) : null}
+                    {booking.clientId ? (
+                      <form action={createNote}>
+                        <input type="hidden" name="clientId" value={booking.clientId} />
+                        <input type="hidden" name="bookingId" value={booking.id} />
+                        <input type="hidden" name="kind" value="CALL" />
+                        <button type="submit" className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-black/5 px-3 py-2 font-display text-xs font-bold hover:bg-aegean-100">
+                          <PhoneCall className="size-3.5" />
+                          Notes d&apos;appel
+                        </button>
+                      </form>
+                    ) : null}
                     {booking.meetingUrl && booking.mode === "VIDEO" ? (
                       <a
                         href={booking.meetingUrl}

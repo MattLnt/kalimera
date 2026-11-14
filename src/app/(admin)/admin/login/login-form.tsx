@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,6 +19,7 @@ export function LoginForm({
     initialError ? "Identifiants incorrects." : "",
   );
   const [pending, setPending] = useState(false);
+  const [reveal, setReveal] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -63,14 +65,25 @@ export function LoginForm({
         <label htmlFor="password" className="field-label">
           Mot de passe
         </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          autoComplete="current-password"
-          className="field-input"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            name="password"
+            type={reveal ? "text" : "password"}
+            required
+            autoComplete="current-password"
+            className="field-input pr-12"
+          />
+          <button
+            type="button"
+            onClick={() => setReveal((value) => !value)}
+            aria-label={reveal ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+            aria-pressed={reveal}
+            className="absolute inset-y-0 right-1.5 my-auto grid size-9 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] transition-colors hover:bg-black/5 hover:text-ink"
+          >
+            {reveal ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
+        </div>
       </div>
 
       {error ? (

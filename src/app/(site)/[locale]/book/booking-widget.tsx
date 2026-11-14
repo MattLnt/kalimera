@@ -4,6 +4,8 @@ import {
   ArrowLeft,
   CalendarCheck2,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Phone,
   Video,
@@ -328,16 +330,32 @@ function Calendar({
   onSelect: (date: string) => void;
   fmt: Formatters;
 }) {
-  if (days.length === 0) return null;
-
   const toDate = (value: string) => new Date(`${value}T00:00:00Z`);
   const byDate = new Map(days.map((day) => [day.date, day]));
 
-  // Démarre au lundi de la première semaine, finit au dimanche de la dernière.
-  const first = toDate(days[0].date);
+  // Les mois couverts par l'horizon de réservation, « 2026-11 », « 2026-12 »…
+  const months = Array.from(new Set(days.map((day) => day.date.slice(0, 7))));
+  const [month, setMonth] = useState(() => (selected ?? days[0]?.date ?? "").slice(0, 7));
+  const index = Math.max(0, months.indexOf(month));
+
+  if (days.length === 0) return null;
+
+  // Change de mois et sélectionne son premier jour ouvert : l'écran des
+  // heures ne reste jamais sur un jour d'un autre mois.
+  const goTo = (target: number) => {
+    const next = months[target];
+    if (!next) return;
+    setMonth(next);
+    const firstOpen = days.find((day) => day.date.startsWith(next) && day.slots.length > 0);
+    if (firstOpen) onSelect(firstOpen.date);
+  };
+
+  // La grille couvre le mois entier, du lundi de la première semaine au
+  // dimanche de la dernière.
+  const first = toDate(`${months[index]}-01`);
   const start = new Date(first);
-  start.setUTCDate(first.getUTCDate() - ((first.getUTCDay() + 6) % 7));
-  const last = toDate(days[days.length - 1].date);
+  start.setUTCDate(1 - ((first.getUTCDay() + 6) % 7));
+  const last = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 0));
   const end = new Date(last);
   end.setUTCDate(last.getUTCDate() + (6 - ((last.getUTCDay() + 6) % 7)));
 
@@ -346,13 +364,28 @@ function Calendar({
     cells.push(cursor.toISOString().slice(0, 10));
   }
 
-  const months = Array.from(new Set(days.map((day) => fmt.month.format(toDate(day.date)))));
+  const navButton =
+    "grid size-9 cursor-pointer place-items-center rounded-full text-aegean-700 transition-colors hover:bg-aegean-50 disabled:cursor-not-allowed disabled:text-[var(--ink-45)] disabled:opacity-30 disabled:hover:bg-transparent";
 
   return (
     <div>
-      <p className="mb-4 text-[0.9375rem] text-[var(--ink-65)] first-letter:uppercase">
-        {months.join(" – ")}
-      </p>
+      <div className="mb-4 flex items-center gap-2">
+        <p className="flex-1 font-display text-[1rem] font-bold tracking-[-0.01em] first-letter:uppercase" aria-live="polite">
+          {fmt.month.format(first)}
+        </p>
+        <button type="button" onClick={() => goTo(index - 1)} disabled={index === 0} aria-label="Mois précédent" className={navButton}>
+          <ChevronLeft className="size-5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => goTo(index + 1)}
+          disabled={index >= months.length - 1}
+          aria-label="Mois suivant"
+          className={navButton}
+        >
+          <ChevronRight className="size-5" />
+        </button>
+      </div>
       <div className="grid grid-cols-7 gap-1.5 text-center">
         {cells.slice(0, 7).map((date) => (
           <span
@@ -363,10 +396,13 @@ function Calendar({
           </span>
         ))}
         {cells.map((date) => {
-          const day = byDate.get(date);
+          // Jours d'un autre mois : cases vides, pour garder la grille alignée.
+          const outside = !date.startsWith(months[index]);
+          const day = outside ? undefined : byDate.get(date);
           const open = Boolean(day && day.slots.length > 0);
           const isSelected = date === selected;
           const dayNumber = Number(date.slice(8));
+          const inMonthPast = !outside && !day;
 
           return (
             <button
@@ -378,18 +414,13 @@ function Calendar({
               aria-label={fmt.dayLong.format(toDate(date))}
               className={cn(
                 "relative grid aspect-square place-items-center rounded-full font-display text-[0.9375rem] font-bold transition-colors",
-                !day && "invisible",
+                outside && "invisible",
                 open && !isSelected && "cursor-pointer bg-aegean-50 text-aegean-700 hover:bg-aegean-100",
                 isSelected && "bg-aegean-600 text-white shadow-[0_8px_20px_-8px_rgba(21,98,184,0.7)]",
-                day && !open && "cursor-not-allowed text-[var(--ink-45)] opacity-40",
+                (inMonthPast || (day && !open)) && "cursor-not-allowed text-[var(--ink-45)] opacity-40",
               )}
             >
               {dayNumber}
-              {dayNumber === 1 ? (
-                <span className="absolute -top-1 text-[0.5625rem] font-bold tracking-wide uppercase opacity-70">
-                  {fmt.monthShort.format(toDate(date)).replace(".", "")}
-                </span>
-              ) : null}
             </button>
           );
         })}

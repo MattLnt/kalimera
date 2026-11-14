@@ -93,6 +93,14 @@ export default async function AdminMessagesPage({
                 </div>
 
                 <div className="flex items-center gap-1">
+                  {message.clientId ? (
+                    <Link
+                      href={`/admin/clients/${message.clientId}`}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-aegean-50 px-3 py-2 font-display text-xs font-bold text-aegean-700 transition-colors hover:bg-aegean-100"
+                    >
+                      Fiche client
+                    </Link>
+                  ) : null}
                   {message.status === "NEW" ? (
                     <form action={markMessageRead}>
                       <input type="hidden" name="id" value={message.id} />

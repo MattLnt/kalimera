@@ -156,3 +156,111 @@ export function Field({
     </div>
   );
 }
+
+/** Pastille colorée : statut, étape, type. Tons définis dans lib/crm/labels. */
+export function Pill({
+  className,
+  dot,
+  children,
+}: {
+  className: string;
+  dot?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-display text-[0.6875rem] font-bold whitespace-nowrap",
+        className,
+      )}
+    >
+      {dot ? <span className={cn("size-1.5 rounded-full", dot)} /> : null}
+      {children}
+    </span>
+  );
+}
+
+/** Chiffre clé du tableau de bord. */
+export function StatCard({
+  label,
+  value,
+  hint,
+  icon,
+  href,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  icon?: React.ReactNode;
+  href?: string;
+}) {
+  const body = (
+    <>
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-display text-[0.75rem] font-bold text-[var(--ink-45)]">{label}</span>
+        {icon ? (
+          <span className="grid size-8 place-items-center rounded-[10px] bg-aegean-50 text-aegean-700">{icon}</span>
+        ) : null}
+      </div>
+      <p className="mt-2 font-display text-[1.625rem] leading-none font-extrabold tracking-[-0.04em]">{value}</p>
+      {hint ? <p className="mt-2 text-[0.8125rem] text-[var(--ink-45)]">{hint}</p> : null}
+    </>
+  );
+  return href ? (
+    <Link href={href} className="surface-card surface-card-hover flex h-full flex-col p-5">
+      {body}
+    </Link>
+  ) : (
+    <div className="surface-card flex h-full flex-col p-5">{body}</div>
+  );
+}
+
+/** Onglets de filtre, en pastilles. */
+export function FilterTabs({ tabs }: { tabs: { href: string; label: string; active: boolean; count?: number }[] }) {
+  return (
+    <div className="mb-5 flex max-w-full gap-1 overflow-x-auto rounded-full bg-black/5 p-1 [scrollbar-width:none] sm:inline-flex">
+      {tabs.map((tab) => (
+        <Link
+          key={tab.href}
+          href={tab.href}
+          className={cn(
+            "flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 font-display text-sm font-bold whitespace-nowrap transition-colors",
+            tab.active ? "bg-white text-aegean-700 shadow-soft" : "text-[var(--ink-45)] hover:text-ink",
+          )}
+        >
+          {tab.label}
+          {tab.count !== undefined ? (
+            <span className={cn("rounded-full px-1.5 text-[0.6875rem]", tab.active ? "bg-aegean-100" : "bg-black/5")}>
+              {tab.count}
+            </span>
+          ) : null}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+/** Bouton d'action principal des pages d'administration. */
+export function ActionLink({
+  href,
+  children,
+  variant = "primary",
+}: {
+  href: string;
+  children: React.ReactNode;
+  variant?: "primary" | "secondary";
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full px-4 py-2.5 font-display text-sm font-bold transition-colors",
+        variant === "primary"
+          ? "bg-aegean-600 text-white shadow-[0_8px_20px_-10px_rgba(21,98,184,0.8)] hover:bg-aegean-700"
+          : "bg-white text-ink shadow-soft hover:bg-aegean-50",
+      )}
+    >
+      {children}
+    </Link>
+  );
+}

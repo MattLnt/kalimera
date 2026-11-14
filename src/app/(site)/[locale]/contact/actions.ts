@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { Locale as DbLocale } from "@/generated/prisma/enums";
 import { sendEnquiryConfirmation, sendEnquiryNotification } from "@/lib/email";
+import { linkInboundClient } from "@/lib/crm/intake";
 import { prisma } from "@/lib/prisma";
 
 export type ContactState = {
@@ -90,7 +91,7 @@ export async function submitEnquiry(
   const data = parsed.data;
 
   try {
-    await prisma.contactMessage.create({
+    const created = await prisma.contactMessage.create({
       data: {
         name: data.name,
         email: data.email.toLowerCase(),
@@ -102,6 +103,18 @@ export async function submitEnquiry(
         locale: locale.toUpperCase() as DbLocale,
       },
     });
+    // Fiche client retrouvée ou créée : la demande apparaît dans le CRM.
+    const clientId = await linkInboundClient({
+      name: data.name,
+      email: data.email,
+      company: data.company || null,
+      phone: data.phone || null,
+      source: "Formulaire de contact",
+      activity: `Demande reçue : ${data.subject}`,
+    });
+    if (clientId) {
+      await prisma.contactMessage.update({ where: { id: created.id }, data: { clientId } }).catch(() => null);
+    }
   } catch (error) {
     console.error("[contact] enregistrement impossible", error);
     return { status: "error", errors: { form: t("rateLimit") } };

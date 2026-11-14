@@ -13,6 +13,7 @@ import {
 } from "@/lib/booking/emails";
 import { bookUrl, getBusy, meetingUrlFor, newToken, toEmail } from "@/lib/booking/service";
 import { isSlotAvailable } from "@/lib/booking/slots";
+import { linkInboundClient } from "@/lib/crm/intake";
 import { redirect } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
@@ -169,6 +170,19 @@ export async function bookCall(_previous: BookingState, formData: FormData): Pro
   }
 
   // Le rendez-vous est enregistré : un e-mail qui échoue ne le perd pas.
+  // Fiche client retrouvée ou créée, pour retrouver l'appel dans le CRM.
+  const clientId = await linkInboundClient({
+    name: booking.name,
+    email: booking.email,
+    company: booking.company,
+    phone: booking.phone,
+    source: "Rendez-vous en ligne",
+    activity: "Appel réservé en ligne",
+  });
+  if (clientId) {
+    await prisma.booking.update({ where: { id: booking.id }, data: { clientId } }).catch(() => null);
+  }
+
   const email = toEmail(booking);
   await Promise.allSettled([sendBookingConfirmation(email), sendBookingNotification(email)]);
 
