@@ -21,7 +21,8 @@ export type DocIssuer = {
   bic?: string | null;
 };
 
-export type DocClient = { name: string; addressLines: string[] };
+/** `idLines` : numéro d'entreprise et de TVA, imprimés en gris sous l'adresse. */
+export type DocClient = { name: string; addressLines: string[]; idLines?: string[] };
 
 export type DocLine = { title: string; description?: string | null; amountCents: number };
 
@@ -210,11 +211,13 @@ function header(doc: Doc, docType: string, extraDate = "") {
 
 function clientBlock(client: DocClient) {
   const value = [client.name, ...client.addressLines].map(esc).join("<br>");
+  const ids = (client.idLines ?? []).map(esc).join("<br>");
   return `
     <div class="info-blocks">
       <div class="info-block">
         <div class="info-label">Client</div>
         <div class="info-value">${value}</div>
+        ${ids ? `<div class="info-label" style="margin-top:4px;line-height:1.6;">${ids}</div>` : ""}
       </div>
     </div>`;
 }

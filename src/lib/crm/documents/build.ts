@@ -22,15 +22,38 @@ export function issuerSnapshot(issuer: Issuer): DocIssuer {
 }
 
 /** Le client tel qu'il s'imprime : nom seul si `printAddress` est faux. */
+const countries: Record<string, string> = {
+  FR: "France",
+  BE: "Belgique",
+  LU: "Luxembourg",
+  CH: "Suisse",
+  ES: "Espagne",
+  US: "États-Unis",
+};
+
+/**
+ * Le client tel qu'il s'imprime : nom, adresse, puis numéro d'entreprise et
+ * de TVA. Avec `printAddress` à faux, le nom seul (cas des sous-traitances).
+ * Le pays n'est imprimé que hors de France, en toutes lettres.
+ */
 export function clientSnapshot(client: Client): DocClient {
   const name = client.legalName || client.name;
   if (!client.printAddress) return { name, addressLines: [] };
   const cityLine = [client.postalCode, client.city].filter(Boolean).join(" ");
+  const country = client.country && client.country !== "FR" && client.country !== "OTHER" ? (countries[client.country] ?? client.country) : null;
+  const vat = client.vatNumber?.trim();
+  const company = client.siren?.trim();
   return {
     name,
-    addressLines: [client.addressLine1, client.addressLine2, cityLine, client.country !== "FR" ? client.country : null].filter(
+    addressLines: [client.addressLine1, client.addressLine2, cityLine, country].filter(
       (line): line is string => Boolean(line && line.trim()),
     ),
+    idLines: [
+      // Un numéro d'entreprise belge est souvent le numéro de TVA sans « BE » :
+      // on ne l'imprime pas deux fois.
+      company && !(vat && vat.replace(/\W/g, "").endsWith(company.replace(/\W/g, ""))) ? `N° d'entreprise : ${company}` : null,
+      vat ? `N° de TVA : ${vat}` : null,
+    ].filter((line): line is string => Boolean(line)),
   };
 }
 
