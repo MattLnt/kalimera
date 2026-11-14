@@ -44,3 +44,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# Documents internes : données personnelles et de facturation, jamais versionnés.
+docs/private/
