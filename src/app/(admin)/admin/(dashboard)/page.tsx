@@ -108,7 +108,6 @@ export default async function AdminHomePage() {
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard
-            tone="dark"
             label="En négociation"
             value={formatMoneyShort(pipeline)}
             hint={`Pondéré : ${formatMoneyShort(weighted)}`}
@@ -116,7 +115,6 @@ export default async function AdminHomePage() {
             href="/admin/deals"
           />
           <StatCard
-            tone="dark"
             label="Devis en attente"
             value={formatMoneyShort(pendingTotal)}
             hint={`${pendingQuotes.length} devis à signer`}
@@ -124,7 +122,6 @@ export default async function AdminHomePage() {
             href="/admin/quotes"
           />
           <StatCard
-            tone="dark"
             label="À encaisser"
             value={formatMoneyShort(due)}
             hint={overdue.length ? `${overdue.length} facture${overdue.length > 1 ? "s" : ""} en retard` : "Aucun retard"}
@@ -132,7 +129,6 @@ export default async function AdminHomePage() {
             href="/admin/invoices"
           />
           <StatCard
-            tone="dark"
             label="Encaissé ce mois"
             value={formatMoneyShort(paymentsThisMonth._sum.amountCents ?? 0)}
             icon={<Wallet className="size-4" />}

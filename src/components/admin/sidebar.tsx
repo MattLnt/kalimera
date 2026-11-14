@@ -28,7 +28,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/site/logo";
-import { Arches } from "@/components/ui/decor";
 import { cn } from "@/lib/utils";
 
 type Item = { href: string; label: string; icon: LucideIcon; exact?: boolean; badge?: "messages" | "tasks" };
@@ -131,14 +130,8 @@ export function AdminSidebar({
   return (
     <>
       {/* ------------------------------------------------ ordinateur */}
-      <aside className="sticky top-0 hidden h-dvh w-[280px] shrink-0 p-3 lg:block">
-        <div className="night-panel relative isolate flex h-full flex-col overflow-hidden rounded-[30px] shadow-lift">
-          <span
-            aria-hidden
-            className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-[radial-gradient(circle,rgba(98,169,242,0.45),transparent_68%)]"
-          />
-          <Arches count={4} className="h-[38%] opacity-60" />
-          <span aria-hidden className="grain-layer" />
+      <aside className="sticky top-0 z-1 hidden h-dvh w-[260px] shrink-0 lg:block">
+        <div className="relative flex h-full flex-col">
 
           <Link
             href="/admin"
@@ -227,8 +220,7 @@ export function AdminSidebar({
       </aside>
 
       {/* ------------------------------------------------ téléphone : en-tête */}
-      <header className="night-panel sticky top-0 z-30 flex items-center gap-2 overflow-hidden px-4 py-3.5 lg:hidden">
-        <span aria-hidden className="grain-layer" />
+      <header className="relative z-1 flex items-center gap-2 px-4 py-3.5 lg:hidden">
         <Link href="/admin" className="relative flex items-center gap-2 font-display text-base font-extrabold tracking-[-0.04em] text-white">
           <Logo id="logo-admin-mobile" />
           Kalimera

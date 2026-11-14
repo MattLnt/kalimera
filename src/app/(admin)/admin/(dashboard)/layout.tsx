@@ -24,13 +24,17 @@ export default async function DashboardLayout({
   ]);
 
   return (
-    <div className="flex min-h-dvh flex-col lg:flex-row">
+    // Le dégradé bleu du site encadre toute l'administration : la barre
+    // latérale est posée dessus, sur toute la hauteur, et le contenu est une
+    // grande surface claire bordée par ce bleu.
+    <div className="night-panel relative isolate flex min-h-dvh flex-col bg-fixed lg:flex-row">
+      <span aria-hidden className="grain-layer fixed! z-0" />
       <AdminSidebar
         user={{ name: user.name ?? "", email: user.email ?? "" }}
         counts={{ messages, tasks }}
       />
       {/* En bas sur mobile, la place de la barre de navigation. */}
-      <main className="min-w-0 flex-1 px-4 pt-5 pb-28 sm:px-8 sm:pt-8 lg:py-10">
+      <main className="relative z-1 min-w-0 flex-1 rounded-t-[26px] bg-canvas px-4 pt-6 pb-28 text-ink sm:px-8 sm:pt-8 lg:my-3 lg:mr-3 lg:rounded-[26px] lg:py-10 lg:shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_30px_60px_-30px_rgba(0,0,0,0.6)]">
         <div className="mx-auto max-w-6xl">{children}</div>
       </main>
     </div>

@@ -3,13 +3,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /**
- * En-tête de page d'administration : titre, sous-titre et action à droite.
- *
- * Sur une page principale (sans lien retour), c'est un bandeau bleu nuit —
- * le panneau sombre du site, avec son grain et son arche. Les fiches de
- * détail gardent un en-tête clair, plus discret, sous leur lien retour.
- * `children` se place dans le bandeau, sous le titre : les chiffres du
- * tableau de bord, par exemple.
+ * En-tête de page d'administration : pastille facultative, titre,
+ * sous-titre, action à droite ; `children` se place dessous (chiffres clés).
  */
 export function AdminHeader({
   title,
@@ -26,37 +21,6 @@ export function AdminHeader({
   eyebrow?: string;
   children?: React.ReactNode;
 }) {
-  if (!back) {
-    return (
-      <header className="night-panel relative isolate mb-6 overflow-hidden rounded-[30px] px-6 py-7 shadow-lift sm:px-9 sm:py-9">
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -top-28 right-[-6%] size-[26rem] rounded-full bg-[radial-gradient(circle,rgba(98,169,242,0.4),transparent_68%)]"
-        />
-        <span aria-hidden className="arch-deco" style={{ width: "26%", right: "-4%", bottom: "-70%" }} />
-        <span aria-hidden className="grain-layer" />
-        <div className="relative z-2 flex flex-wrap items-end justify-between gap-5">
-          <div className="min-w-0">
-            {eyebrow ? (
-              <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-3.5 pl-2.5 font-display text-[0.6875rem] font-semibold text-white backdrop-blur-sm">
-                <span aria-hidden className="size-[7px] rounded-full bg-aegean-400" />
-                {eyebrow}
-              </span>
-            ) : null}
-            <h1 className="font-display text-[clamp(1.75rem,3.2vw,2.5rem)] leading-[1.05] font-extrabold tracking-[-0.045em] text-white">
-              {title}
-            </h1>
-            {subtitle ? (
-              <p className="mt-2 max-w-[60ch] text-[0.9375rem] text-white/65 first-letter:uppercase">{subtitle}</p>
-            ) : null}
-          </div>
-          {action}
-        </div>
-        {children ? <div className="relative z-2 mt-7">{children}</div> : null}
-      </header>
-    );
-  }
-
   return (
     <header className="mb-7">
       {back ? (
@@ -67,15 +31,22 @@ export function AdminHeader({
           ← {back.label}
         </Link>
       ) : null}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
+          {eyebrow ? (
+            <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-aegean-100 py-1.5 pr-3.5 pl-2.5 font-display text-[0.6875rem] font-semibold text-aegean-700">
+              <span aria-hidden className="size-[7px] rounded-full bg-aegean-500" />
+              {eyebrow}
+            </span>
+          ) : null}
           <h1 className="display-3">{title}</h1>
           {subtitle ? (
-            <p className="mt-1.5 text-[0.9375rem] text-[var(--ink-65)]">{subtitle}</p>
+            <p className="mt-1.5 text-[0.9375rem] text-[var(--ink-65)] first-letter:uppercase">{subtitle}</p>
           ) : null}
         </div>
         {action}
       </div>
+      {children ? <div className="mt-6">{children}</div> : null}
     </header>
   );
 }
