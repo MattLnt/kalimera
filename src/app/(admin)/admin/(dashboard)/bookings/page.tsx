@@ -109,10 +109,10 @@ export default async function AgendaPage({ searchParams }: { searchParams: Promi
 }
 
 const eventStyles: Record<CalendarEvent["kind"], string> = {
-  video: "bg-[#EFE8FC] text-[#4B2399] shadow-[inset_3px_0_0_#7C4DDB]",
-  phone: "bg-[#FDEBD9] text-[#8A4204] shadow-[inset_3px_0_0_#E8740C]",
-  block: "bg-[repeating-linear-gradient(135deg,#EEF1F5_0_6px,#E3E8EF_6px_12px)] text-[#3B4A5E] shadow-[inset_3px_0_0_#64748B]",
-  external: "bg-[#E4F0FD] text-[#0E4A8C] shadow-[inset_3px_0_0_#2A86E8]",
+  video: "bg-[#E3EFFC] text-[#155399] shadow-[inset_3px_0_0_#1F7AE0]",
+  phone: "bg-[#E3EFFC] text-[#155399] shadow-[inset_3px_0_0_#1F7AE0]",
+  block: "bg-[repeating-linear-gradient(135deg,#EEF1F5_0_6px,#E3E8EF_6px_12px)] text-[#475569] shadow-[inset_3px_0_0_#64748B]",
+  external: "bg-white text-[#475569] shadow-[inset_0_0_0_1px_#CBD5E1,inset_3px_0_0_#64748B]",
 };
 
 async function WeekView({ week, now, config }: { week?: string; now: Date; config: Rules }) {
@@ -295,10 +295,9 @@ async function WeekView({ week, now, config }: { week?: string; now: Date; confi
 
         <footer className="flex flex-wrap gap-x-5 gap-y-2 border-t border-[#EDF1F6] px-5 py-3 text-[0.75rem] font-semibold text-[var(--ink-65)]">
           <Legend className="bg-[#EEF6FF] ring-1 ring-[#CFE2F8]" label="Ouvert à la réservation" />
-          <Legend className="bg-[#7C4DDB]" label="Appel visio" />
-          <Legend className="bg-[#E8740C]" label="Appel téléphone" />
+          <Legend className="bg-[#1F7AE0]" label="Appel réservé" />
           <Legend className="bg-[#64748B]" label="Bloqué à la main" />
-          <Legend className="bg-[#2A86E8]" label="Mon agenda" />
+          <Legend className="bg-white ring-1 ring-[#94A3B8]" label="Mon agenda" />
         </footer>
       </section>
 
@@ -310,7 +309,7 @@ async function WeekView({ week, now, config }: { week?: string; now: Date; confi
             <ul className="grid gap-2">
               {upcoming.map((booking) => (
                 <li key={booking.id} className="flex items-center gap-3 rounded-[14px] bg-[#F5F8FC] p-3">
-                  <span className={cn("grid size-9 shrink-0 place-items-center rounded-[11px] text-white", booking.mode === "VIDEO" ? "bg-[#7C4DDB]" : "bg-[#E8740C]")}>
+                  <span className={cn("grid size-9 shrink-0 place-items-center rounded-[11px] text-white", "bg-[#1F7AE0]")}>
                     {booking.mode === "VIDEO" ? <Video className="size-4" /> : <Phone className="size-4" />}
                   </span>
                   <span className="min-w-0 flex-1">

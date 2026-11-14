@@ -148,7 +148,7 @@ export default async function AdminHomePage() {
             icon={<BriefcaseBusiness className="size-4" />}
             href="/admin/deals"
           />
-          <StatCard color="violet"
+          <StatCard color="orange"
             label="Devis en attente"
             value={formatMoneyShort(pendingTotal)}
             chip={`${pendingQuotes.length} devis`}

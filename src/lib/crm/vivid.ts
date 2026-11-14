@@ -1,82 +1,86 @@
 /**
- * Couleurs vives des statuts, étapes et priorités — l'élément qui se lit
- * d'un coup d'œil dans un tableau. Le reste de l'interface garde le bleu
- * Kalimera. Teintes assez soutenues pour un texte blanc en gras lisible.
+ * Couleurs des statuts : cinq couleurs, un seul sens, partout dans l'admin.
+ *
+ * - gris  : pas commencé, brouillon, classé
+ * - bleu  : en cours, de notre côté
+ * - ambre : en attente du client, à surveiller
+ * - vert  : gagné, fait, payé
+ * - rouge : problème, perdu, en retard
+ *
+ * Deux statuts peuvent partager une couleur : c'est le sens qui compte, le
+ * libellé fait la différence.
  */
 
 export type VividOption = { value: string; label: string; color: string };
 
-const slate = "#64748B";
-const gray = "#9CA3AF";
-const sky = "#0284C7";
-const amber = "#D97706";
-const orange = "#EA580C";
-const emerald = "#059669";
-const violet = "#7C3AED";
-const fuchsia = "#C026D3";
-const green = "#16A34A";
-const teal = "#0D9488";
-const rose = "#E11D48";
-const indigo = "#4F46E5";
+export const statusColors = {
+  neutral: "#64748B",
+  active: "#1F7AE0",
+  waiting: "#D97706",
+  done: "#059669",
+  problem: "#DC2626",
+} as const;
+
+const { neutral, active, waiting, done, problem } = statusColors;
 
 export const dealStageOptions: VividOption[] = [
-  { value: "LEAD", label: "Piste", color: slate },
-  { value: "DISCOVERY", label: "Découverte", color: sky },
-  { value: "PROPOSAL", label: "Devis envoyé", color: amber },
-  { value: "NEGOTIATION", label: "Négociation", color: orange },
-  { value: "WON", label: "Signé", color: emerald },
-  { value: "IN_PROGRESS", label: "En production", color: violet },
-  { value: "REVIEW", label: "Recette", color: fuchsia },
-  { value: "DELIVERED", label: "Livré", color: green },
-  { value: "MAINTENANCE", label: "Maintenance", color: teal },
-  { value: "LOST", label: "Perdu", color: rose },
+  { value: "LEAD", label: "Piste", color: neutral },
+  { value: "DISCOVERY", label: "Découverte", color: active },
+  { value: "PROPOSAL", label: "Devis envoyé", color: waiting },
+  { value: "NEGOTIATION", label: "Négociation", color: waiting },
+  { value: "WON", label: "Signé", color: done },
+  { value: "IN_PROGRESS", label: "En production", color: active },
+  { value: "REVIEW", label: "Recette", color: waiting },
+  { value: "DELIVERED", label: "Livré", color: done },
+  { value: "MAINTENANCE", label: "Maintenance", color: done },
+  { value: "LOST", label: "Perdu", color: problem },
 ];
 
 export const taskStatusOptions: VividOption[] = [
-  { value: "TODO", label: "À faire", color: slate },
-  { value: "DOING", label: "En cours", color: amber },
-  { value: "DONE", label: "Fait", color: emerald },
+  { value: "TODO", label: "À faire", color: neutral },
+  { value: "DOING", label: "En cours", color: active },
+  { value: "DONE", label: "Fait", color: done },
 ];
 
 export const taskPriorityOptions: VividOption[] = [
-  { value: "LOW", label: "Basse", color: sky },
-  { value: "NORMAL", label: "Normale", color: indigo },
-  { value: "HIGH", label: "Haute", color: rose },
+  { value: "LOW", label: "Basse", color: neutral },
+  { value: "NORMAL", label: "Normale", color: active },
+  { value: "HIGH", label: "Haute", color: problem },
 ];
 
 export const clientStatusOptions: VividOption[] = [
-  { value: "LEAD", label: "Piste", color: slate },
-  { value: "PROSPECT", label: "Prospect", color: amber },
-  { value: "ACTIVE", label: "Client actif", color: emerald },
-  { value: "PAST", label: "Ancien client", color: sky },
-  { value: "ARCHIVED", label: "Archivé", color: gray },
+  { value: "LEAD", label: "Piste", color: neutral },
+  { value: "PROSPECT", label: "Prospect", color: active },
+  { value: "ACTIVE", label: "Client actif", color: done },
+  { value: "PAST", label: "Ancien client", color: neutral },
+  { value: "ARCHIVED", label: "Archivé", color: neutral },
 ];
 
 export const quoteStatusOptions: VividOption[] = [
-  { value: "DRAFT", label: "Brouillon", color: slate },
-  { value: "SENT", label: "Envoyé", color: sky },
-  { value: "VIEWED", label: "Consulté", color: violet },
-  { value: "SIGNED", label: "Accepté", color: emerald },
-  { value: "DECLINED", label: "Refusé", color: rose },
-  { value: "EXPIRED", label: "Expiré", color: orange },
-  { value: "CANCELLED", label: "Annulé", color: gray },
+  { value: "DRAFT", label: "Brouillon", color: neutral },
+  { value: "SENT", label: "Envoyé", color: waiting },
+  { value: "VIEWED", label: "Consulté", color: waiting },
+  { value: "SIGNED", label: "Accepté", color: done },
+  { value: "DECLINED", label: "Refusé", color: problem },
+  { value: "EXPIRED", label: "Expiré", color: problem },
+  { value: "CANCELLED", label: "Annulé", color: neutral },
 ];
 
 export const invoiceStateOptions: VividOption[] = [
-  { value: "DRAFT", label: "Brouillon", color: slate },
-  { value: "ISSUED", label: "À encaisser", color: amber },
-  { value: "PARTIAL", label: "Partiel", color: sky },
-  { value: "OVERDUE", label: "En retard", color: rose },
-  { value: "PAID", label: "Payée", color: emerald },
-  { value: "CANCELLED", label: "Annulée", color: gray },
+  { value: "DRAFT", label: "Brouillon", color: neutral },
+  { value: "ISSUED", label: "À encaisser", color: waiting },
+  { value: "PARTIAL", label: "Partiel", color: waiting },
+  { value: "OVERDUE", label: "En retard", color: problem },
+  { value: "PAID", label: "Payée", color: done },
+  { value: "CANCELLED", label: "Annulée", color: neutral },
 ];
 
 export const messageStatusOptions: VividOption[] = [
-  { value: "NEW", label: "Nouvelle", color: sky },
-  { value: "READ", label: "Traitée", color: emerald },
-  { value: "ARCHIVED", label: "Archivée", color: gray },
+  { value: "NEW", label: "Nouvelle", color: active },
+  { value: "READ", label: "Lue", color: neutral },
+  { value: "ARCHIVED", label: "Archivée", color: neutral },
 ];
 
 export function optionOf(options: VividOption[], value: string | null | undefined) {
-  return options.find((option) => option.value === value) ?? { value: value ?? "", label: value ?? "—", color: gray };
+  return options.find((option) => option.value === value) ?? { value: value ?? "", label: value ?? "—", color: neutral };
 }

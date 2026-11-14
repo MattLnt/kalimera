@@ -134,7 +134,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
       <ol className="mt-3 grid gap-3 text-[0.8125rem]">
         <TimelineItem color="var(--color-aegean-500)" title="Cette demande" date={dayFmt.format(selected.createdAt)} />
         {bookings.map((booking) => (
-          <TimelineItem key={booking.id} color="#7C3AED" title={booking.cancelledAt ? "Appel annulé" : "Appel réservé"} date={dayFmt.format(booking.startsAt)} />
+          <TimelineItem key={booking.id} color="var(--color-aegean-500)" title={booking.cancelledAt ? "Appel annulé" : "Appel réservé"} date={dayFmt.format(booking.startsAt)} />
         ))}
         {previous.map((message) => (
           <li key={message.id}>
@@ -236,7 +236,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                             <span className="mt-0.5 block truncate text-[0.8125rem] text-[var(--ink-45)]">{message.message}</span>
                             {message.clientId || message.status === "ARCHIVED" ? (
                               <span className="mt-1.5 flex gap-1.5">
-                                {message.clientId ? <Pill option={{ label: "Fiche client", color: "#059669" }} /> : null}
+                                {message.clientId ? <Pill option={{ label: "Fiche client", color: "#64748B" }} /> : null}
                                 {message.status === "ARCHIVED" ? <Pill option={optionOf(messageStatusOptions, "ARCHIVED")} /> : null}
                               </span>
                             ) : null}
@@ -298,12 +298,12 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
               <span className="text-[0.75rem] text-white/75">Dans votre messagerie</span>
             </a>
             {client ? (
-              <ActionCard href={`/admin/clients/${client.id}`} icon={<UserRound className="size-5 text-emerald-600" />} title="Voir la fiche" hint={client.name} />
+              <ActionCard href={`/admin/clients/${client.id}`} icon={<UserRound className="size-5 text-aegean-600" />} title="Voir la fiche" hint={client.name} />
             ) : (
               <form action={createClientFromMessage} className="contents">
                 <input type="hidden" name="id" value={selected.id} />
                 <button type="submit" className="flex cursor-pointer flex-col gap-2 rounded-[18px] bg-white p-4 text-left shadow-[0_0_0_1px_#DFE6EF] transition-transform hover:-translate-y-0.5">
-                  <UserPlus className="size-5 text-emerald-600" />
+                  <UserPlus className="size-5 text-aegean-600" />
                   <span className="font-display text-[0.9375rem] font-extrabold">Créer le client</span>
                   <span className="text-[0.75rem] text-[var(--ink-45)]">Fiche pré-remplie</span>
                 </button>
@@ -311,14 +311,14 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
             )}
             <ActionCard
               href={`mailto:${selected.email}?subject=${encodeURIComponent("Prenons rendez-vous")}&body=${encodeURIComponent(`Bonjour ${selected.name.split(/\s+/)[0]},\n\nMerci pour votre message. Choisissez le créneau qui vous convient pour en parler :\n${bookingUrl}\n\nÀ très vite,\nMatiaz — Kalimera`)}`}
-              icon={<CalendarPlus className="size-5 text-violet-600" />}
+              icon={<CalendarPlus className="size-5 text-aegean-600" />}
               title="Proposer un appel"
               hint="E-mail avec le lien de réservation"
             />
             <ActionCard
               href={client ? `/admin/deals/new?clientId=${client.id}` : "#"}
               disabled={!client}
-              icon={<BriefcaseBusiness className="size-5 text-orange-600" />}
+              icon={<BriefcaseBusiness className="size-5 text-aegean-600" />}
               title="Ouvrir un projet"
               hint={client ? "Puis un devis" : "Créez d'abord la fiche"}
             />

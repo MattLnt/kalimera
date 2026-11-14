@@ -228,14 +228,16 @@ export function Pill({
  * Chiffre clé : tuile d'icône en dégradé, valeur affirmée, précision et
  * tendance facultative. `tone="dark"` reste disponible pour un fond bleu nuit.
  */
-/** Couleurs franches des indicateurs : une couleur = un sens, partout. */
+/**
+ * Couleurs des indicateurs, les mêmes que les statuts : bleu = en cours,
+ * orange = en attente, vert = acquis, rouge = problème, gris = neutre.
+ */
 const statColors = {
-  blue: { tile: "#2A86E8", soft: "#E4F0FD", ink: "#0E4A8C" },
-  violet: { tile: "#7C4DDB", soft: "#EFE8FC", ink: "#5B2FB8" },
-  orange: { tile: "#E8740C", soft: "#FDEBD9", ink: "#9A4A05" },
-  green: { tile: "#12A06A", soft: "#DDF5EB", ink: "#0B6B47" },
-  red: { tile: "#D63A3A", soft: "#FDE3E3", ink: "#A31919" },
-  slate: { tile: "#52627A", soft: "#E9EEF4", ink: "#334155" },
+  blue: { tile: "#1F7AE0", soft: "#E3EFFC", ink: "#155399" },
+  orange: { tile: "#D97706", soft: "#FCEFDC", ink: "#9B5505" },
+  green: { tile: "#059669", soft: "#DCF1EA", ink: "#046C4E" },
+  red: { tile: "#DC2626", soft: "#FCE3E3", ink: "#A01C1C" },
+  slate: { tile: "#64748B", soft: "#ECEFF3", ink: "#475569" },
 } as const;
 export type StatColor = keyof typeof statColors;
 
@@ -352,10 +354,11 @@ export function RowLink({ href, children, className }: { href: string; children:
 /** Avatar à initiales, teinte stable par nom. */
 export function Avatar({ name, size = "md" }: { name: string; size?: "sm" | "md" | "lg" }) {
   const gradients = [
+    // Toujours dans les bleus Kalimera : la couleur vive est réservée aux statuts.
     "from-aegean-400 to-aegean-700",
-    "from-sky-400 to-indigo-600",
-    "from-cyan-400 to-aegean-600",
-    "from-indigo-400 to-violet-700",
+    "from-aegean-300 to-aegean-600",
+    "from-aegean-500 to-aegean-800",
+    "from-slate-400 to-aegean-700",
     "from-aegean-500 to-slate-800",
   ];
   const hash = [...name].reduce((sum, char) => sum + char.charCodeAt(0), 0);
