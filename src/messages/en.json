@@ -24,7 +24,14 @@
     "allServices": "See all our expertise",
     "allSectors": "See all sectors",
     "markets": "Cities & markets",
-    "closeSubmenu": "Close submenu"
+    "closeSubmenu": "Close submenu",
+    "allWork": "See all our work",
+    "featureEyebrow": "E-commerce reference",
+    "featureCta": "See the project",
+    "sectorAsideTitle": "Your trade isn't listed?",
+    "sectorAsideBody": "We start from how you work, not from a sector template. Tell us about your business.",
+    "workAsideTitle": "Everything is live",
+    "workAsideBody": "Every project links to the site in production: you can check for yourself."
   },
   "home": {
     "hero": {
@@ -47,7 +54,7 @@
       "card1Title": "100% code, zero proprietary platform",
       "card1Body": "No WordPress, no Shopify, no page builder. Your product is written in TypeScript, documented and version-controlled — the repository is yours from day one, and you are locked in to nobody.",
       "card2Title": "Products, not brochures",
-      "card2Body": "User accounts, recurring subscriptions, messaging, gated access, payments: we have shipped five platforms running with real paying customers behind them.",
+      "card2Body": "User accounts, recurring subscriptions, messaging, gated access, payments: we have shipped four platforms running with real paying customers behind them.",
       "card3Title": "Regulated sectors",
       "card3Body": "Insurance broking, accountancy firms, real estate, financial recruitment. We know the data confidentiality, role-based access and domain constraints these professions carry.",
       "card4Title": "Multilingual by default",
@@ -212,7 +219,8 @@
     "careers": "Careers",
     "legal": "Legal notice",
     "privacy": "Privacy",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "locationsTitle": "Where we work"
   },
   "common": {
     "readMore": "Read more",

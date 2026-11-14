@@ -39,8 +39,8 @@ export const siteConfig = {
    * ne rien mettre ici qui ne soit pas démontrable par une URL en ligne.
    */
   stats: {
-    projects: 8,
-    platforms: 5,
+    projects: 10,
+    platforms: 4,
     countries: 3,
     locales: 3,
   },

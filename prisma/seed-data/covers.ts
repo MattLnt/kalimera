@@ -2,7 +2,7 @@
  * Captures d'écran des réalisations.
  *
  * Les fichiers sont servis depuis `public/work/` plutôt que depuis
- * Cloudinary : ce sont huit images figées, versionnées avec le code, qui
+ * Cloudinary : ce sont des images figées, versionnées avec le code, qui
  * n'ont pas vocation à être remplacées depuis l'administration. Les éviter
  * de passer par un service tiers supprime une dépendance et une latence.
  *
@@ -15,7 +15,7 @@
  *
  * Aucune ne montre une page d'accueil : un listing filtrable, une grille
  * tarifaire, un tableau de bord ou un calculateur disent ce que le produit
- * fait, là où huit héros alignés se ressemblent tous.
+ * fait, là où dix héros alignés se ressemblent tous.
  */
 export const covers = [
   {
@@ -33,14 +33,6 @@ export const covers = [
       "Page Tarifs de Brokeris : dépôt gratuit pour les vendeurs, accès acheteur à 59 € par mois",
     altEn: "Brokeris pricing page: free listing for sellers, buyer access at €59 a month",
     altEs: "Página de tarifas de Brokeris: publicación gratuita para vendedores, acceso de comprador a 59 € al mes",
-  },
-  {
-    projectKey: "onshare",
-    file: "onshare.jpg",
-    altFr:
-      "Tableau de bord d'OnShare : biens et acheteurs de l'agence, catalogue du réseau et évolution du portefeuille",
-    altEn: "OnShare dashboard: the agency's properties and buyers, network catalogue and portfolio trend",
-    altEs: "Panel de OnShare: inmuebles y compradores de la agencia, catálogo de la red y evolución de la cartera",
   },
   {
     projectKey: "skillio",
@@ -81,6 +73,29 @@ export const covers = [
       "Page Tarifs d'Elite Detail : prix fixes par gabarit de véhicule et par type de prestation",
     altEn: "Elite Detail pricing page: flat prices by vehicle size and service type",
     altEs: "Página de tarifas de Elite Detail: precios fijos por tamaño de vehículo y tipo de servicio",
+  },
+  {
+    projectKey: "digital-showroom",
+    file: "digital-showroom.jpg",
+    altFr:
+      "Page The Digital Showroom de Studio K : showroom revendeur ouvert 24 h/24, deux circuits de commande et accès sur validation",
+    altEn: "Studio K's Digital Showroom page: a reseller showroom open around the clock, two ordering channels and approval-based access",
+    altEs: "Página The Digital Showroom de Studio K: showroom para revendedores abierto 24 h, dos circuitos de pedido y acceso previa validación",
+  },
+  {
+    projectKey: "laenseigne",
+    file: "laenseigne.jpg",
+    altFr:
+      "Page Réalisations de L&A Enseigne : galerie d'enseignes et de marquages posés, note Google de 5,0",
+    altEn: "L&A Enseigne projects page: gallery of installed signs and vehicle graphics, 5.0 Google rating",
+    altEs: "Página de trabajos de L&A Enseigne: galería de rótulos y rotulaciones instalados, valoración Google de 5,0",
+  },
+  {
+    projectKey: "dorian-detailing",
+    file: "dorian-detailing.jpg",
+    altFr: "Page Tarifs de Dorian Detailing : grille complète par prestation et par gabarit de véhicule",
+    altEn: "Dorian Detailing pricing page: full grid by service and vehicle size",
+    altEs: "Página de tarifas de Dorian Detailing: tabla completa por servicio y tamaño de vehículo",
   },
 ];
 

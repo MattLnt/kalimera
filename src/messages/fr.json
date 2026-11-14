@@ -9,7 +9,7 @@
   },
   "nav": {
     "services": "Services",
-    "work": "Projets",
+    "work": "Réalisations",
     "studio": "Studio",
     "journal": "Journal",
     "contact": "Contact",
@@ -24,7 +24,14 @@
     "allServices": "Voir toutes nos expertises",
     "allSectors": "Voir tous les secteurs",
     "markets": "Villes & marchés",
-    "closeSubmenu": "Fermer le sous-menu"
+    "closeSubmenu": "Fermer le sous-menu",
+    "allWork": "Voir toutes les réalisations",
+    "featureEyebrow": "Référence e-commerce",
+    "featureCta": "Voir le projet",
+    "sectorAsideTitle": "Votre métier n'est pas listé ?",
+    "sectorAsideBody": "Nous partons de votre façon de travailler, pas d'un modèle de secteur. Décrivez-nous votre activité.",
+    "workAsideTitle": "Tout est en ligne",
+    "workAsideBody": "Chaque réalisation renvoie au site en production : vous pouvez vérifier par vous-même."
   },
   "home": {
     "hero": {
@@ -47,7 +54,7 @@
       "card1Title": "100 % code, zéro plateforme propriétaire",
       "card1Body": "Ni WordPress, ni Shopify, ni constructeur de pages. Votre produit est écrit en TypeScript, documenté et versionné — le dépôt vous appartient dès le premier jour, et vous n'êtes captif de personne.",
       "card2Title": "Des produits, pas des brochures",
-      "card2Body": "Comptes utilisateurs, abonnements récurrents, messagerie, accès conditionnés, paiements : nous avons livré cinq plateformes qui tournent avec de vrais clients payants derrière.",
+      "card2Body": "Comptes utilisateurs, abonnements récurrents, messagerie, accès conditionnés, paiements : nous avons livré quatre plateformes qui tournent avec de vrais clients payants derrière.",
       "card3Title": "Secteurs réglementés",
       "card3Body": "Courtage, fiduciaires, immobilier, recrutement financier. Nous connaissons la confidentialité des données, les accès par rôle et les contraintes métier de ces professions.",
       "card4Title": "Multilingue de série",
@@ -212,7 +219,8 @@
     "careers": "Carrières",
     "legal": "Mentions légales",
     "privacy": "Confidentialité",
-    "rights": "Tous droits réservés."
+    "rights": "Tous droits réservés.",
+    "locationsTitle": "Où nous intervenons"
   },
   "common": {
     "readMore": "Lire la suite",

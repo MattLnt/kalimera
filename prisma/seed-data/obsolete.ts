@@ -10,10 +10,17 @@
  * le seed » : les contenus créés depuis l'administration doivent survivre.
  */
 export const obsolete = {
-  /** Services remplacés par l'offre plateformes et le sur-mesure. */
-  serviceKeys: ["sites-vitrines", "e-commerce", "applications-mobiles"],
+  /** Services remplacés par l’offre plateformes et le sur-mesure. « applications-mobiles » en est sorti : le service a été réintroduit. */
+  serviceKeys: ["sites-vitrines", "e-commerce"],
   /** Quatre clients fictifs du jeu de démonstration. */
-  projectKeys: ["thalassa-resorts", "kyma-fitness", "helia-cosmetics", "delphi-capital"],
+  projectKeys: [
+    "thalassa-resorts",
+    "kyma-fitness",
+    "helia-cosmetics",
+    "delphi-capital",
+    // Réalisé pour le client d'un partenaire : ne figure plus au portfolio.
+    "onshare",
+  ],
   /** Articles réécrits ou retirés — celui sur le score Lighthouse annonçait un chiffre non mesuré. */
   postKeys: ["cout-site-vitrine-2026", "regles-lighthouse-98"],
   /** Témoignage inventé, attribué à un client qui n'existe pas. */

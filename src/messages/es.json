@@ -24,7 +24,14 @@
     "allServices": "Ver todas nuestras especialidades",
     "allSectors": "Ver todos los sectores",
     "markets": "Ciudades y mercados",
-    "closeSubmenu": "Cerrar el submenú"
+    "closeSubmenu": "Cerrar el submenú",
+    "allWork": "Ver todos los proyectos",
+    "featureEyebrow": "Referencia e-commerce",
+    "featureCta": "Ver el proyecto",
+    "sectorAsideTitle": "¿Tu sector no aparece?",
+    "sectorAsideBody": "Partimos de tu forma de trabajar, no de una plantilla de sector. Cuéntanos tu actividad.",
+    "workAsideTitle": "Todo está en línea",
+    "workAsideBody": "Cada proyecto enlaza con la web en producción: puedes comprobarlo tú mismo."
   },
   "home": {
     "hero": {
@@ -47,7 +54,7 @@
       "card1Title": "100 % código, cero plataforma propietaria",
       "card1Body": "Ni WordPress, ni Shopify, ni maquetadores. Tu producto está escrito en TypeScript, documentado y versionado: el repositorio es tuyo desde el primer día y no dependes de nadie.",
       "card2Title": "Productos, no folletos",
-      "card2Body": "Cuentas de usuario, suscripciones recurrentes, mensajería, accesos restringidos, pagos: hemos entregado cinco plataformas que funcionan con clientes reales que pagan.",
+      "card2Body": "Cuentas de usuario, suscripciones recurrentes, mensajería, accesos restringidos, pagos: hemos entregado cuatro plataformas que funcionan con clientes reales que pagan.",
       "card3Title": "Sectores regulados",
       "card3Body": "Corretaje, asesorías, inmobiliaria, selección financiera. Conocemos la confidencialidad de los datos, los accesos por rol y las exigencias de estas profesiones.",
       "card4Title": "Multilingüe de serie",
@@ -212,7 +219,8 @@
     "careers": "Empleo",
     "legal": "Aviso legal",
     "privacy": "Privacidad",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "locationsTitle": "Dónde trabajamos"
   },
   "common": {
     "readMore": "Leer más",

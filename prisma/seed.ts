@@ -135,7 +135,7 @@ async function main() {
         accent: project.accent,
         featured: project.featured,
         position: index,
-        published: true,
+        published: project.published ?? true,
         services: { set: serviceIds.map((s) => ({ id: s.id })) },
       },
       create: {
@@ -148,7 +148,7 @@ async function main() {
         accent: project.accent,
         featured: project.featured,
         position: index,
-        published: true,
+        published: project.published ?? true,
         services: { connect: serviceIds.map((s) => ({ id: s.id })) },
       },
     });

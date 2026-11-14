@@ -3,21 +3,22 @@ import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/site/logo";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import type { Locale as DbLocale } from "@/generated/prisma/enums";
-import { getServices } from "@/lib/content";
+import { LandingKind, type Locale as DbLocale } from "@/generated/prisma/enums";
+import { getLandings, getServices } from "@/lib/content";
 import { ContactLink } from "@/components/site/contact-link";
 import { siteConfig } from "@/lib/site";
 
 export async function SiteFooter({ dbLocale }: { dbLocale: DbLocale }) {
-  const [t, services] = await Promise.all([
+  const [t, services, locations] = await Promise.all([
     getTranslations(),
     getServices(dbLocale),
+    getLandings(dbLocale, LandingKind.LOCATION),
   ]);
 
   return (
     <footer className="pt-10 pb-8">
       <div className="page-shell">
-        <div className="grid gap-8 pb-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div className="grid gap-8 pb-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
           <div>
             <Link
               href="/"
@@ -49,6 +50,31 @@ export async function SiteFooter({ dbLocale }: { dbLocale: DbLocale }) {
                     className="text-[0.9375rem] text-[var(--ink-65)] transition-colors hover:text-ink"
                   >
                     {service.translations[0].title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Les villes ne sont plus dans le menu : ce bloc garde un lien vers
+              chacune depuis toutes les pages, utile au référencement local. */}
+          <div>
+            <h2 className="mb-4 font-display text-[0.8125rem] font-bold text-[var(--ink-45)]">
+              {t("footer.locationsTitle")}
+            </h2>
+            <ul className="grid gap-2.5">
+              {locations.map((location) => (
+                <li key={location.id}>
+                  <Link
+                    href={{
+                      pathname: "/locations/[slug]",
+                      params: { slug: location.translations[0].slug },
+                    }}
+                    className="text-[0.9375rem] text-[var(--ink-65)] transition-colors hover:text-ink"
+                  >
+                    {/* Le titre complet : « Développement web à Aix-en-Provence »
+                        est aussi l'ancre que l'on veut voir associée à la page. */}
+                    {location.translations[0].title}
                   </Link>
                 </li>
               ))}

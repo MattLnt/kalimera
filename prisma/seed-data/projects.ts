@@ -3,7 +3,8 @@ import { ProjectKind } from "../../src/generated/prisma/enums";
 import { t } from "./locale";
 
 /**
- * Les huit réalisations réelles, plateformes B2B d'abord.
+ * Les réalisations réelles. L'ordre d'affichage est fixé par `order`, en bas
+ * du fichier ; OnShare a été retiré (client d'un partenaire, pas du studio).
  *
  * Règle de rédaction : ne rien écrire ici qui ne soit vérifiable en ouvrant
  * l'URL. Les `metrics` ne contiennent donc que des faits publics (prix
@@ -18,7 +19,7 @@ import { t } from "./locale";
  * - `outcome` attend vos chiffres réels quand vous les aurez : c'est la partie
  *   qui convertit le mieux, et la seule qu'on ne peut pas écrire sans vous.
  */
-export const projects = [
+const entries = [
   {
     key: "fiderio",
     kind: ProjectKind.WEBAPP,
@@ -104,50 +105,6 @@ export const projects = [
       "Plateforme en production, entièrement off-market : aucune annonce n'est visible des moteurs de recherche, et chaque accès à un dossier est journalisé.",
       "In production and entirely off-market: no listing is visible to search engines, and every access to a file is logged.",
       "Plataforma en producción, totalmente fuera de mercado: ningún anuncio es visible para los motores de búsqueda y cada acceso a un expediente queda registrado.",
-    ),
-  },
-  {
-    key: "onshare",
-    kind: ProjectKind.WEBAPP,
-    client: "OnShare",
-    year: 2025,
-    liveUrl: "https://onshare.be",
-    stack: ["Next.js", "TypeScript", "PostgreSQL", "Stripe"],
-    accent: "g3",
-    featured: true,
-    serviceKeys: ["plateformes-metier", "saas-abonnement"],
-    metrics: [
-      {
-        value: "150 €/mois",
-        label: t("Abonnement agence, HTVA", "Agency subscription, ex VAT", "Suscripción agencia, sin IVA"),
-      },
-    ],
-    slug: t("onshare", "onshare", "onshare"),
-    title: t("OnShare", "OnShare", "OnShare"),
-    category: t(
-      "Plateforme SaaS · Immobilier",
-      "SaaS platform · Real estate",
-      "Plataforma SaaS · Inmobiliaria",
-    ),
-    summary: t(
-      "Réseau fermé d'agences immobilières qui partagent leurs mandats et leurs acquéreurs.",
-      "A closed network of estate agencies sharing their mandates and their buyers.",
-      "Red cerrada de agencias inmobiliarias que comparten sus mandatos y sus compradores.",
-    ),
-    challenge: t(
-      "Une agence détient des mandats qu'elle ne vend pas, et des acquéreurs pour des biens qu'elle n'a pas. Partager avec une agence concurrente suppose de régler à l'avance qui voit quoi, qui contacte le client et comment la commission se répartit — ce qu'aucun outil généraliste ne savait faire.",
-      "An agency holds mandates it is not selling, and buyers for properties it does not have. Sharing with a competing agency means settling in advance who sees what, who contacts the client and how the commission is split — something no general-purpose tool could handle.",
-      "Una agencia tiene mandatos que no vende y compradores para inmuebles que no posee. Compartir con una agencia competidora exige acordar de antemano quién ve qué, quién contacta al cliente y cómo se reparte la comisión, algo que ninguna herramienta generalista sabía hacer.",
-    ),
-    solution: t(
-      "Un espace réservé aux agences vérifiées, avec gestion des mandats partagés, base d'acquéreurs qualifiés, et règles de visibilité définies par l'agence propriétaire du mandat. Chaque agence dispose de son tableau de bord, et l'accès au réseau est conditionné à un abonnement mensuel.",
-      "A space restricted to verified agencies, with shared-mandate management, a qualified buyer database, and visibility rules set by the agency that owns the mandate. Each agency gets its own dashboard, and network access is gated behind a monthly subscription.",
-      "Un espacio reservado a agencias verificadas, con gestión de mandatos compartidos, base de compradores cualificados y reglas de visibilidad definidas por la agencia propietaria del mandato. Cada agencia tiene su propio panel y el acceso a la red está condicionado a una suscripción mensual.",
-    ),
-    outcome: t(
-      "Plateforme en production, accessible aux agences vérifiées pour 150 € par mois hors TVA.",
-      "In production, open to verified agencies at €150 a month excluding VAT.",
-      "Plataforma en producción, accesible a agencias verificadas por 150 € al mes sin IVA.",
     ),
   },
   {
@@ -360,4 +317,197 @@ export const projects = [
       "Web en producción, servida en inglés, español y francés, con reserva y pago en línea.",
     ),
   },
+  {
+    key: "digital-showroom",
+    kind: ProjectKind.ECOMMERCE,
+    client: "Studio K",
+    year: 2025,
+    liveUrl: "https://thedigitalshowroom.fr",
+    stack: ["Espace revendeur", "Catalogue B2B", "FR · EN", "Cloudinary"],
+    accent: "g1",
+    featured: true,
+    serviceKeys: ["e-commerce-sur-mesure", "plateformes-metier", "design-ux-ui"],
+    metrics: [
+      { value: "2", label: t("Circuits de commande", "Ordering channels", "Circuitos de pedido") },
+      { value: "24 h/24", label: t("Commande revendeur", "Reseller ordering", "Pedidos de revendedor") },
+    ],
+    slug: t("the-digital-showroom", "the-digital-showroom", "the-digital-showroom"),
+    title: t("The Digital Showroom", "The Digital Showroom", "The Digital Showroom"),
+    category: t(
+      "Plateforme B2B · Mode & accessoires",
+      "B2B platform · Fashion & accessories",
+      "Plataforma B2B · Moda y accesorios",
+    ),
+    summary: t(
+      "Showroom en ligne réservé aux revendeurs d'une agence commerciale de mode, à Aix-en-Provence.",
+      "An online showroom reserved for the retailers of a fashion sales agency, in Aix-en-Provence.",
+      "Showroom en línea reservado a los revendedores de una agencia comercial de moda, en Aix-en-Provence.",
+    ),
+    challenge: t(
+      "Studio K représente des marques d'accessoires de mode auprès des boutiques, depuis un showroom de 270 m² cours Mirabeau. Mais un showroom physique n'ouvre que sur rendez-vous : entre deux visites, le revendeur n'avait ni les collections, ni ses prix d'achat, ni le moyen de commander.",
+      "Studio K represents fashion accessory brands to retailers, from a 270 m² showroom on the Cours Mirabeau. But a physical showroom only opens by appointment: between visits, retailers had neither the collections, nor their trade prices, nor a way to order.",
+      "Studio K representa marcas de accesorios de moda ante las tiendas, desde un showroom de 270 m² en el Cours Mirabeau. Pero un showroom físico solo abre con cita: entre dos visitas, el revendedor no tenía ni las colecciones, ni sus precios de compra, ni forma de hacer pedidos.",
+    ),
+    solution: t(
+      "Un site vitrine pour l'agence et, derrière, un espace revendeur fermé : demande d'accès validée par Studio K avant ouverture du compte, catalogue des marques avec prix professionnels, et deux circuits de commande — les collections en précommande de saison, et le « Pronto » sur stock réel en livraison immédiate. Le tout en français et en anglais.",
+      "A showcase site for the agency and, behind it, a closed reseller area: access requests approved by Studio K before the account opens, a brand catalogue with trade prices, and two ordering channels — seasonal pre-orders for the collections, and \"Pronto\" on real stock with immediate delivery. All in French and English.",
+      "Una web corporativa para la agencia y, detrás, un área de revendedor cerrada: solicitud de acceso validada por Studio K antes de abrir la cuenta, catálogo de marcas con precios profesionales y dos circuitos de pedido: las colecciones en preventa de temporada y el «Pronto» sobre stock real con entrega inmediata. Todo en francés e inglés.",
+    ),
+    outcome: t(
+      "Plateforme en production : les revendeurs validés consultent et commandent 24 h/24, sans attendre le prochain rendez-vous au showroom.",
+      "In production: approved retailers browse and order around the clock, without waiting for the next showroom appointment.",
+      "Plataforma en producción: los revendedores validados consultan y hacen pedidos 24 h al día, sin esperar a la próxima cita en el showroom.",
+    ),
+  },
+  {
+    key: "laenseigne",
+    kind: ProjectKind.WEBSITE,
+    client: "L&A Enseigne",
+    year: 2025,
+    liveUrl: "https://laenseigne.fr",
+    stack: ["Next.js", "Devis en ligne", "SEO local"],
+    accent: "g3",
+    featured: false,
+    serviceKeys: ["sites-sur-mesure", "design-ux-ui"],
+    metrics: [
+      { value: "5,0/5", label: t("Avis Google", "Google rating", "Valoración Google") },
+      { value: "48 h", label: t("Délai de devis annoncé", "Stated quote turnaround", "Plazo de presupuesto anunciado") },
+    ],
+    slug: t("la-enseigne", "la-enseigne", "la-enseigne"),
+    title: t("L&A Enseigne", "L&A Enseigne", "L&A Enseigne"),
+    category: t(
+      "Site sur mesure · Enseignes & signalétique",
+      "Bespoke site · Signage",
+      "Web a medida · Rótulos y señalética",
+    ),
+    summary: t(
+      "Site d'un fabricant d'enseignes et de marquage à Gardanne, pensé pour le référencement local et la demande de devis.",
+      "Website for a sign and vehicle-graphics maker in Gardanne, built for local search and quote requests.",
+      "Web de un fabricante de rótulos y rotulación en Gardanne, pensada para el posicionamiento local y la solicitud de presupuesto.",
+    ),
+    challenge: t(
+      "Six métiers sous le même toit — enseignes lumineuses, signalétique, impression grand format, marquage de véhicules, vitrophanie, textile — et une clientèle de commerçants qui cherchent « enseigne + leur ville ». Il fallait que chaque métier et chaque zone desservie soit trouvable, sans transformer le site en catalogue illisible.",
+      "Six trades under one roof — illuminated signs, wayfinding, large-format print, vehicle graphics, window graphics, textile — and a clientele of shopkeepers who search for \"sign + their town\". Each trade and each area served had to be findable, without turning the site into an unreadable catalogue.",
+      "Seis oficios bajo el mismo techo —rótulos luminosos, señalética, impresión de gran formato, rotulación de vehículos, vinilos de escaparate, textil— y una clientela de comerciantes que busca «rótulo + su ciudad». Cada oficio y cada zona atendida debía poder encontrarse, sin convertir la web en un catálogo ilegible.",
+    ),
+    solution: t(
+      "Une page par prestation, une page par zone d'intervention autour de Gardanne, Aix et Marseille, et une galerie de réalisations réelles qui sert de preuve sur chacune. La demande de devis gratuite est accessible de partout, avec une réponse annoncée sous 48 heures.",
+      "One page per service, one page per area served around Gardanne, Aix and Marseille, and a gallery of real jobs used as proof on each. The free quote request is reachable from everywhere, with a reply promised within 48 hours.",
+      "Una página por servicio, una página por zona de intervención en torno a Gardanne, Aix y Marsella, y una galería de trabajos reales que sirve de prueba en cada una. La solicitud de presupuesto gratuita está accesible desde cualquier página, con respuesta anunciada en 48 horas.",
+    ),
+    outcome: t(
+      "Site en production, avec 5,0/5 sur Google affiché et une demande de devis présente sur chaque page.",
+      "In production, showing 5.0/5 on Google and a quote request on every page.",
+      "Web en producción, con 5,0/5 en Google y solicitud de presupuesto en cada página.",
+    ),
+  },
+  {
+    key: "dorian-detailing",
+    kind: ProjectKind.WEBSITE,
+    client: "Dorian Detailing",
+    year: 2025,
+    liveUrl: "https://doriandetailing.be",
+    stack: ["Next.js", "Grille tarifaire", "Boutique vitrine"],
+    accent: "g2",
+    featured: false,
+    serviceKeys: ["sites-sur-mesure", "design-ux-ui"],
+    metrics: [
+      { value: "5,0/5", label: t("142 avis Google", "142 Google reviews", "142 reseñas Google") },
+      { value: "9", label: t("Prestations à prix affiché", "Services with a listed price", "Servicios con precio publicado") },
+    ],
+    slug: t("dorian-detailing", "dorian-detailing", "dorian-detailing"),
+    title: t("Dorian Detailing", "Dorian Detailing", "Dorian Detailing"),
+    category: t(
+      "Site sur mesure · Services automobiles",
+      "Bespoke site · Automotive services",
+      "Web a medida · Servicios de automoción",
+    ),
+    summary: t(
+      "Site d'un atelier de detailing automobile à Braine-l'Alleud, en Belgique, avec grille tarifaire par gabarit de véhicule.",
+      "Website for a car-detailing workshop in Braine-l'Alleud, Belgium, with a price grid by vehicle size.",
+      "Web de un taller de detailing de automóviles en Braine-l'Alleud (Bélgica), con tarifas por tamaño de vehículo.",
+    ),
+    challenge: t(
+      "Le prix d'un detailing dépend du véhicule et de son état : sans grille claire, chaque visiteur appelait pour demander « combien pour ma voiture », et l'atelier passait ses journées au téléphone au lieu de travailler. Il fallait aussi présenter une petite gamme de produits d'entretien sans ouvrir une vraie boutique en ligne.",
+      "The price of a detail depends on the vehicle and its condition: without a clear grid, every visitor called to ask \"how much for my car\", and the workshop spent its days on the phone instead of working. A small range of care products also had to be shown without opening a full online store.",
+      "El precio de un detailing depende del vehículo y de su estado: sin tarifas claras, cada visitante llamaba para preguntar «cuánto por mi coche», y el taller pasaba el día al teléfono en lugar de trabajar. También había que presentar una pequeña gama de productos de mantenimiento sin abrir una tienda en línea completa.",
+    ),
+    solution: t(
+      "Une grille tarifaire complète par prestation et par gabarit — citadine, berline, SUV, 7 places, sportive —, une zone d'intervention mobile annoncée commune par commune, et une boutique vitrine dont chaque produit pré-remplit le formulaire de contact. Le formulaire demande le véhicule et la prestation souhaitée : l'atelier répond avec un créneau et un devis confirmé.",
+      "A full price grid by service and by size — city car, saloon, SUV, 7-seater, sports car —, a mobile service area listed town by town, and a showcase shop where each product pre-fills the contact form. The form asks for the vehicle and the service wanted: the workshop replies with a slot and a confirmed quote.",
+      "Una tabla de tarifas completa por servicio y tamaño —urbano, berlina, SUV, 7 plazas, deportivo—, una zona de servicio móvil indicada municipio por municipio y una tienda escaparate en la que cada producto rellena el formulario de contacto. El formulario pide el vehículo y el servicio deseado: el taller responde con una franja y un presupuesto confirmado.",
+    ),
+    outcome: t(
+      "Site en production. L'atelier affiche 5,0/5 sur 142 avis Google, et les demandes arrivent avec le véhicule et la prestation déjà renseignés.",
+      "In production. The workshop shows 5.0/5 from 142 Google reviews, and enquiries arrive with the vehicle and service already filled in.",
+      "Web en producción. El taller muestra 5,0/5 sobre 142 reseñas de Google, y las solicitudes llegan con el vehículo y el servicio ya indicados.",
+    ),
+  },
+  {
+    // Refonte en cours de finition : le site en ligne est encore l'ancienne
+    // version WordPress. Ne publier qu'une fois la nouvelle version en ligne,
+    // en passant `published` à true et en ajoutant sa capture dans covers.ts.
+    key: "just-love-room",
+    kind: ProjectKind.WEBSITE,
+    client: "Just Love Room",
+    year: 2026,
+    liveUrl: "https://justloveroom.fr",
+    stack: ["Next.js", "Réservation en ligne"],
+    accent: "g3",
+    featured: false,
+    published: false,
+    serviceKeys: ["sites-sur-mesure", "design-ux-ui"],
+    metrics: [],
+    slug: t("just-love-room", "just-love-room", "just-love-room"),
+    title: t("Just Love Room", "Just Love Room", "Just Love Room"),
+    category: t(
+      "Site & réservation · Hébergement",
+      "Site & booking · Accommodation",
+      "Web y reservas · Alojamiento",
+    ),
+    summary: t(
+      "Site et réservation de suites avec spa privatif en Provence : Aix, Saint-Maximin, Trets et Rousset.",
+      "Website and booking for suites with a private spa in Provence: Aix, Saint-Maximin, Trets and Rousset.",
+      "Web y reservas de suites con spa privado en Provenza: Aix, Saint-Maximin, Trets y Rousset.",
+    ),
+    challenge: t(
+      "Quatre adresses, des nuits, des créneaux de journée et des locations de spa à l'heure : l'ancien site affichait des tarifs et des modes de réservation qui se contredisaient d'une page à l'autre.",
+      "Four addresses, nights, day slots and hourly spa rentals: the old site showed prices and booking methods that contradicted each other from page to page.",
+      "Cuatro direcciones, noches, franjas de día y alquiler de spa por horas: la antigua web mostraba tarifas y formas de reserva que se contradecían de una página a otra.",
+    ),
+    solution: t(
+      "Refonte en cours de finition.",
+      "Rebuild currently being finished.",
+      "Rediseño en fase de finalización.",
+    ),
+    outcome: t(
+      "Mise en ligne prochaine.",
+      "Launching soon.",
+      "Publicación próxima.",
+    ),
+  },
 ];
+
+/**
+ * Ordre d'affichage du portfolio. Côté BURO remonte en troisième position :
+ * c'est la référence e-commerce, et la plus proche de nos prospects locaux.
+ */
+const order = [
+  "fiderio",
+  "brokeris",
+  "coteburo",
+  "digital-showroom",
+  "skillio",
+  "laenseigne",
+  "buymonth",
+  "dorian-detailing",
+  "mh-defense",
+  "elite-detail-tampa",
+  "just-love-room",
+];
+
+export const projects = order.map((key) => {
+  const entry = entries.find((project) => project.key === key);
+  if (!entry) throw new Error(`Projet inconnu dans l'ordre d'affichage : ${key}`);
+  return entry;
+});

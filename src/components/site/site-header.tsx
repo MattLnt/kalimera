@@ -7,7 +7,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ContactLink } from "@/components/site/contact-link";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { Logo } from "@/components/site/logo";
-import { MegaPanel, type MegaColumn } from "@/components/site/mega-panel";
+import Image from "next/image";
+
+import { MegaAside, MegaPanel, type MegaConfig } from "@/components/site/mega-panel";
 import type { NavData } from "@/components/site/nav-data";
 import { Button } from "@/components/ui/button";
 import { Arches, Orbs } from "@/components/ui/decor";
@@ -24,23 +26,24 @@ type StaticPath =
   | "/studio"
   | "/journal";
 
-type NavKey = "build" | "sectors" | "work" | "studio" | "journal";
+type NavKey = "services" | "sectors" | "work" | "studio";
 
-type MegaKey = "build" | "sectors";
+type MegaKey = "services" | "sectors" | "work";
 
 /**
- * Deux entrées ouvrent un panneau, les autres sont des liens directs.
+ * Quatre entrées : ce qu'on fait, pour qui, la preuve, qui on est. Trois
+ * ouvrent un panneau. Le journal et les villes vivent dans le pied de page :
+ * dans la barre, ils diluaient les quatre questions qu'un prospect se pose.
  *
  * `menu` désigne le panneau à ouvrir, et `href` reste la destination du clic :
  * le menu fonctionne donc à la souris comme au clavier, et reste utilisable
  * si le JavaScript n'a pas encore pris la main.
  */
 const links: { href: StaticPath; key: NavKey; menu?: MegaKey }[] = [
-  { href: "/services", key: "build", menu: "build" },
+  { href: "/services", key: "services", menu: "services" },
   { href: "/sectors", key: "sectors", menu: "sectors" },
-  { href: "/work", key: "work" },
+  { href: "/work", key: "work", menu: "work" },
   { href: "/studio", key: "studio" },
-  { href: "/journal", key: "journal" },
 ];
 
 export function SiteHeader({ nav }: { nav: NavData }) {
@@ -119,42 +122,82 @@ export function SiteHeader({ nav }: { nav: NavData }) {
   // Le panneau garde son contenu pendant qu'il s'efface : sans cela il se
   // viderait d'un coup à la fermeture. On retient donc la dernière entrée
   // ouverte, et `mega` ne commande plus que la visibilité.
-  const [shown, setShown] = useState<MegaKey>("build");
+  const [shown, setShown] = useState<MegaKey>("services");
   if (mega && mega !== shown) setShown(mega);
 
-  // Référence stable : `MegaPanel` est mémoïsé, et un tableau recréé à chaque
+  // Référence stable : `MegaPanel` est mémoïsé, et un objet recréé à chaque
   // rendu annulerait la mémoïsation au moment précis où elle sert.
-  const columns: Record<MegaKey, MegaColumn[]> = useMemo(() => ({
-    build: [
-      {
-        heading: t("build"),
-        entries: nav.services,
-        pathname: "/services/[slug]",
+  const panels: Record<MegaKey, MegaConfig> = useMemo(() => {
+    const feature = nav.feature;
+
+    return {
+      services: {
+        groups: nav.services,
         allLabel: t("allServices"),
         allHref: "/services",
-        split: true,
+        // La référence e-commerce, avec sa capture : la preuve à côté de l'offre.
+        aside: feature ? (
+          <Link
+            href={{ pathname: "/work/[slug]", params: { slug: feature.slug } }}
+            onClick={closeMega}
+            className="group/feature block h-full"
+          >
+            <MegaAside eyebrow={t("featureEyebrow")} title={feature.title} body={feature.category}>
+              {feature.image ? (
+                <span className="relative mt-3 block aspect-[1512/795] overflow-hidden rounded-[12px] bg-white shadow-soft">
+                  <Image
+                    src={feature.image.url}
+                    alt={feature.image.alt}
+                    fill
+                    sizes="272px"
+                    className="object-cover object-top transition-transform duration-500 group-hover/feature:scale-[1.03]"
+                  />
+                </span>
+              ) : null}
+              <span className="mt-auto inline-flex items-center gap-1 pt-3 font-display text-[0.75rem] font-bold text-aegean-700">
+                {t("featureCta")}
+                <ArrowUpRight aria-hidden className="size-3.5" />
+              </span>
+            </MegaAside>
+          </Link>
+        ) : undefined,
       },
-    ],
-    sectors: [
-      {
-        heading: t("sectors"),
-        entries: nav.sectors,
-        pathname: "/sectors/[slug]",
+      sectors: {
+        groups: nav.sectors,
         allLabel: t("allSectors"),
         allHref: "/sectors",
-        // Douze secteurs sur une seule liste rendaient le panneau plus haut
-        // que l'écran.
-        split: true,
+        aside: (
+          <MegaAside title={t("sectorAsideTitle")} body={t("sectorAsideBody")}>
+            <Link
+              href="/contact"
+              onClick={closeMega}
+              className="mt-auto inline-flex items-center gap-1 pt-3 font-display text-[0.75rem] font-bold text-aegean-700 hover:text-aegean-900"
+            >
+              {t("cta")}
+              <ArrowUpRight aria-hidden className="size-3.5" />
+            </Link>
+          </MegaAside>
+        ),
       },
-      {
-        heading: t("markets"),
-        entries: nav.locations,
-        pathname: "/locations/[slug]",
-        allLabel: t("locations"),
-        allHref: "/locations",
+      work: {
+        groups: nav.work,
+        allLabel: t("allWork"),
+        allHref: "/work",
+        aside: (
+          <MegaAside title={t("workAsideTitle")} body={t("workAsideBody")}>
+            <Link
+              href="/work"
+              onClick={closeMega}
+              className="mt-auto inline-flex items-center gap-1 pt-3 font-display text-[0.75rem] font-bold text-aegean-700 hover:text-aegean-900"
+            >
+              {t("allWork")}
+              <ArrowUpRight aria-hidden className="size-3.5" />
+            </Link>
+          </MegaAside>
+        ),
       },
-    ],
-  }), [nav, t]);
+    };
+  }, [nav, t, closeMega]);
 
   return (
     <header
@@ -285,7 +328,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
         )}
       >
         <div className="rounded-[26px] bg-white shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.28)]">
-          <MegaPanel columns={columns[shown]} onNavigate={closeMega} />
+          <MegaPanel config={panels[shown]} onNavigate={closeMega} />
         </div>
       </div>
       </div>
@@ -328,18 +371,7 @@ function MobileMenu({
    * dix-huit pages d'intention affichées d'un bloc noyaient les cinq entrées
    * principales, qui sont ce qu'on vient chercher dans un menu.
    */
-  const subGroups = (menu?: MegaKey) => {
-    if (menu === "build") {
-      return [{ pathname: "/services/[slug]" as const, entries: nav.services }];
-    }
-    if (menu === "sectors") {
-      return [
-        { pathname: "/sectors/[slug]" as const, entries: nav.sectors },
-        { pathname: "/locations/[slug]" as const, entries: nav.locations },
-      ];
-    }
-    return [];
-  };
+  const subGroups = (menu?: MegaKey) => (menu ? nav[menu] : []);
 
   return (
     <div
@@ -410,25 +442,41 @@ function MobileMenu({
                 </div>
 
                 {groups.length > 0 && expanded === link.key ? (
-                  <ul className="mb-5 grid animate-[menu-open_0.25s_var(--ease-out-expo)_both] gap-px overflow-hidden rounded-field bg-white/10">
-                    {groups.flatMap((group) =>
-                      group.entries.map((entry) => (
-                        <li key={`${group.pathname}-${entry.slug}`}>
-                          <Link
-                            href={{
-                              pathname: group.pathname,
-                              params: { slug: entry.slug },
-                            }}
-                            onClick={onNavigate}
-                            className="flex items-center justify-between gap-3 bg-aegean-950/40 px-4 py-3.5 font-display text-[0.9375rem] font-semibold text-white/80 transition-colors hover:bg-aegean-950/10 hover:text-white"
-                          >
-                            {entry.title}
-                            <ArrowUpRight aria-hidden className="size-4 shrink-0 text-white/30" />
-                          </Link>
-                        </li>
-                      )),
-                    )}
-                  </ul>
+                  <div className="mb-5 grid animate-[menu-open_0.25s_var(--ease-out-expo)_both] gap-4">
+                    {groups.map((group) => (
+                      <div key={group.heading}>
+                        <p className="mb-2 font-display text-[0.6875rem] font-bold tracking-[0.08em] text-white/45 uppercase">
+                          {group.heading}
+                        </p>
+                        <ul className="grid gap-px overflow-hidden rounded-field bg-white/10">
+                          {group.entries.map((entry) => (
+                            <li key={`${entry.pathname}-${entry.slug}`}>
+                              <Link
+                                href={{
+                                  pathname: entry.pathname,
+                                  params: { slug: entry.slug },
+                                }}
+                                onClick={onNavigate}
+                                className="flex items-center justify-between gap-3 bg-aegean-950/40 px-4 py-3 text-white/80 transition-colors hover:bg-aegean-950/10 hover:text-white"
+                              >
+                                <span className="min-w-0">
+                                  <span className="block font-display text-[0.9375rem] font-semibold">
+                                    {entry.title}
+                                  </span>
+                                  {entry.hint ? (
+                                    <span className="block truncate text-[0.75rem] text-white/45">
+                                      {entry.hint}
+                                    </span>
+                                  ) : null}
+                                </span>
+                                <ArrowUpRight aria-hidden className="size-4 shrink-0 text-white/30" />
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 ) : null}
               </li>
             );
