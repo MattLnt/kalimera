@@ -1,7 +1,9 @@
 /**
- * Règles de prise de rendez-vous.
+ * Règles de prise de rendez-vous PAR DÉFAUT.
  *
- * Tout se règle ici : horaires, durée, préavis, horizon. Les heures sont
+ * Les réglages réels se font dans l'admin (Agenda › Disponibilités) et sont
+ * enregistrés en base ; ces valeurs servent tant que rien n'y est
+ * enregistré. Le fuseau, lui, reste fixe. Les heures sont
  * exprimées dans le fuseau du studio, et c'est dans ce fuseau que le visiteur
  * les voit — avec la correspondance dans son propre fuseau s'il est ailleurs.
  */
@@ -40,4 +42,7 @@ export const bookingConfig = {
   ] as string[],
 };
 
-export type BookingConfig = typeof bookingConfig;
+export type BookingConfig = typeof bookingConfig & {
+  /** Adresse iCal secrète d'un agenda externe : ses évènements bloquent les créneaux. */
+  busyCalendarUrl?: string | null;
+};

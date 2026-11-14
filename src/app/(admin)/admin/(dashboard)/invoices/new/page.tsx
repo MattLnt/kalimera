@@ -8,8 +8,8 @@ export const metadata = { title: "Nouvelle facture" };
 export const dynamic = "force-dynamic";
 
 /** Facture hors devis. Celles qui suivent un devis se créent depuis le devis. */
-export default async function NewInvoicePage({ searchParams }: { searchParams: Promise<{ clientId?: string }> }) {
-  const { clientId = "" } = await searchParams;
+export default async function NewInvoicePage({ searchParams }: { searchParams: Promise<{ clientId?: string; dealId?: string }> }) {
+  const { clientId = "", dealId = "" } = await searchParams;
   const { issuers, clients } = await loadEditorData();
 
   if (clients.length === 0) {
@@ -33,7 +33,7 @@ export default async function NewInvoicePage({ searchParams }: { searchParams: P
         initialDraft={{
           kind: "STANDARD",
           clientId,
-          dealId: "",
+          dealId,
           issuerId: issuer?.id ?? "",
           currency: issuer?.currency ?? "EUR",
           title: "",

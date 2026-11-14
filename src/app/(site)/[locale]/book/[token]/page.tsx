@@ -74,7 +74,7 @@ export default async function ManageBookingPage({
               {day}
             </p>
             <p className="mt-1 text-[var(--ink-65)]">
-              {time} · {bookingConfig.durationMinutes} min · {t("zone")}
+              {time} · {Math.round((booking.endsAt.getTime() - booking.startsAt.getTime()) / 60_000)} min · {t("zone")}
             </p>
 
             {cancelled ? (

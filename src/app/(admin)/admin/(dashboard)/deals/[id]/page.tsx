@@ -5,11 +5,13 @@ import { notFound } from "next/navigation";
 import { addDefaultMilestones, addMilestone, deleteMilestone, setDealStage, toggleMilestone } from "../actions";
 import { createNote } from "../../notes/actions";
 
+import { Pill as VividPill } from "@/components/admin/board/pill";
 import { QuickTaskForm, TaskList } from "@/components/admin/crm/task-list";
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
 import { DatePicker } from "@/components/ui/date-picker";
 import { formatDate, formatDateTime, formatMoney, formatRelative } from "@/lib/crm/format";
-import { dealStage, dealStages, invoiceKind, noteKind, quoteStatus, toneClasses } from "@/lib/crm/labels";
+import { dealStage, dealStages, noteKind, toneClasses } from "@/lib/crm/labels";
+import { invoiceStateOptions, optionOf, quoteStatusOptions } from "@/lib/crm/vivid";
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +36,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
       tasks: { orderBy: [{ status: "asc" }, { dueAt: "asc" }] },
       notes: { orderBy: { occurredAt: "desc" }, take: 20 },
       quotes: { orderBy: { createdAt: "desc" } },
-      invoices: { orderBy: { createdAt: "desc" } },
+      invoices: { orderBy: { createdAt: "asc" }, include: { payments: { select: { amountCents: true } } } },
       activities: { orderBy: { createdAt: "desc" }, take: 20 },
     },
   });
@@ -44,7 +46,14 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
   const currentIndex = track.findIndex((item) => item.value === deal.stage);
   const done = deal.milestones.filter((milestone) => milestone.doneAt).length;
   const progress = deal.milestones.length ? Math.round((done / deal.milestones.length) * 100) : 0;
-  const signed = deal.quotes.find((quote) => quote.status === "SIGNED");
+  const liveInvoices = deal.invoices.filter((invoice) => invoice.status !== "DRAFT" && invoice.status !== "CANCELLED");
+  const billing = {
+    signed: deal.quotes.filter((quote) => quote.status === "SIGNED").reduce((sum, quote) => sum + quote.totalCents, 0),
+    billed: liveInvoices.reduce((sum, invoice) => sum + (invoice.kind === "CREDIT_NOTE" ? -invoice.totalCents : invoice.totalCents), 0),
+    paid: liveInvoices.reduce((sum, invoice) => sum + invoice.payments.reduce((total, payment) => total + payment.amountCents, 0), 0),
+    base: 1,
+  };
+  billing.base = Math.max(billing.signed, billing.billed, 1);
 
   const quickAction =
     "inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 font-display text-[0.8125rem] font-bold shadow-soft transition-colors hover:bg-aegean-50 cursor-pointer";
@@ -260,36 +269,68 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
             {deal.lostReason ? <p className="mt-3 text-[0.875rem] text-red-700">Perdu : {deal.lostReason}</p> : null}
           </Panel>
 
-          <Panel title="Devis & factures">
-            {signed ? (
-              <p className="mb-3 rounded-field bg-green-50 px-3 py-2 text-[0.8125rem] text-green-800">
-                Devis {signed.number} signé le {formatDate(signed.signedAt)}
-              </p>
-            ) : null}
-            <ul className="grid gap-1.5">
+          <Panel
+            title="Facturation"
+            description="Devis, acomptes, solde : autant qu'il en faut."
+            action={
+              <div className="flex gap-1">
+                <Link href={`/admin/quotes/new?clientId=${deal.client.id}&dealId=${deal.id}`} className="rounded-full bg-aegean-50 px-3 py-1.5 font-display text-[0.75rem] font-bold text-aegean-700 hover:bg-aegean-100">
+                  + Devis
+                </Link>
+                <Link href={`/admin/invoices/new?clientId=${deal.client.id}&dealId=${deal.id}`} className="rounded-full bg-aegean-50 px-3 py-1.5 font-display text-[0.75rem] font-bold text-aegean-700 hover:bg-aegean-100">
+                  + Facture
+                </Link>
+              </div>
+            }
+          >
+            <div className="mb-4 grid gap-3">
+              <div className="grid grid-cols-3 gap-2">
+                <BillingFigure label="Signé" value={formatMoney(billing.signed)} />
+                <BillingFigure label="Facturé" value={formatMoney(billing.billed)} />
+                <BillingFigure label="Encaissé" value={formatMoney(billing.paid)} tone="text-emerald-700" />
+              </div>
+              <div className="relative h-2 overflow-hidden rounded-full bg-black/[0.06]" title="Facturé et encaissé, sur le montant signé">
+                <div className="absolute inset-y-0 left-0 rounded-full bg-aegean-300" style={{ width: `${Math.min(100, (billing.billed / billing.base) * 100)}%` }} />
+                <div className="absolute inset-y-0 left-0 rounded-full bg-emerald-500" style={{ width: `${Math.min(100, (billing.paid / billing.base) * 100)}%` }} />
+              </div>
+              {billing.signed > billing.billed ? (
+                <p className="text-[0.8125rem] text-[var(--ink-65)]">
+                  Reste à facturer : <span className="font-display font-bold text-ink">{formatMoney(billing.signed - billing.billed)}</span>
+                </p>
+              ) : null}
+            </div>
+
+            {deal.quotes.length ? <p className="mb-1.5 font-display text-[0.6875rem] font-bold tracking-[0.06em] text-[var(--ink-45)] uppercase">Devis ({deal.quotes.length})</p> : null}
+            <ul className="mb-3 grid grid-cols-[minmax(0,1fr)] gap-1">
               {deal.quotes.map((quote) => (
                 <li key={quote.id}>
-                  <Link href={`/admin/quotes/${quote.id}`} className="flex items-center gap-2 rounded-field px-2 py-2 hover:bg-aegean-50">
-                    <FileSignature className="size-4 text-[var(--ink-45)]" />
+                  <Link href={`/admin/quotes/${quote.id}`} className="flex items-center gap-2 rounded-[12px] px-2 py-2 hover:bg-aegean-50">
+                    <FileSignature className="size-4 shrink-0 text-[var(--ink-45)]" />
                     <span className="min-w-0 flex-1 truncate text-[0.875rem]">
                       <span className="font-display font-bold">{quote.number ?? "Brouillon"}</span> · {formatMoney(quote.totalCents)}
                     </span>
-                    <Pill className={toneClasses[quoteStatus[quote.status].tone]}>{quoteStatus[quote.status].label}</Pill>
-                  </Link>
-                </li>
-              ))}
-              {deal.invoices.map((invoice) => (
-                <li key={invoice.id}>
-                  <Link href={`/admin/invoices/${invoice.id}`} className="flex items-center gap-2 rounded-field px-2 py-2 hover:bg-aegean-50">
-                    <Receipt className="size-4 text-[var(--ink-45)]" />
-                    <span className="min-w-0 flex-1 truncate text-[0.875rem]">
-                      <span className="font-display font-bold">{invoice.number ?? invoiceKind[invoice.kind]}</span> · {formatMoney(invoice.totalCents)}
-                    </span>
+                    <VividPill option={optionOf(quoteStatusOptions, quote.status)} />
                   </Link>
                 </li>
               ))}
             </ul>
-            {deal.quotes.length + deal.invoices.length === 0 ? <p className="text-[0.875rem] text-[var(--ink-45)]">Aucun document.</p> : null}
+
+            {deal.invoices.length ? <p className="mb-1.5 font-display text-[0.6875rem] font-bold tracking-[0.06em] text-[var(--ink-45)] uppercase">Factures ({deal.invoices.length})</p> : null}
+            <ul className="grid grid-cols-[minmax(0,1fr)] gap-1">
+              {deal.invoices.map((invoice) => (
+                <li key={invoice.id}>
+                  <Link href={`/admin/invoices/${invoice.id}`} className="flex items-center gap-2 rounded-[12px] px-2 py-2 hover:bg-aegean-50">
+                    <Receipt className="size-4 shrink-0 text-[var(--ink-45)]" />
+                    <span className="min-w-0 flex-1 truncate text-[0.875rem]">
+                      <span className="font-display font-bold">{shortKind[invoice.kind]}</span>
+                      <span className="text-[var(--ink-45)]">{invoice.number ? ` ${invoice.number}` : ""}</span> · {formatMoney(invoice.kind === "CREDIT_NOTE" ? -invoice.totalCents : invoice.totalCents)}
+                    </span>
+                    <VividPill option={optionOf(invoiceStateOptions, invoiceState(invoice))} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {deal.quotes.length + deal.invoices.length === 0 ? <p className="text-[0.875rem] text-[var(--ink-45)]">Aucun document. Créez un devis, ou une facture hors devis.</p> : null}
           </Panel>
 
           <Panel title="Tâches">
@@ -313,3 +354,21 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
     </>
   );
 }
+
+function invoiceState(invoice: { status: string; dueDate: Date | null; payments: { amountCents: number }[] }) {
+  const paid = invoice.payments.reduce((sum, payment) => sum + payment.amountCents, 0);
+  if (invoice.status === "ISSUED" && invoice.dueDate && invoice.dueDate < new Date()) return "OVERDUE";
+  if (invoice.status === "ISSUED" && paid > 0) return "PARTIAL";
+  return invoice.status;
+}
+
+function BillingFigure({ label, value, tone }: { label: string; value: string; tone?: string }) {
+  return (
+    <div className="rounded-[14px] bg-[#F5F8FC] px-3 py-2.5">
+      <p className="font-display text-[0.625rem] font-bold tracking-[0.06em] text-[var(--ink-45)] uppercase">{label}</p>
+      <p className={cn("font-display text-[1rem] font-extrabold", tone)}>{value}</p>
+    </div>
+  );
+}
+
+const shortKind: Record<string, string> = { DEPOSIT: "Acompte", BALANCE: "Solde", STANDARD: "Facture", CREDIT_NOTE: "Avoir" };

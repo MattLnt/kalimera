@@ -9,7 +9,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { bookingConfig } from "@/lib/booking/config";
-import { getAvailability } from "@/lib/booking/service";
+import { getAvailability, getBookingConfig } from "@/lib/booking/service";
 import { buildAlternates } from "@/lib/seo";
 
 /**
@@ -39,7 +39,7 @@ export default async function BookPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [t, days] = await Promise.all([getTranslations("booking"), getAvailability()]);
+  const [t, days, config] = await Promise.all([getTranslations("booking"), getAvailability(), getBookingConfig()]);
 
   const steps = [
     { icon: Ear, title: t("aside1Title"), body: t("aside1Body") },
@@ -57,7 +57,7 @@ export default async function BookPage({
             <BookingWidget
               days={days}
               timeZone={bookingConfig.timeZone}
-              durationMinutes={bookingConfig.durationMinutes}
+              durationMinutes={config.durationMinutes}
             />
           </Reveal>
 

@@ -30,6 +30,7 @@
     "next": "16.4.2",
     "next-auth": "^5.0.0-beta.32",
     "next-intl": "^4.14.9",
+    "node-ical": "^0.27.6",
     "pg": "^8.16.3",
     "puppeteer-core": "25.16.0",
     "react": "19.3.0",

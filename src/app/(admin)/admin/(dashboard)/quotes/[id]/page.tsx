@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { deleteQuote, duplicateQuote, invoiceFromQuote, setQuoteStatus } from "../actions";
+import { DepositForm } from "./deposit-form";
 import { AcceptQuoteForm, ActionTabs, SendQuoteForm } from "./quote-actions";
 
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
@@ -191,14 +192,15 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
                     </span>
                   </Link>
                 ))}
-                {deposit.length === 0 && balance.length === 0 && quote.depositPercent > 0 && quote.depositPercent < 100 ? (
-                  <form action={invoiceFromQuote}>
-                    <input type="hidden" name="id" value={quote.id} />
-                    <input type="hidden" name="kind" value="DEPOSIT" />
-                    <button type="submit" className="w-full cursor-pointer rounded-full bg-aegean-600 px-4 py-2.5 font-display text-sm font-bold text-white hover:bg-aegean-700">
-                      Facturer l&apos;acompte ({quote.depositPercent} %)
-                    </button>
-                  </form>
+                {balance.length === 0 ? (
+                  <DepositForm
+                    quoteId={quote.id}
+                    totalCents={quote.totalCents}
+                    billedCents={deposit.reduce((sum, invoice) => sum + invoice.totalCents, 0)}
+                    currency={quote.currency}
+                    defaultPercent={deposit.length ? 0 : quote.depositPercent}
+                    count={deposit.length}
+                  />
                 ) : null}
                 {balance.length === 0 ? (
                   <form action={invoiceFromQuote}>

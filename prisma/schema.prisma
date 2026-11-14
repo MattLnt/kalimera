@@ -878,6 +878,18 @@ model CompanySettings {
 }
 
 /// Règles de la prise de rendez-vous, réglables depuis l'administration.
+/// Créneau fermé à la main dans l'agenda (rendez-vous perso, déplacement…).
+model BookingBlock {
+  id        String   @id @default(cuid())
+  startsAt  DateTime
+  endsAt    DateTime
+  label     String?
+  createdAt DateTime @default(now())
+
+  @@index([startsAt])
+  @@map("crm_booking_blocks")
+}
+
 model BookingSettings {
   id              String   @id @default("default")
   durationMinutes Int      @default(30)

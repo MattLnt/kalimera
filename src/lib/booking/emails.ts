@@ -198,7 +198,7 @@ export async function sendBookingConfirmation(booking: BookingEmail) {
       <p style="margin:0 0 20px;font-size:15px;line-height:1.65;color:rgba(8,9,11,.7)">${escapeHtml(c.intro(booking.name))}</p>
       <div style="padding:20px;background:#f1f7fe;border-radius:16px;margin-bottom:20px">
         <p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;color:#08090b">${escapeHtml(day)}</p>
-        <p style="margin:4px 0 0;font-size:15px;color:#1562b8">${c.at} ${time} · ${bookingConfig.durationMinutes} min · ${c.zone}</p>
+        <p style="margin:4px 0 0;font-size:15px;color:#1562b8">${c.at} ${time} · ${Math.round((booking.endsAt.getTime() - booking.startsAt.getTime()) / 60_000)} min · ${c.zone}</p>
       </div>
       ${how}
       <p style="margin:20px 0;font-size:14px;line-height:1.6;color:rgba(8,9,11,.6)">${c.prepare}</p>

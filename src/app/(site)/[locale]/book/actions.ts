@@ -5,13 +5,12 @@ import { z } from "zod";
 
 import { Prisma } from "@/generated/prisma/client";
 import { Locale as DbLocale } from "@/generated/prisma/enums";
-import { bookingConfig } from "@/lib/booking/config";
 import {
   sendBookingCancellation,
   sendBookingConfirmation,
   sendBookingNotification,
 } from "@/lib/booking/emails";
-import { bookUrl, getBusy, meetingUrlFor, newToken, toEmail } from "@/lib/booking/service";
+import { bookUrl, getBookingConfig, getBusy, meetingUrlFor, newToken, toEmail } from "@/lib/booking/service";
 import { isSlotAvailable } from "@/lib/booking/slots";
 import { linkInboundClient } from "@/lib/crm/intake";
 import { redirect } from "@/i18n/navigation";
@@ -124,7 +123,8 @@ export async function bookCall(_previous: BookingState, formData: FormData): Pro
 
   const data = parsed.data;
   const startsAt = new Date(data.slot);
-  const endsAt = new Date(startsAt.getTime() + bookingConfig.durationMinutes * 60_000);
+  const config = await getBookingConfig();
+  const endsAt = new Date(startsAt.getTime() + config.durationMinutes * 60_000);
   const token = newToken();
 
   let booking;
@@ -134,8 +134,8 @@ export async function bookCall(_previous: BookingState, formData: FormData): Pro
     // l'obtenir tous les deux.
     booking = await prisma.$transaction(
       async (tx) => {
-        const busy = await getBusy(tx);
-        if (!isSlotAvailable(startsAt.toISOString(), busy)) return null;
+        const busy = await getBusy(tx, new Date(), config);
+        if (!isSlotAvailable(startsAt.toISOString(), busy, new Date(), config)) return null;
         return tx.booking.create({
           data: {
             startsAt,

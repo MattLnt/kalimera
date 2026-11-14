@@ -12,7 +12,8 @@ export type AvailableDay = {
   slots: string[];
 };
 
-type Busy = { startsAt: Date; endsAt: Date };
+/** Une occupation. `counts: false` : bloque le créneau sans compter dans le maximum du jour. */
+export type Busy = { startsAt: Date; endsAt: Date; counts?: boolean };
 
 const MINUTE = 60_000;
 
@@ -100,7 +101,7 @@ export function computeAvailability(
     const windows = config.blackoutDates.includes(date) ? [] : (config.weekly[weekday(date)] ?? []);
 
     const bookedThatDay = busy.filter(
-      (item) => localDate(item.startsAt, config.timeZone) === date,
+      (item) => item.counts !== false && localDate(item.startsAt, config.timeZone) === date,
     ).length;
     const full = bookedThatDay >= config.maxPerDay;
 
@@ -128,6 +129,6 @@ export function computeAvailability(
 }
 
 /** Vrai si l'instant proposé est un créneau libre au moment de l'appel. */
-export function isSlotAvailable(slot: string, busy: Busy[], now = new Date()) {
-  return computeAvailability(busy, now).some((day) => day.slots.includes(slot));
+export function isSlotAvailable(slot: string, busy: Busy[], now = new Date(), config: BookingConfig = bookingConfig) {
+  return computeAvailability(busy, now, config).some((day) => day.slots.includes(slot));
 }

@@ -373,14 +373,27 @@ export async function invoiceFromQuote(formData: FormData) {
   let lines: { title: string; description: string | null; amountCents: number }[];
   let title = quote.title;
   if (kind === "DEPOSIT") {
-    const amount = Math.round((quote.totalCents * quote.depositPercent) / 100);
-    lines = [{ title: `Acompte de ${quote.depositPercent} % à la commande`, description: `Devis ${ref} — ${quote.title}`, amountCents: amount }];
-    title = `${quote.title} — Acompte`;
+    // Plusieurs acomptes possibles : montant choisi (ou pourcentage du devis),
+    // jamais au-delà du reste à facturer.
+    const asked = Number(readString(formData, "amountCents"));
+    const percent = Number(readString(formData, "percent")) || quote.depositPercent;
+    const amount = Math.min(asked > 0 ? Math.round(asked) : Math.round((quote.totalCents * percent) / 100), quote.totalCents - billed);
+    if (amount <= 0) return;
+    const rank = quote.invoices.filter((invoice) => invoice.kind === "DEPOSIT" && invoice.status !== "CANCELLED").length + 1;
+    const share = Math.round((amount / quote.totalCents) * 1000) / 10;
+    lines = [
+      {
+        title: `${rank > 1 ? `Acompte n° ${rank}` : "Acompte à la commande"} — ${String(share).replace(".", ",")} % du devis`,
+        description: `Devis ${ref} — ${quote.title}`,
+        amountCents: amount,
+      },
+    ];
+    title = `${quote.title} — Acompte${rank > 1 ? ` n° ${rank}` : ""}`;
   } else if (kind === "BALANCE") {
     lines = quote.lines
       .filter((line) => line.kind === "ITEM")
       .map((line) => ({ title: line.title, description: line.description, amountCents: line.unitPriceCents }));
-    if (billed > 0) lines.push({ title: "Acompte déjà facturé", description: `Devis ${ref}`, amountCents: -billed });
+    if (billed > 0) lines.push({ title: "Acomptes déjà facturés", description: `Devis ${ref}`, amountCents: -billed });
     title = `${quote.title} — Solde`;
   } else {
     lines = quote.lines

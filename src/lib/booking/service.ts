@@ -2,31 +2,80 @@ import "server-only";
 
 import { randomBytes } from "node:crypto";
 
+import { cache } from "react";
+
 import type { Booking } from "@/generated/prisma/client";
-import { bookingConfig } from "@/lib/booking/config";
+import { bookingConfig, type BookingConfig } from "@/lib/booking/config";
 import type { BookingEmail } from "@/lib/booking/emails";
-import { computeAvailability } from "@/lib/booking/slots";
+import { readExternalCalendar } from "@/lib/booking/external";
+import { computeAvailability, type Busy } from "@/lib/booking/slots";
 import { getPathname } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { getSiteUrl } from "@/lib/site";
 
-type Db = Pick<typeof prisma, "booking">;
+type Db = Pick<typeof prisma, "booking" | "bookingBlock">;
 
-/** Rendez-vous confirmés qui occupent l'horizon de réservation. */
-export async function getBusy(db: Db = prisma, now = new Date()) {
-  return db.booking.findMany({
-    where: {
-      status: "CONFIRMED",
-      endsAt: { gte: now },
-      startsAt: { lte: new Date(now.getTime() + (bookingConfig.horizonDays + 1) * 86_400_000) },
-    },
-    select: { startsAt: true, endsAt: true },
-  });
+/** Les plages d'un jour, nettoyées : heures valides, début avant la fin, triées. */
+function cleanWeekly(raw: unknown): BookingConfig["weekly"] | null {
+  if (!raw || typeof raw !== "object") return null;
+  const weekly: BookingConfig["weekly"] = {};
+  for (const [day, ranges] of Object.entries(raw as Record<string, unknown>)) {
+    if (!Array.isArray(ranges)) continue;
+    const ok = ranges
+      .filter((r): r is [string, string] => Array.isArray(r) && /^\d\d:\d\d$/.test(r[0]) && /^\d\d:\d\d$/.test(r[1]) && r[0] < r[1])
+      .sort((a, b) => a[0].localeCompare(b[0]));
+    if (ok.length) weekly[Number(day)] = ok;
+  }
+  return weekly;
+}
+
+/**
+ * Règles en vigueur : celles enregistrées dans l'admin (Agenda ›
+ * Disponibilités), sinon les valeurs par défaut de `config.ts`.
+ */
+export const getBookingConfig = cache(async (): Promise<BookingConfig> => {
+  const row = await prisma.bookingSettings.findUnique({ where: { id: "default" } }).catch(() => null);
+  if (!row) return bookingConfig;
+  return {
+    ...bookingConfig,
+    durationMinutes: row.durationMinutes,
+    stepMinutes: row.stepMinutes,
+    bufferMinutes: row.bufferMinutes,
+    minNoticeHours: row.minNoticeHours,
+    horizonDays: row.horizonDays,
+    maxPerDay: row.maxPerDay,
+    weekly: cleanWeekly(row.weekly) ?? bookingConfig.weekly,
+    blackoutDates: row.blackoutDates,
+    busyCalendarUrl: row.busyCalendarUrl,
+  };
+});
+
+/**
+ * Tout ce qui occupe l'horizon : rendez-vous confirmés, créneaux bloqués à
+ * la main, et évènements de l'agenda externe s'il est branché.
+ */
+export async function getBusy(db: Db = prisma, now = new Date(), config?: BookingConfig): Promise<Busy[]> {
+  const rules = config ?? (await getBookingConfig());
+  const until = new Date(now.getTime() + (rules.horizonDays + 1) * 86_400_000);
+  const [bookings, blocks, external] = await Promise.all([
+    db.booking.findMany({
+      where: { status: "CONFIRMED", endsAt: { gte: now }, startsAt: { lte: until } },
+      select: { startsAt: true, endsAt: true },
+    }),
+    db.bookingBlock.findMany({ where: { endsAt: { gte: now }, startsAt: { lte: until } }, select: { startsAt: true, endsAt: true } }),
+    rules.busyCalendarUrl ? readExternalCalendar(rules.busyCalendarUrl, now, until) : Promise.resolve({ events: [], error: null }),
+  ]);
+  return [
+    ...bookings,
+    ...blocks.map((block) => ({ ...block, counts: false })),
+    ...external.events.map(({ startsAt, endsAt }) => ({ startsAt, endsAt, counts: false })),
+  ];
 }
 
 export async function getAvailability() {
-  return computeAvailability(await getBusy());
+  const config = await getBookingConfig();
+  return computeAvailability(await getBusy(prisma, new Date(), config), new Date(), config);
 }
 
 /** Jeton du lien de gestion : impossible à deviner, propre dans une URL. */
