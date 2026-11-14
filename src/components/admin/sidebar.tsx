@@ -2,12 +2,14 @@
 
 import {
   BriefcaseBusiness,
+  ChevronDown,
   CalendarDays,
   CheckSquare,
   ExternalLink,
   FileSignature,
   FileText,
   FolderKanban,
+  Globe,
   Image as ImageIcon,
   LayoutGrid,
   Layers,
@@ -73,6 +75,10 @@ const groups: { title: string; items: Item[] }[] = [
   },
 ];
 
+/** Ordinateur : trois sections courtes ; le site se replie, le compte va en bas. */
+const deskSections = groups.filter((group) => group.title !== "Site" && group.title !== "Compte");
+const siteItems = groups.find((group) => group.title === "Site")?.items ?? [];
+
 /** Les quatre destinations de la barre du bas ; le reste passe par « Plus ». */
 const mobileBar: Item[] = [
   { href: "/admin", label: "Accueil", icon: LayoutGrid, exact: true },
@@ -124,18 +130,25 @@ export function AdminSidebar({
     };
   }, [sheet]);
 
+  const siteActive = siteItems.some((item) => isActive(pathname, item));
+  const [siteOpen, setSiteOpen] = useState(siteActive);
+  const [wasSiteActive, setWasSiteActive] = useState(siteActive);
+  if (siteActive !== wasSiteActive) {
+    setWasSiteActive(siteActive);
+    if (siteActive) setSiteOpen(true);
+  }
+
   const badge = (item: Item) => (item.badge ? counts[item.badge] : 0);
   const moreActive = !mobileBar.some((item) => isActive(pathname, item));
 
   return (
     <>
       {/* ------------------------------------------------ ordinateur */}
-      <aside className="sticky top-0 z-1 hidden h-dvh w-[260px] shrink-0 lg:block">
+      <aside className="sticky top-0 z-1 hidden h-dvh w-[248px] shrink-0 lg:block">
         <div className="relative flex h-full flex-col">
-
           <Link
             href="/admin"
-            className="relative z-2 flex items-center gap-2 px-6 pt-6 pb-4 font-display text-lg font-extrabold tracking-[-0.04em] text-white"
+            className="flex items-center gap-2 px-6 pt-6 pb-5 font-display text-lg font-extrabold tracking-[-0.04em] text-white"
           >
             <Logo id="logo-admin" />
             Kalimera
@@ -144,60 +157,56 @@ export function AdminSidebar({
             </span>
           </Link>
 
-          <nav className="relative z-2 flex-1 overflow-y-auto px-3 pb-4 [scrollbar-color:rgba(255,255,255,0.2)_transparent] [scrollbar-width:thin]">
-            {groups.map((group) => (
-              <div key={group.title} className="mt-4 first:mt-1">
+          {/* Trois sections courtes, puis le site replié : tout tient sans
+              défilement sur un écran d'ordinateur portable. */}
+          <nav className="flex-1 overflow-y-auto px-3 [scrollbar-width:none]">
+            {deskSections.map((section) => (
+              <div key={section.title} className="mb-4">
                 <p className="mb-1 px-3 font-display text-[0.625rem] font-bold tracking-[0.12em] text-white/35 uppercase">
-                  {group.title}
+                  {section.title}
                 </p>
                 <ul className="grid gap-0.5">
-                  {group.items.map((item) => {
-                    const active = isActive(pathname, item);
-                    const count = badge(item);
-                    return (
-                      <li key={item.href}>
-                        <Link
-                          href={item.href}
-                          aria-current={active ? "page" : undefined}
-                          className={cn(
-                            "flex items-center gap-2.5 rounded-[12px] px-3 py-2 font-display text-[0.875rem] font-semibold transition-colors",
-                            active
-                              ? "bg-white text-aegean-800 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.6)]"
-                              : "text-white/65 hover:bg-white/[0.08] hover:text-white",
-                          )}
-                        >
-                          <item.icon className={cn("size-4 shrink-0", active && "text-aegean-600")} />
-                          {item.label}
-                          {count > 0 ? (
-                            <span
-                              className={cn(
-                                "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[0.6875rem] font-bold",
-                                active ? "bg-aegean-100 text-aegean-700" : "bg-aegean-500 text-white",
-                              )}
-                            >
-                              {count}
-                            </span>
-                          ) : null}
-                        </Link>
-                      </li>
-                    );
-                  })}
+                  {section.items.map((item) => (
+                    <li key={item.href}>
+                      <NavLink item={item} active={isActive(pathname, item)} count={badge(item)} />
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}
+
+            <div className="mb-4">
+              <p className="mb-1 px-3 font-display text-[0.625rem] font-bold tracking-[0.12em] text-white/35 uppercase">
+                Contenu
+              </p>
+              <button
+                type="button"
+                onClick={() => setSiteOpen((value) => !value)}
+                aria-expanded={siteOpen}
+                className={cn(
+                  "flex w-full cursor-pointer items-center gap-2.5 rounded-[12px] px-3 py-[7px] font-display text-[0.875rem] font-semibold transition-colors",
+                  siteActive && !siteOpen ? "bg-white/[0.1] text-white" : "text-white/65 hover:bg-white/[0.08] hover:text-white",
+                )}
+              >
+                <Globe className="size-4 shrink-0" />
+                Site web
+                <ChevronDown className={cn("ml-auto size-4 transition-transform duration-300", siteOpen && "rotate-180")} />
+              </button>
+              {siteOpen ? (
+                <ul className="mt-0.5 ml-[21px] grid gap-0.5 border-l border-white/10 pl-2">
+                  {siteItems.map((item) => (
+                    <li key={item.href}>
+                      <NavLink item={item} active={isActive(pathname, item)} count={0} compact />
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
           </nav>
 
-          <div className="relative z-2 grid gap-1 border-t border-white/10 p-3">
-            <a
-              href="/fr"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2.5 rounded-[12px] px-3 py-2 font-display text-[0.875rem] font-semibold text-white/65 transition-colors hover:bg-white/[0.08] hover:text-white"
-            >
-              <ExternalLink className="size-4" />
-              Voir le site
-            </a>
-            <div className="flex items-center gap-2.5 rounded-[16px] bg-white/[0.06] px-3 py-2.5">
+          {/* Profil, avec les trois actions de compte en icônes. */}
+          <div className="p-3">
+            <div className="flex items-center gap-2 rounded-[16px] bg-white/[0.07] p-2 pl-3">
               <span className="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-aegean-400 to-aegean-600 font-display text-xs font-bold text-white">
                 {(user.name || user.email).slice(0, 1).toUpperCase()}
               </span>
@@ -205,14 +214,37 @@ export function AdminSidebar({
                 <span className="block truncate font-display text-[0.8125rem] font-bold text-white">{user.name}</span>
                 <span className="block truncate text-[0.6875rem] text-white/45">{user.email}</span>
               </span>
+            </div>
+            <div className="mt-1.5 grid grid-cols-3 gap-1">
+              <Link
+                href="/admin/settings"
+                title="Réglages"
+                className={cn(
+                  "flex items-center justify-center gap-1.5 rounded-[12px] py-2 font-display text-[0.6875rem] font-bold transition-colors",
+                  pathname.startsWith("/admin/settings") ? "bg-white text-aegean-800" : "text-white/55 hover:bg-white/[0.08] hover:text-white",
+                )}
+              >
+                <Settings className="size-3.5" />
+                Réglages
+              </Link>
+              <a
+                href="/fr"
+                target="_blank"
+                rel="noreferrer"
+                title="Voir le site"
+                className="flex items-center justify-center gap-1.5 rounded-[12px] py-2 font-display text-[0.6875rem] font-bold text-white/55 transition-colors hover:bg-white/[0.08] hover:text-white"
+              >
+                <ExternalLink className="size-3.5" />
+                Site
+              </a>
               <button
                 type="button"
                 title="Se déconnecter"
-                aria-label="Se déconnecter"
                 onClick={() => signOut({ callbackUrl: "/admin/login" })}
-                className="grid size-8 cursor-pointer place-items-center rounded-full text-white/45 transition-colors hover:bg-white/10 hover:text-white"
+                className="flex cursor-pointer items-center justify-center gap-1.5 rounded-[12px] py-2 font-display text-[0.6875rem] font-bold text-white/55 transition-colors hover:bg-white/[0.08] hover:text-white"
               >
-                <LogOut className="size-4" />
+                <LogOut className="size-3.5" />
+                Quitter
               </button>
             </div>
           </div>
@@ -355,5 +387,34 @@ export function AdminSidebar({
         </div>
       ) : null}
     </>
+  );
+}
+
+function NavLink({ item, active, count, compact = false }: { item: Item; active: boolean; count: number; compact?: boolean }) {
+  return (
+    <Link
+      href={item.href}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "flex items-center gap-2.5 rounded-[12px] px-3 font-display font-semibold transition-colors",
+        compact ? "py-1.5 text-[0.8125rem]" : "py-[7px] text-[0.875rem]",
+        active
+          ? "bg-white text-aegean-800 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.6)]"
+          : "text-white/65 hover:bg-white/[0.08] hover:text-white",
+      )}
+    >
+      <item.icon className={cn("shrink-0", compact ? "size-3.5" : "size-4", active && "text-aegean-600")} />
+      {item.label}
+      {count > 0 ? (
+        <span
+          className={cn(
+            "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[0.6875rem] font-bold",
+            active ? "bg-aegean-100 text-aegean-700" : "bg-aegean-500 text-white",
+          )}
+        >
+          {count}
+        </span>
+      ) : null}
+    </Link>
   );
 }
