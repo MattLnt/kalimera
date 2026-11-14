@@ -16,7 +16,9 @@ export default function AdminRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${manrope.variable} ${inter.variable}`}>
+    // 90 % de la taille de base : tout ce qui est en rem (texte, marges, champs)
+    // se resserre d'un même cran, sans rien déséquilibrer.
+    <html lang="fr" className={`${manrope.variable} ${inter.variable}`} style={{ fontSize: "90%" }}>
       <body className="min-h-dvh bg-canvas">{children}</body>
     </html>
   );

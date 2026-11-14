@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { FileText, Layers, Loader2, StickyNote, UserRound } from "lucide-react";
 import { useActionState, useMemo, useState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -76,7 +76,7 @@ export function InvoiceEditor({ initialDraft, issuers, clients }: { initialDraft
       <form action={action} className="grid gap-4">
         <input type="hidden" name="payload" value={payload} />
 
-        <Panel title="Destinataire et émetteur">
+        <Panel title="Destinataire et émetteur" description="À qui, au nom de qui, dans quelle devise." icon={<UserRound className="size-4" />}>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Client">
               <Select
@@ -126,7 +126,7 @@ export function InvoiceEditor({ initialDraft, issuers, clients }: { initialDraft
           </div>
         </Panel>
 
-        <Panel title="Contenu">
+        <Panel title="Contenu" description="Titre et ligne de contexte, en tête de la facture." icon={<FileText className="size-4" />}>
           <div className="grid gap-4">
             <Field label="Titre">
               <input value={draft.title} onChange={(event) => set({ title: event.target.value })} placeholder="Projet Exemple — Évolution de la plateforme" className="field-input font-display font-bold" />
@@ -137,11 +137,11 @@ export function InvoiceEditor({ initialDraft, issuers, clients }: { initialDraft
           </div>
         </Panel>
 
-        <Panel title={`Détail des prestations · ${centsToAmount(total)} ${symbol}`}>
+        <Panel title="Détail des prestations" description="Une ligne par prestation, avec son montant." icon={<Layers className="size-4" />} action={<span className="rounded-full bg-aegean-50 px-3 py-1 font-display text-[0.8125rem] font-extrabold text-aegean-800 tabular-nums">{centsToAmount(total)} {symbol}</span>}>
           <LotsEditor lots={draft.lots} onChange={(next) => set({ lots: next })} currencySymbol={symbol} titlePlaceholder="Envoi d'une notification par e-mail" />
         </Panel>
 
-        <Panel title="Note finale" description="Facultatif, imprimée en gris sous le total.">
+        <Panel title="Note finale" description="Facultatif, imprimée en gris sous le total." icon={<StickyNote className="size-4" />}>
           <textarea value={draft.notes} onChange={(event) => set({ notes: event.target.value })} rows={2} className="field-input resize-y" />
         </Panel>
 

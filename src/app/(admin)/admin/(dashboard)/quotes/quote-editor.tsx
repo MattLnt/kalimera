@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Sparkles, X } from "lucide-react";
+import { Ban, Clock, Code2, FileText, Layers, ListPlus, Loader2, ScrollText, Sparkles, TrendingUp, UserRound, Wallet, X } from "lucide-react";
 import { useActionState, useMemo, useState, useTransition } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -9,6 +9,7 @@ import { generateQuoteDraft } from "./ai";
 
 import { amountToCents, centsToAmount, LotsEditor, newLotKey, type LotDraft } from "@/components/admin/crm/lots-editor";
 import { OpenDraftPreview } from "@/components/admin/crm/open-preview";
+import { OptionalSections } from "@/components/admin/crm/optional-sections";
 import { Field, Panel } from "@/components/admin/ui";
 import { Select } from "@/components/ui/select";
 import { renderDocument, type DocClient, type DocIssuer } from "@/lib/crm/documents/render";
@@ -159,7 +160,7 @@ export function QuoteEditor({
           }
         />
 
-        <Panel title="Destinataire et émetteur">
+        <Panel title="Destinataire et émetteur" description="À qui, au nom de qui, dans quelle devise." icon={<UserRound className="size-4" />}>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Client">
               <Select
@@ -205,7 +206,7 @@ export function QuoteEditor({
           </div>
         </Panel>
 
-        <Panel title="Le projet">
+        <Panel title="Le projet" description="Titre, contexte et périmètre, en tête du devis." icon={<FileText className="size-4" />}>
           <div className="grid gap-4">
             <Field label="Titre">
               <input value={draft.title} onChange={(event) => set({ title: event.target.value })} placeholder="Plateforme de gestion interne — Version 1" className="field-input font-display font-bold" />
@@ -219,11 +220,11 @@ export function QuoteEditor({
           </div>
         </Panel>
 
-        <Panel title={`Lots · ${centsToAmount(total)} ${symbol}`} description="Une ligne par lot, avec son contenu et son prix.">
+        <Panel title="Lots et tarification" description="Une ligne par lot, avec son contenu et son prix." icon={<Layers className="size-4" />} action={<span className="rounded-full bg-aegean-50 px-3 py-1 font-display text-[0.8125rem] font-extrabold text-aegean-800 tabular-nums">{centsToAmount(total)} {symbol}</span>}>
           <LotsEditor lots={draft.lots} onChange={(next) => set({ lots: next })} currencySymbol={symbol} />
         </Panel>
 
-        <Panel title="Paiement et validité">
+        <Panel title="Paiement et validité" description="Acompte, durée de validité et mode d'accord." icon={<Wallet className="size-4" />}>
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Acompte (%)" hint="0 : paiement à la livraison.">
               <input type="number" min={0} max={100} value={draft.depositPercent} onChange={(event) => set({ depositPercent: event.target.value })} className="field-input" />
@@ -255,24 +256,16 @@ export function QuoteEditor({
           </div>
         </Panel>
 
-        <Panel title="Sections facultatives" description="Laissées vides, elles n'apparaissent pas sur le devis.">
-          <div className="grid gap-4">
-            <Field label="Délai">
-              <textarea value={draft.delay} onChange={(event) => set({ delay: event.target.value })} rows={2} className="field-input resize-y" />
-            </Field>
-            <Field label="Stack technique" hint="Une technologie par ligne.">
-              <textarea value={draft.stack} onChange={(event) => set({ stack: event.target.value })} rows={3} className="field-input resize-y" />
-            </Field>
-            <Field label="Hors périmètre">
-              <textarea value={draft.outOfScope} onChange={(event) => set({ outOfScope: event.target.value })} rows={2} className="field-input resize-y" />
-            </Field>
-            <Field label="Évolutions envisageables" hint="Une piste par ligne.">
-              <textarea value={draft.evolutions} onChange={(event) => set({ evolutions: event.target.value })} rows={3} className="field-input resize-y" />
-            </Field>
-            <Field label="Conditions particulières">
-              <textarea value={draft.terms} onChange={(event) => set({ terms: event.target.value })} rows={2} className="field-input resize-y" />
-            </Field>
-          </div>
+        <Panel title="Sections facultatives" description="Ouvrez une section pour la remplir ; vide, elle n'apparaît pas sur le devis." icon={<ListPlus className="size-4" />}>
+          <OptionalSections
+            sections={[
+              { key: "delay", icon: Clock, title: "Délai", hint: "Durée de réalisation estimée", value: draft.delay, onChange: (value) => set({ delay: value }), rows: 2, placeholder: "Délai de réalisation estimé : 4 à 6 semaines à compter de la validation du devis." },
+              { key: "stack", icon: Code2, title: "Stack technique", hint: "Une technologie par ligne", value: draft.stack, onChange: (value) => set({ stack: value }), placeholder: "Next.js (App Router), hébergement Vercel" },
+              { key: "outOfScope", icon: Ban, title: "Hors périmètre", hint: "Ce qui est explicitement exclu", value: draft.outOfScope, onChange: (value) => set({ outOfScope: value }), rows: 2 },
+              { key: "evolutions", icon: TrendingUp, title: "Évolutions envisageables", hint: "Une piste par ligne, pour un devis complémentaire", value: draft.evolutions, onChange: (value) => set({ evolutions: value }) },
+              { key: "terms", icon: ScrollText, title: "Conditions particulières", hint: "Clauses propres à ce devis", value: draft.terms, onChange: (value) => set({ terms: value }), rows: 2 },
+            ]}
+          />
         </Panel>
 
         {state.error ? <p role="alert" className="rounded-field bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p> : null}
