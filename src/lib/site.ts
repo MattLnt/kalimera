@@ -31,7 +31,6 @@ export const siteConfig = {
   openingHours: { days: ["Mo", "Tu", "We", "Th", "Fr"], opens: "09:00", closes: "18:00" },
   social: {
     linkedin: "https://www.linkedin.com/company/kalimera-agency",
-    github: "https://github.com/kalimera-agency",
     instagram: "https://www.instagram.com/kalimera.agency",
   },
   /**
@@ -39,8 +38,8 @@ export const siteConfig = {
    * ne rien mettre ici qui ne soit pas démontrable par une URL en ligne.
    */
   stats: {
-    projects: 10,
-    platforms: 4,
+    projects: 9,
+    platforms: 3,
     countries: 3,
     locales: 3,
   },

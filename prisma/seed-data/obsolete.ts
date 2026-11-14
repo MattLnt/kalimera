@@ -18,8 +18,9 @@ export const obsolete = {
     "kyma-fitness",
     "helia-cosmetics",
     "delphi-capital",
-    // Réalisé pour le client d'un partenaire : ne figure plus au portfolio.
+    // Réalisés pour les clients d'un partenaire : ne figurent plus au portfolio.
     "onshare",
+    "buymonth",
   ],
   /** Articles réécrits ou retirés — celui sur le score Lighthouse annonçait un chiffre non mesuré. */
   postKeys: ["cout-site-vitrine-2026", "regles-lighthouse-98"],

@@ -38,7 +38,6 @@ export function organizationSchema(base: string, description: string): Json {
     areaServed,
     sameAs: [
       siteConfig.social.linkedin,
-      siteConfig.social.github,
       siteConfig.social.instagram,
     ],
   };

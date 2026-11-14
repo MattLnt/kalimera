@@ -143,16 +143,6 @@ export async function SiteFooter({ dbLocale }: { dbLocale: DbLocale }) {
                   LinkedIn
                 </a>
               </li>
-              <li>
-                <a
-                  href={siteConfig.social.github}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                  className="text-[0.9375rem] text-[var(--ink-65)] transition-colors hover:text-ink"
-                >
-                  GitHub
-                </a>
-              </li>
             </ul>
           </div>
         </div>

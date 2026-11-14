@@ -4,7 +4,7 @@ import { t } from "./locale";
 
 /**
  * Les réalisations réelles. L'ordre d'affichage est fixé par `order`, en bas
- * du fichier ; OnShare a été retiré (client d'un partenaire, pas du studio).
+ * du fichier ; OnShare et BuyMonth ont été retirés (clients d'un partenaire, pas du studio).
  *
  * Règle de rédaction : ne rien écrire ici qui ne soit vérifiable en ouvrant
  * l'URL. Les `metrics` ne contiennent donc que des faits publics (prix
@@ -144,45 +144,6 @@ const entries = [
       "Plateforme en production, avec candidature anonyme, catégories de postes dédiées au secteur et accès recruteur par abonnement.",
       "In production, with anonymous applications, sector-specific role categories and subscription-based recruiter access.",
       "Plataforma en producción, con candidatura anónima, categorías de puesto propias del sector y acceso de reclutador por suscripción.",
-    ),
-  },
-  {
-    key: "buymonth",
-    kind: ProjectKind.WEBAPP,
-    client: "BuyMonth",
-    year: 2025,
-    liveUrl: "https://buymonth.be",
-    stack: ["Next.js", "TypeScript", "PostgreSQL"],
-    accent: "g2",
-    featured: false,
-    serviceKeys: ["saas-abonnement", "applications-web"],
-    metrics: [],
-    slug: t("buymonth", "buymonth", "buymonth"),
-    title: t("BuyMonth", "BuyMonth", "BuyMonth"),
-    category: t(
-      "SaaS B2B · Immobilier & crédit",
-      "B2B SaaS · Real estate & lending",
-      "SaaS B2B · Inmobiliaria y crédito",
-    ),
-    summary: t(
-      "Outil pour promoteurs immobiliers qui convertit un prix de vente en mensualité estimée.",
-      "A tool for property developers that turns a sale price into an estimated monthly payment.",
-      "Herramienta para promotores inmobiliarios que convierte un precio de venta en una mensualidad estimada.",
-    ),
-    challenge: t(
-      "Un prix de vente affiché en capital parle mal à un acheteur particulier, qui raisonne en mensualité. Les promoteurs perdaient des contacts simplement parce que le visiteur ne se projetait pas, faute de savoir ce que le bien représenterait dans son budget mensuel.",
-      "A sale price shown as a capital sum speaks poorly to a private buyer, who thinks in monthly payments. Developers were losing enquiries simply because visitors could not picture themselves there, not knowing what the property would mean for their monthly budget.",
-      "Un precio de venta expresado en capital le dice poco a un comprador particular, que razona en mensualidades. Los promotores perdían contactos simplemente porque el visitante no se proyectaba, al no saber qué supondría el inmueble en su presupuesto mensual.",
-    ),
-    solution: t(
-      "Un produit distribué sous forme de badges, de widgets et de QR codes que le promoteur intègre à ses propres supports, en ligne comme sur ses panneaux de chantier. Le calcul de mensualité est paramétrable, les contacts générés remontent dans un espace de suivi, et des partenariats de crédit peuvent être branchés dessus.",
-      "A product distributed as badges, widgets and QR codes that the developer embeds in their own materials, online and on site hoardings. The monthly-payment calculation is configurable, generated enquiries feed into a tracking area, and lending partnerships can be plugged in.",
-      "Un producto distribuido como insignias, widgets y códigos QR que el promotor integra en sus propios soportes, en línea y en sus vallas de obra. El cálculo de la mensualidad es configurable, los contactos generados llegan a un área de seguimiento y se pueden conectar acuerdos de crédito.",
-    ),
-    outcome: t(
-      "Produit en production, avec widgets intégrables, suivi des contacts et mentions légales conformes au cadre belge du crédit.",
-      "In production, with embeddable widgets, enquiry tracking and legal notices compliant with the Belgian lending framework.",
-      "Producto en producción, con widgets integrables, seguimiento de contactos y avisos legales conformes al marco belga del crédito.",
     ),
   },
   {
@@ -499,7 +460,6 @@ const order = [
   "digital-showroom",
   "skillio",
   "laenseigne",
-  "buymonth",
   "dorian-detailing",
   "mh-defense",
   "elite-detail-tampa",

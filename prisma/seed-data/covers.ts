@@ -43,14 +43,6 @@ export const covers = [
     altEs: "Página de ofertas de Skillio: búsqueda de empleos contables con filtros por ubicación y jornada",
   },
   {
-    projectKey: "buymonth",
-    file: "buymonth.jpg",
-    altFr:
-      "Calculateur de rentabilité de BuyMonth : curseurs de paramétrage et seuil de rentabilité calculé en direct",
-    altEn: "BuyMonth profitability calculator: parameter sliders and a break-even figure computed live",
-    altEs: "Calculadora de rentabilidad de BuyMonth: controles de parámetros y umbral de rentabilidad calculado en directo",
-  },
-  {
     projectKey: "coteburo",
     file: "coteburo.jpg",
     altFr:
