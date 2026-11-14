@@ -463,6 +463,15 @@
       opacity: 1;
     }
   }
+  /* Panneau latéral du CRM, qui glisse depuis la droite. */
+  @keyframes drawer-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
   /* Feuille du menu mobile de l'administration, qui monte du bas. */
   @keyframes sheet-up {
     from {

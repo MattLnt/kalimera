@@ -19,6 +19,7 @@ import {
   MoreHorizontal,
   Quote,
   Receipt,
+  Search,
   Settings,
   Users,
   X,
@@ -29,6 +30,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { openCommandPalette } from "@/components/admin/command-palette";
 import { Logo } from "@/components/site/logo";
 import { cn } from "@/lib/utils";
 
@@ -157,6 +159,16 @@ export function AdminSidebar({
             </span>
           </Link>
 
+          <button
+            type="button"
+            onClick={openCommandPalette}
+            className="mx-3 mb-4 flex cursor-pointer items-center gap-2.5 rounded-[12px] bg-white/[0.08] px-3 py-2 text-left font-display text-[0.8125rem] font-semibold text-white/60 ring-1 ring-white/10 transition-colors hover:bg-white/[0.12] hover:text-white"
+          >
+            <Search className="size-4" />
+            Rechercher
+            <kbd className="ml-auto rounded-[6px] bg-white/10 px-1.5 py-0.5 font-mono text-[0.625rem] text-white/50">Ctrl K</kbd>
+          </button>
+
           {/* Trois sections courtes, puis le site replié : tout tient sans
               défilement sur un écran d'ordinateur portable. */}
           <nav className="flex-1 overflow-y-auto px-3 [scrollbar-width:none]">
@@ -260,6 +272,9 @@ export function AdminSidebar({
             Studio
           </span>
         </Link>
+        <button type="button" onClick={openCommandPalette} aria-label="Rechercher" className="ml-auto grid size-10 cursor-pointer place-items-center rounded-full bg-white/10 text-white">
+          <Search className="size-4" />
+        </button>
       </header>
 
       {/* ------------------------------------------------ téléphone : barre du bas */}

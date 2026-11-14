@@ -7,7 +7,8 @@ import { useOptimistic, useState, useTransition } from "react";
 import { moveDeal } from "./actions";
 
 import type { DealStage } from "@/generated/prisma/enums";
-import { dealStages, toneDots } from "@/lib/crm/labels";
+import { dealStages } from "@/lib/crm/labels";
+import { dealStageOptions, optionOf } from "@/lib/crm/vivid";
 import { cn } from "@/lib/utils";
 
 export type BoardDeal = {
@@ -84,7 +85,7 @@ export function PipelineBoard({ deals, stages }: { deals: BoardDeal[]; stages: D
               )}
             >
               <header className="flex items-center gap-2 px-2 pt-1.5 pb-2.5">
-                <span className={cn("size-2 rounded-full", toneDots[meta.tone])} />
+                <span className="size-2.5 rounded-full" style={{ background: optionOf(dealStageOptions, stage).color }} />
                 <h2 className="font-display text-[0.875rem] font-bold">{meta.label}</h2>
                 <span className="rounded-full bg-white px-2 text-[0.6875rem] font-bold text-[var(--ink-45)]">{cards.length}</span>
                 <span className="ml-auto text-[0.75rem] font-semibold text-[var(--ink-45)]">{total ? euro.format(total / 100) : ""}</span>

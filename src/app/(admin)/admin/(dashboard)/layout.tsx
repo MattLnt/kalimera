@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { CommandPalette } from "@/components/admin/command-palette";
 import { AdminSidebar } from "@/components/admin/sidebar";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -37,6 +38,7 @@ export default async function DashboardLayout({
       <main className="relative z-1 min-w-0 flex-1 rounded-t-[26px] bg-canvas px-4 pt-6 pb-28 text-ink sm:px-8 sm:pt-8 lg:my-3 lg:mr-3 lg:rounded-[26px] lg:px-10 lg:py-10 2xl:px-14 lg:shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_30px_60px_-30px_rgba(0,0,0,0.6)]">
         <div className="mx-auto w-full max-w-[1720px]">{children}</div>
       </main>
+      <CommandPalette />
     </div>
   );
 }

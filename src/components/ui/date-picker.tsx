@@ -3,10 +3,12 @@
 import { CalendarDays, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 
+import { useFloating } from "@/lib/use-floating";
 import { cn } from "@/lib/utils";
 
 const monthFmt = new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", month: "long", year: "numeric" });
 const labelFmt = new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short", year: "numeric" });
+const shortFmt = new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", day: "numeric", month: "short" });
 const weekdays = ["L", "M", "M", "J", "V", "S", "D"];
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -35,6 +37,7 @@ export function DatePicker({
   className,
   clearable = true,
   "aria-label": ariaLabel,
+  bare = false,
 }: {
   name?: string;
   defaultValue?: string;
@@ -44,6 +47,8 @@ export function DatePicker({
   required?: boolean;
   className?: string;
   clearable?: boolean;
+  /** Version cellule de tableau : sans cadre, date courte centrée. */
+  bare?: boolean;
   "aria-label"?: string;
 }) {
   const id = useId();
@@ -55,6 +60,9 @@ export function DatePicker({
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  // Dans une cellule de tableau, le calendrier flotte en position fixe pour
+  // ne pas être rogné par le tableau.
+  const floating = useFloating(rootRef, open && Boolean(bare), () => setOpen(false), { width: 296, height: 360 });
 
   const set = (next: string) => {
     if (controlled === undefined) setInner(next);
@@ -145,18 +153,23 @@ export function DatePicker({
         aria-label={ariaLabel}
         onClick={() => {
           setCursor(value || today);
+          if (!open && bare) floating.place();
           setOpen((current) => !current);
         }}
         className={cn(
-          "field-input flex cursor-pointer items-center gap-2.5 text-left",
+          bare
+            ? "flex h-full w-full cursor-pointer items-center justify-center gap-1.5 px-2 text-[0.8125rem] transition-colors hover:bg-black/[0.03]"
+            : "field-input flex cursor-pointer items-center gap-2.5 text-left",
           open && "shadow-[inset_0_0_0_1px_var(--color-aegean-500),0_0_0_4px_rgba(42,134,232,0.14)]",
         )}
       >
-        <CalendarDays className={cn("size-4 shrink-0", selected ? "text-aegean-600" : "text-[var(--ink-45)]")} />
-        <span className={cn("min-w-0 flex-1 truncate first-letter:uppercase", !selected && "text-[var(--ink-45)]")}>
-          {selected ? labelFmt.format(selected) : placeholder}
+        {bare && selected ? null : (
+          <CalendarDays className={cn("size-4 shrink-0", selected ? "text-aegean-600" : "text-[var(--ink-45)]")} />
+        )}
+        <span className={cn("min-w-0 truncate first-letter:uppercase", !bare && "flex-1", !selected && "text-[var(--ink-45)]")}>
+          {selected ? (bare ? shortFmt.format(selected) : labelFmt.format(selected)) : bare ? "" : placeholder}
         </span>
-        {clearable && selected ? (
+        {clearable && selected && !bare ? (
           <span
             role="button"
             tabIndex={-1}
@@ -177,7 +190,12 @@ export function DatePicker({
           id={`${id}-dialog`}
           role="dialog"
           aria-label="Choisir une date"
-          className="absolute top-[calc(100%+6px)] left-0 z-50 w-[296px] animate-[menu-open_0.18s_var(--ease-out-expo)_both] rounded-[20px] bg-white p-3 shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.35)] ring-1 ring-black/5"
+          data-floating
+          style={bare ? floating.style : undefined}
+          className={cn(
+            "z-50 w-[296px] animate-[menu-open_0.18s_var(--ease-out-expo)_both] rounded-[20px] bg-white p-3 text-left shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.35)] ring-1 ring-black/5",
+            !bare && "absolute top-[calc(100%+6px)] left-0",
+          )}
         >
           <div className="mb-2 flex items-center gap-1 px-1">
             <p className="flex-1 font-display text-[0.9375rem] font-bold first-letter:uppercase" aria-live="polite">
