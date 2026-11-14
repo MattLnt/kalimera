@@ -10,6 +10,7 @@ export const config = {
    * du système de langues et protège ses propres routes dans son layout.
    */
   matcher: [
-    "/((?!api|admin|_next|_vercel|monitoring|.*\\..*).*)",
+    // « documents » : devis et factures envoyés aux clients, hors du système de langues.
+    "/((?!api|admin|documents|_next|_vercel|monitoring|.*\\..*).*)",
   ],
 };

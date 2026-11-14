@@ -26,6 +26,8 @@ export type ClientDraft = {
   source: string;
   status: string;
   summary: string;
+  defaultIssuerId: string;
+  printAddress: boolean;
 };
 
 const sources = ["Formulaire de contact", "Rendez-vous en ligne", "Recommandation", "Réseau", "Prospection", "Google", "Autre"];
@@ -42,7 +44,7 @@ const countries = [
 
 const initial: FormState = {};
 
-export function ClientForm({ client }: { client: ClientDraft }) {
+export function ClientForm({ client, issuers }: { client: ClientDraft; issuers: { id: string; label: string }[] }) {
   const [state, action] = useActionState(saveClient, initial);
   const isNew = !client.id;
 
@@ -141,6 +143,26 @@ export function ClientForm({ client }: { client: ClientDraft }) {
         </Panel>
       ) : null}
 
+      <Panel title="Devis et factures">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Émis par défaut au nom de" hint="Proposé à la création de ses devis et factures.">
+            <Select
+              name="defaultIssuerId"
+              defaultValue={client.defaultIssuerId}
+              placeholder="Aucune préférence"
+              options={[{ value: "", label: "Aucune préférence" }, ...issuers.map((issuer) => ({ value: issuer.id, label: issuer.label }))]}
+            />
+          </Field>
+          <label className="flex cursor-pointer items-start gap-3 self-end rounded-field bg-black/[0.03] px-4 py-3 text-[0.875rem]">
+            <input name="printAddress" type="checkbox" defaultChecked={client.printAddress} className="mt-0.5 size-4 accent-aegean-600" />
+            <span>
+              <span className="block font-display font-bold">Imprimer l&apos;adresse sur les documents</span>
+              <span className="text-[var(--ink-45)]">Décochez pour n&apos;imprimer que le nom (sous-traitance, par exemple).</span>
+            </span>
+          </label>
+        </div>
+      </Panel>
+
       <Panel title="Mémo" description="Ce qu'il faut savoir avant d'appeler : contexte, enjeux, ton.">
         <textarea name="summary" rows={4} defaultValue={client.summary} className="field-input resize-y" />
       </Panel>
@@ -174,4 +196,6 @@ export const emptyClient: ClientDraft = {
   source: "",
   status: "LEAD",
   summary: "",
+  defaultIssuerId: "",
+  printAddress: true,
 };

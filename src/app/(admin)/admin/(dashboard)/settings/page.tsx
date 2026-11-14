@@ -1,3 +1,6 @@
+import { ArrowRight, Building2 } from "lucide-react";
+import Link from "next/link";
+
 import { PasswordForm, ProfileForm } from "./settings-forms";
 
 import { AdminHeader, Panel } from "@/components/admin/ui";
@@ -22,6 +25,21 @@ export default async function SettingsPage() {
       <AdminHeader title="Réglages" subtitle="Votre compte et l'état des services connectés." />
 
       <div className="grid gap-4">
+        <Link
+          href="/admin/settings/issuers"
+          className="surface-card surface-card-hover flex items-center gap-4 p-5"
+        >
+          <span className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-aegean-50 text-aegean-700">
+            <Building2 className="size-5" />
+          </span>
+          <span className="flex-1">
+            <span className="block font-display text-[1rem] font-bold tracking-[-0.02em]">Identités de facturation</span>
+            <span className="block text-[0.875rem] text-[var(--ink-65)]">
+              Kalimera LLC, nom propre, Estelle : en-têtes, mentions, banque et numérotation des devis et factures.
+            </span>
+          </span>
+          <ArrowRight className="size-4 text-aegean-600" />
+        </Link>
         <ProfileForm name={user?.name ?? ""} email={user?.email ?? ""} />
         <PasswordForm />
 

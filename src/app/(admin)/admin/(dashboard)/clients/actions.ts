@@ -31,6 +31,8 @@ function readClient(formData: FormData) {
     source: readOptional(formData, "source"),
     status: statuses.includes(status) ? status : "LEAD",
     summary: readOptional(formData, "summary"),
+    defaultIssuerId: readOptional(formData, "defaultIssuerId"),
+    printAddress: formData.get("printAddress") === "on",
   };
 }
 

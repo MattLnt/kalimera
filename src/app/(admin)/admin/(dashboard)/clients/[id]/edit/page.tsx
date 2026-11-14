@@ -11,13 +11,17 @@ export const metadata = { title: "Modifier le client" };
 
 export default async function EditClientPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const client = await prisma.client.findUnique({ where: { id } });
+  const [client, issuers] = await Promise.all([
+    prisma.client.findUnique({ where: { id } }),
+    prisma.issuer.findMany({ where: { archived: false }, orderBy: { position: "asc" }, select: { id: true, label: true } }),
+  ]);
   if (!client) notFound();
 
   return (
     <>
       <AdminHeader title={`Modifier ${client.name}`} back={{ href: `/admin/clients/${id}`, label: client.name }} />
       <ClientForm
+        issuers={issuers}
         client={{
           id: client.id,
           name: client.name,
@@ -35,6 +39,8 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
           source: client.source ?? "",
           status: client.status,
           summary: client.summary ?? "",
+          defaultIssuerId: client.defaultIssuerId ?? "",
+          printAddress: client.printAddress,
         }}
       />
 

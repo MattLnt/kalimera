@@ -48,7 +48,7 @@ const nextConfig: NextConfig = {
   },
   // Le client Prisma est généré dans src/generated : il doit rester externe au
   // bundle serveur pour que son moteur se charge correctement.
-  serverExternalPackages: ["@prisma/client", "@prisma/adapter-pg"],
+  serverExternalPackages: ["@prisma/client", "@prisma/adapter-pg", "puppeteer-core", "@sparticuz/chromium"],
   poweredByHeader: false,
   async headers() {
     return [

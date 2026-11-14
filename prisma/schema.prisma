@@ -427,38 +427,43 @@ enum ClientStatus {
 }
 
 model Client {
-  id           String       @id @default(cuid())
+  id              String       @id @default(cuid())
   /// Nom d'usage : « Côté BURO ».
-  name         String
+  name            String
   /// Raison sociale, telle qu'elle doit figurer sur les factures.
-  legalName    String?
-  siren        String?
-  vatNumber    String?
-  email        String?
-  phone        String?
-  website      String?
-  addressLine1 String?
-  addressLine2 String?
-  postalCode   String?
-  city         String?
-  country      String       @default("FR")
+  legalName       String?
+  siren           String?
+  vatNumber       String?
+  email           String?
+  phone           String?
+  website         String?
+  addressLine1    String?
+  addressLine2    String?
+  postalCode      String?
+  city            String?
+  country         String       @default("FR")
   /// D'où vient le client : formulaire, rendez-vous, recommandation…
-  source       String?
-  status       ClientStatus @default(LEAD)
+  source          String?
+  status          ClientStatus @default(LEAD)
   /// Mémo libre, affiché en tête de fiche.
-  summary      String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  summary         String?
+  /// Identité émettrice proposée par défaut sur ses devis et factures.
+  defaultIssuerId String?
+  /// Faux : seul le nom figure sur les documents (cas des sous-traitances).
+  printAddress    Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
-  contacts   ClientContact[]
-  deals      Deal[]
-  notes      Note[]
-  tasks      Task[]
-  quotes     Quote[]
-  invoices   Invoice[]
-  activities Activity[]
-  bookings   Booking[]
-  messages   ContactMessage[]
+  contacts      ClientContact[]
+  deals         Deal[]
+  notes         Note[]
+  tasks         Task[]
+  quotes        Quote[]
+  invoices      Invoice[]
+  activities    Activity[]
+  bookings      Booking[]
+  messages      ContactMessage[]
+  defaultIssuer Issuer?          @relation("ClientDefaultIssuer", fields: [defaultIssuerId], references: [id], onDelete: SetNull)
 
   @@index([status, updatedAt])
   @@map("crm_clients")
@@ -619,49 +624,72 @@ enum QuoteStatus {
 }
 
 model Quote {
-  id             String      @id @default(cuid())
-  /// Attribué à l'envoi : DEV-2026-001. Un brouillon n'a pas de numéro.
-  number         String?     @unique
-  clientId       String
-  dealId         String?
-  status         QuoteStatus @default(DRAFT)
-  title          String
-  intro          String?
+  id               String           @id @default(cuid())
+  /// Attribué à l'envoi ou à l'acceptation : DEV-2026-11-01. Modifiable.
+  number           String?
+  issuerId         String?
+  currency         String           @default("EUR")
+  clientId         String
+  dealId           String?
+  status           QuoteStatus      @default(DRAFT)
+  title            String
+  intro            String?
+  /// Section « Contexte » du devis.
+  context          String?
+  /// Phrase « Périmètre », en gras sous le contexte.
+  perimeter        String?
+  stack            String[]         @default([])
+  /// Section « Délai ».
+  delay            String?
+  /// Section « Hors périmètre de ce devis ».
+  outOfScope       String?
+  /// Section « Évolutions envisageables ».
+  evolutions       String[]         @default([])
+  /// Phrase grise sous les modalités de paiement.
+  paymentNote      String?
   /// Conditions particulières, affichées avant la signature.
-  terms          String?
-  issueDate      DateTime?
-  validUntil     DateTime?
-  depositPercent Int         @default(30)
-  subtotalCents  Int         @default(0)
-  vatCents       Int         @default(0)
-  totalCents     Int         @default(0)
+  terms            String?
+  issueDate        DateTime?
+  validUntil       DateTime?
+  validityDays     Int              @default(30)
+  depositPercent   Int              @default(50)
+  /// Faux : l'accord se fait hors ligne (oral, e-mail), sans page de signature.
+  requireSignature Boolean          @default(true)
+  acceptedVia      QuoteAcceptance?
+  acceptanceNote   String?
+  subtotalCents    Int              @default(0)
+  vatCents         Int              @default(0)
+  totalCents       Int              @default(0)
   /// Jeton du lien public de consultation et de signature.
-  token          String      @unique
+  token            String           @unique
   /// Coordonnées figées à l'envoi : le document ne change plus ensuite.
-  clientSnapshot Json?
-  issuerSnapshot Json?
-  sentAt         DateTime?
-  viewedAt       DateTime?
-  signedAt       DateTime?
-  signerName     String?
-  signerEmail    String?
-  signerIp       String?
-  signerAgent    String?
+  clientSnapshot   Json?
+  issuerSnapshot   Json?
+  sentAt           DateTime?
+  viewedAt         DateTime?
+  signedAt         DateTime?
+  signerName       String?
+  signerEmail      String?
+  signerIp         String?
+  signerAgent      String?
   /// Signature dessinée, en image PNG encodée.
-  signatureImage String?
+  signatureImage   String?
   /// Empreinte SHA-256 du contenu signé : prouve qu'il n'a pas changé.
-  signedHash     String?
-  declinedAt     DateTime?
-  declineReason  String?
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  signedHash       String?
+  declinedAt       DateTime?
+  declineReason    String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
   client     Client      @relation(fields: [clientId], references: [id], onDelete: Restrict)
   deal       Deal?       @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  issuer     Issuer?     @relation(fields: [issuerId], references: [id], onDelete: Restrict)
   lines      QuoteLine[]
   invoices   Invoice[]
   activities Activity[]
 
+  /// Une suite de numéros par identité émettrice.
+  @@unique([issuerId, number])
   @@index([status, updatedAt])
   @@index([clientId])
   @@map("crm_quotes")
@@ -710,8 +738,12 @@ enum InvoiceStatus {
 
 model Invoice {
   id                String        @id @default(cuid())
-  /// Numérotation continue, attribuée à l'émission : FAC-2026-0001.
-  number            String?       @unique
+  /// Numérotation continue par identité, attribuée à l'émission : FAC-2026-11-05.
+  number            String?
+  issuerId          String?
+  currency          String        @default("EUR")
+  /// Ligne de contexte facultative : « Prestation hors devis du … ».
+  contextLine       String?
   kind              InvoiceKind   @default(STANDARD)
   status            InvoiceStatus @default(DRAFT)
   clientId          String
@@ -738,10 +770,12 @@ model Invoice {
   client     Client        @relation(fields: [clientId], references: [id], onDelete: Restrict)
   deal       Deal?         @relation(fields: [dealId], references: [id], onDelete: SetNull)
   quote      Quote?        @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  issuer     Issuer?       @relation(fields: [issuerId], references: [id], onDelete: Restrict)
   lines      InvoiceLine[]
   payments   Payment[]
   activities Activity[]
 
+  @@unique([issuerId, number])
   @@index([status, dueDate])
   @@index([clientId])
   @@map("crm_invoices")
@@ -860,4 +894,58 @@ model BookingSettings {
   updatedAt       DateTime @updatedAt
 
   @@map("crm_booking_settings")
+}
+
+/// Comment un devis a été accepté.
+enum QuoteAcceptance {
+  /// Signé en ligne par le client.
+  SIGNATURE
+  /// Accord donné à l'oral.
+  VERBAL
+  EMAIL
+  PURCHASE_ORDER
+  OTHER
+}
+
+/// Identité au nom de laquelle un devis ou une facture est émis : la LLC,
+/// une personne en nom propre… Chacune a son en-tête, son pied de page, ses
+/// mentions, sa banque et sa propre suite de numéros.
+model Issuer {
+  id                String   @id @default(cuid())
+  /// Nom affiché dans l'administration.
+  label             String
+  /// Nom imprimé en gras en tête du document.
+  name              String
+  /// Lignes imprimées sous le nom (adresse, contact, immatriculation…).
+  headerLines       String   @default("")
+  /// Pied de page imprimé, centré.
+  footer            String   @default("")
+  email             String?
+  phone             String?
+  website           String?
+  /// Mention de TVA imprimée ; vide : rien n'est imprimé.
+  vatMention        String?
+  /// Délai de paiement, pénalités, indemnité : imprimés seulement si saisis.
+  paymentTerms      String?
+  latePenalty       String?
+  recoveryFee       String?
+  currency          String   @default("EUR")
+  bankHolder        String?
+  bankName          String?
+  iban              String?
+  bic               String?
+  depositPercent    Int      @default(50)
+  quoteValidityDays Int      @default(30)
+  invoicePrefix     String   @default("FAC")
+  quotePrefix       String   @default("DEV")
+  position          Int      @default(0)
+  archived          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  quotes         Quote[]
+  invoices       Invoice[]
+  defaultClients Client[]  @relation("ClientDefaultIssuer")
+
+  @@map("crm_issuers")
 }
