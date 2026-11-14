@@ -13,13 +13,16 @@ const moneyShort = new Intl.NumberFormat("fr-FR", {
 });
 
 /** 123456 → « 1 234,56 € » */
+/** L'espace fine de Intl n'existe pas dans la police du site : espace insécable. */
+const spaced = (text: string) => text.replace(/\u202f/g, "\u00a0");
+
 export function formatMoney(cents: number | null | undefined) {
-  return money.format((cents ?? 0) / 100);
+  return spaced(money.format((cents ?? 0) / 100));
 }
 
 /** 123456 → « 1 235 € », pour les tableaux de bord. */
 export function formatMoneyShort(cents: number | null | undefined) {
-  return moneyShort.format((cents ?? 0) / 100);
+  return spaced(moneyShort.format((cents ?? 0) / 100));
 }
 
 /** « 1 234,56 » ou « 1234.56 » → 123456. Renvoie null si illisible. */
@@ -74,7 +77,8 @@ export function fromDateInput(value: string | null | undefined) {
 export function initials(name: string) {
   return name
     .split(/\s+/)
-    .filter(Boolean)
+    // Seuls les mots qui commencent par une lettre : « TEST — Dupont » → « TD ».
+    .filter((part) => /^\p{L}/u.test(part))
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join("");

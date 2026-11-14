@@ -6,6 +6,7 @@ import { saveDeal, type FormState } from "./actions";
 
 import { SubmitButton } from "@/components/admin/form-controls";
 import { Field, Panel } from "@/components/admin/ui";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Select } from "@/components/ui/select";
 import { dealStages } from "@/lib/crm/labels";
 
@@ -77,10 +78,10 @@ export function DealForm({ deal, clients }: { deal: DealDraft; clients: { id: st
                 </div>
               </Field>
               <Field label="Démarrage">
-                <input name="startDate" type="date" defaultValue={deal.startDate} className="field-input" />
+                <DatePicker name="startDate" defaultValue={deal.startDate} placeholder="Non fixé" />
               </Field>
               <Field label="Livraison prévue">
-                <input name="dueDate" type="date" defaultValue={deal.dueDate} className="field-input" />
+                <DatePicker name="dueDate" defaultValue={deal.dueDate} placeholder="Non fixée" />
               </Field>
             </div>
             {stage === "LOST" ? (

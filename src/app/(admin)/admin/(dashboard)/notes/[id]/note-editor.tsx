@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { saveNote, type NoteDraft } from "../actions";
 
 import { Select } from "@/components/ui/select";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { noteKind } from "@/lib/crm/labels";
 import { cn } from "@/lib/utils";
 
@@ -208,7 +209,7 @@ export function NoteEditor({
       </div>
 
       {/* En-tête de la note */}
-      <div className="grid gap-3 border-b border-black/5 p-4 sm:grid-cols-[1fr_170px_200px_110px] sm:p-5">
+      <div className="grid gap-3 border-b border-black/5 p-4 sm:grid-cols-[1fr_170px_minmax(280px,320px)_110px] sm:p-5">
         <input
           value={draft.title}
           onChange={(event) => update({ title: event.target.value })}
@@ -222,12 +223,9 @@ export function NoteEditor({
           onValueChange={(value) => update({ kind: value as NoteDraft["kind"] })}
           options={Object.entries(noteKind).map(([value, item]) => ({ value, label: item.label }))}
         />
-        <input
-          type="datetime-local"
-          aria-label="Date"
+        <DateTimePicker
           value={toLocalInput(draft.occurredAt)}
-          onChange={(event) => update({ occurredAt: new Date(event.target.value).toISOString() })}
-          className="field-input"
+          onChange={(value) => value && update({ occurredAt: new Date(value).toISOString() })}
         />
         <label className="relative">
           <span className="sr-only">Durée en minutes</span>

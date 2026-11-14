@@ -3,6 +3,7 @@ import { createTask } from "./actions";
 import { TaskList } from "@/components/admin/crm/task-list";
 import { AdminHeader, Panel } from "@/components/admin/ui";
 import { Select } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { daysAgo } from "@/lib/crm/format";
 import { prisma } from "@/lib/prisma";
 
@@ -52,14 +53,14 @@ export default async function TasksPage() {
       <AdminHeader title="Tâches" subtitle="Relances, livrables, rappels : tout ce qui doit être fait, et quand." />
 
       <Panel className="mb-4">
-        <form action={createTask} className="grid gap-2 sm:grid-cols-[1fr_200px_160px_140px_auto]">
+        <form action={createTask} className="grid gap-2 sm:grid-cols-[1fr_200px_210px_140px_auto]">
           <input name="title" required placeholder="Nouvelle tâche : relancer, envoyer, préparer…" className="field-input" aria-label="Tâche" />
           <Select
             name="clientId"
             placeholder="Client (facultatif)"
             options={[{ value: "", label: "Aucun client" }, ...clients.map((client) => ({ value: client.id, label: client.name }))]}
           />
-          <input name="dueAt" type="date" className="field-input" aria-label="Échéance" />
+          <DatePicker name="dueAt" placeholder="Échéance" aria-label="Échéance" />
           <Select
             name="priority"
             defaultValue="NORMAL"

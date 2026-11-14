@@ -69,7 +69,7 @@ export default async function NotePage({
         />
 
         <div className="flex flex-col gap-4">
-          <Panel title={client.name}>
+          <Panel title={client.name} className={client.notes.length === 0 && !note.booking?.message ? "flex-1" : ""}>
             {client.summary ? (
               <p className="mb-4 rounded-field bg-amber-50 px-3.5 py-3 text-[0.875rem] leading-relaxed whitespace-pre-wrap text-amber-900">
                 {client.summary}
@@ -124,9 +124,7 @@ export default async function NotePage({
                 ))}
               </ul>
             </Panel>
-          ) : (
-            <div className="flex-1" />
-          )}
+          ) : null}
 
           <form action={deleteNote}>
             <input type="hidden" name="id" value={note.id} />

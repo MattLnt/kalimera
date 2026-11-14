@@ -2,7 +2,8 @@ import { CalendarClock, Check, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 import { createTask, deleteTask, toggleTask } from "@/app/(admin)/admin/(dashboard)/tasks/actions";
-import { formatDate } from "@/lib/crm/format";
+import { formatDate, toDateInput } from "@/lib/crm/format";
+import { DatePicker } from "@/components/ui/date-picker";
 import { cn } from "@/lib/utils";
 
 type TaskRow = {
@@ -28,13 +29,13 @@ export function TaskList({
   if (tasks.length === 0) {
     return <p className="py-2 text-[0.875rem] text-[var(--ink-45)]">{emptyLabel}</p>;
   }
-  const now = new Date();
+  const today = toDateInput(new Date());
 
   return (
     <ul className="grid gap-1">
       {tasks.map((task) => {
         const done = task.status === "DONE";
-        const late = !done && task.dueAt && task.dueAt < now;
+        const late = !done && task.dueAt && toDateInput(task.dueAt) < today;
         return (
           <li key={task.id} className="group flex items-start gap-3 rounded-field px-2 py-2 hover:bg-black/[0.02]">
             <form action={toggleTask}>
@@ -92,11 +93,11 @@ export function TaskList({
 /** Ajout rapide : un titre, une échéance facultative, Entrée. */
 export function QuickTaskForm({ clientId, dealId }: { clientId?: string; dealId?: string }) {
   return (
-    <form action={createTask} className="mt-3 flex flex-wrap gap-2">
+    <form action={createTask} className="mt-3 grid grid-cols-[1fr_auto] gap-2">
       {clientId ? <input type="hidden" name="clientId" value={clientId} /> : null}
       {dealId ? <input type="hidden" name="dealId" value={dealId} /> : null}
-      <input name="title" required placeholder="Nouvelle tâche…" className="field-input min-w-0 flex-1 py-2.5" aria-label="Nouvelle tâche" />
-      <input name="dueAt" type="date" className="field-input w-auto py-2.5" aria-label="Échéance" />
+      <input name="title" required placeholder="Nouvelle tâche…" className="field-input col-span-2 py-2.5" aria-label="Nouvelle tâche" />
+      <DatePicker name="dueAt" placeholder="Échéance" className="min-w-0" aria-label="Échéance" />
       <button type="submit" className="cursor-pointer rounded-full bg-aegean-600 px-4 font-display text-sm font-bold text-white hover:bg-aegean-700">
         Ajouter
       </button>

@@ -7,6 +7,7 @@ import { createNote } from "../../notes/actions";
 
 import { QuickTaskForm, TaskList } from "@/components/admin/crm/task-list";
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
+import { DatePicker } from "@/components/ui/date-picker";
 import { formatDate, formatDateTime, formatMoney, formatRelative } from "@/lib/crm/format";
 import { dealStage, dealStages, invoiceKind, noteKind, quoteStatus, toneClasses } from "@/lib/crm/labels";
 import { prisma } from "@/lib/prisma";
@@ -203,7 +204,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
             <form action={addMilestone} className="mt-2 flex flex-wrap gap-2">
               <input type="hidden" name="dealId" value={deal.id} />
               <input name="title" required placeholder="Nouvelle étape…" className="field-input min-w-0 flex-1 py-2.5" aria-label="Nouvelle étape" />
-              <input name="dueDate" type="date" className="field-input w-auto py-2.5" aria-label="Date prévue" />
+              <DatePicker name="dueDate" placeholder="Date prévue" className="w-52" aria-label="Date prévue" />
               <button type="submit" className="cursor-pointer rounded-full bg-aegean-600 px-4 font-display text-sm font-bold text-white">
                 Ajouter
               </button>

@@ -8,6 +8,7 @@ import { DeleteButton, FormError, SubmitButton } from "@/components/admin/form-c
 import { ImagePicker, type PickedMedia } from "@/components/admin/image-picker";
 import { LocaleTabs } from "@/components/admin/locale-tabs";
 import { Field, Panel } from "@/components/admin/ui";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 export type PostFormData = {
   id?: string;
@@ -152,12 +153,7 @@ export function PostForm({ post }: { post: PostFormData }) {
               label="Date de publication"
               hint="Une date future garde l'article invisible jusqu'à cette date."
             >
-              <input
-                name="publishedAt"
-                type="datetime-local"
-                defaultValue={post.publishedAt}
-                className="field-input"
-              />
+              <DateTimePicker name="publishedAt" defaultValue={post.publishedAt} />
             </Field>
           </div>
 
