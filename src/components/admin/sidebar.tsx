@@ -188,7 +188,7 @@ export function AdminSidebar({
                   siteActive && !siteOpen ? "bg-white/[0.1] text-white" : "text-white/65 hover:bg-white/[0.08] hover:text-white",
                 )}
               >
-                <Globe className="size-4 shrink-0" />
+                <span className="grid size-7 shrink-0 place-items-center"><Globe className="size-4" /></span>
                 Site web
                 <ChevronDown className={cn("ml-auto size-4 transition-transform duration-300", siteOpen && "rotate-180")} />
               </button>
@@ -390,26 +390,45 @@ export function AdminSidebar({
   );
 }
 
+/**
+ * Entrée du menu. L'onglet actif est une pastille au dégradé du site, avec
+ * un liseré clair, un halo bleu, l'icône dans sa propre tuile et un repère
+ * lumineux sur le bord gauche — plus riche qu'un simple fond blanc.
+ */
 function NavLink({ item, active, count, compact = false }: { item: Item; active: boolean; count: number; compact?: boolean }) {
   return (
     <Link
       href={item.href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex items-center gap-2.5 rounded-[12px] px-3 font-display font-semibold transition-colors",
-        compact ? "py-1.5 text-[0.8125rem]" : "py-[7px] text-[0.875rem]",
+        "group/nav relative flex items-center gap-2.5 rounded-[12px] px-2 font-display font-semibold transition-[background-color,color,box-shadow] duration-300",
+        compact ? "py-1 text-[0.8125rem]" : "py-[5px] text-[0.875rem]",
         active
-          ? "bg-white text-aegean-800 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.6)]"
-          : "text-white/65 hover:bg-white/[0.08] hover:text-white",
+          ? "bg-gradient-to-r from-aegean-500/90 to-aegean-600/70 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16),0_12px_28px_-12px_rgba(42,134,232,0.85)]"
+          : "text-white/65 hover:bg-white/[0.07] hover:text-white",
       )}
     >
-      <item.icon className={cn("shrink-0", compact ? "size-3.5" : "size-4", active && "text-aegean-600")} />
+      {active ? (
+        <span
+          aria-hidden
+          className="absolute top-1/2 -left-3 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-aegean-200 shadow-[0_0_12px_2px_rgba(187,219,251,0.7)]"
+        />
+      ) : null}
+      <span
+        className={cn(
+          "grid shrink-0 place-items-center rounded-[9px] transition-colors",
+          compact ? "size-6" : "size-7",
+          active ? "bg-white/20 text-white" : "text-white/55 group-hover/nav:text-white",
+        )}
+      >
+        <item.icon className={compact ? "size-3.5" : "size-4"} />
+      </span>
       {item.label}
       {count > 0 ? (
         <span
           className={cn(
             "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[0.6875rem] font-bold",
-            active ? "bg-aegean-100 text-aegean-700" : "bg-aegean-500 text-white",
+            active ? "bg-white text-aegean-700" : "bg-aegean-500 text-white",
           )}
         >
           {count}
