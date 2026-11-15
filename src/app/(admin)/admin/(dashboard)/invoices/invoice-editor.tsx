@@ -73,7 +73,7 @@ export function InvoiceEditor({ initialDraft, issuers, clients }: { initialDraft
 
   return (
     <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-      <form action={action} className="grid gap-4">
+      <form action={action} className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
         <input type="hidden" name="payload" value={payload} />
 
         <Panel title="Destinataire et émetteur" description="À qui, au nom de qui, dans quelle devise." icon={<UserRound className="size-4" />}>

@@ -139,7 +139,7 @@ export function QuoteEditor({
 
   return (
     <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-      <form action={action} className="grid gap-4">
+      <form action={action} className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
         <input type="hidden" name="payload" value={payload} />
 
         <AiPanel

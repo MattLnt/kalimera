@@ -31,7 +31,7 @@ export function LotsEditor({
   };
 
   return (
-    <div className="grid gap-3">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-3">
       {lots.map((lot, index) => (
         <div key={lot.key} className="rounded-[18px] border border-black/[0.07] bg-white p-3.5">
           <div className="flex gap-2">
@@ -60,7 +60,7 @@ export function LotsEditor({
             rows={3}
             placeholder={"Contenu du lot : éléments séparés par « · », ou une liste :\n- premier élément\n- deuxième élément\n> note finale en gris"}
             aria-label="Contenu"
-            className="field-input mt-2 resize-y py-2.5 text-[0.875rem]"
+            className="field-input mt-2 min-h-[5.5rem] resize-y py-2.5 text-[0.875rem] leading-relaxed [field-sizing:content]"
           />
           <div className="mt-2 flex justify-end gap-1">
             <button type="button" disabled={index === 0} onClick={() => move(index, -1)} aria-label="Monter" className="grid size-8 cursor-pointer place-items-center rounded-full text-[var(--ink-45)] hover:bg-black/5 disabled:opacity-30">
