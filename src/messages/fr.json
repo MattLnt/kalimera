@@ -76,10 +76,17 @@
       "empty": "Les réalisations arrivent très bientôt."
     },
     "stats": {
-      "projects": "Projets en production",
-      "platforms": "Plateformes B2B livrées",
-      "countries": "Pays où nous avons livré",
-      "locales": "Langues gérées de série"
+      "chip": "En bref",
+      "titleTop": "{count} projets en ligne.",
+      "titleBottom": "Allez les voir.",
+      "intro": "Pas de maquettes ni de démos : des plateformes, des boutiques et des sites que leurs clients utilisent tous les jours.",
+      "breakdown": "Répartition",
+      "countries": "Livrés en",
+      "countriesList": "Belgique · France · États-Unis",
+      "locales": "Langues de série",
+      "localesList": "Français · English · Español",
+      "visit": "Visiter le site",
+      "all": "Toutes les réalisations"
     },
     "process": {
       "chip": "Méthode",

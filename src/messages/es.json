@@ -76,10 +76,17 @@
       "empty": "Los proyectos llegan muy pronto."
     },
     "stats": {
-      "projects": "Proyectos en producción",
-      "platforms": "Plataformas B2B entregadas",
-      "countries": "Países donde hemos entregado",
-      "locales": "Idiomas gestionados de serie"
+      "chip": "En resumen",
+      "titleTop": "{count} proyectos en línea.",
+      "titleBottom": "Vaya a verlos.",
+      "intro": "Ni maquetas ni demos: plataformas, tiendas y sitios que sus clientes usan todos los días.",
+      "breakdown": "Reparto",
+      "countries": "Entregados en",
+      "countriesList": "Bélgica · Francia · Estados Unidos",
+      "locales": "Idiomas de serie",
+      "localesList": "Français · English · Español",
+      "visit": "Visitar el sitio",
+      "all": "Todos nuestros proyectos"
     },
     "process": {
       "chip": "Método",

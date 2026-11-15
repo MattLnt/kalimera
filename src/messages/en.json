@@ -76,10 +76,17 @@
       "empty": "Our work is coming very soon."
     },
     "stats": {
-      "projects": "Projects in production",
-      "platforms": "B2B platforms shipped",
-      "countries": "Countries we have shipped in",
-      "locales": "Languages handled by default"
+      "chip": "At a glance",
+      "titleTop": "{count} projects live.",
+      "titleBottom": "Go and see them.",
+      "intro": "No mock-ups, no demos: platforms, shops and websites their customers use every day.",
+      "breakdown": "Breakdown",
+      "countries": "Shipped in",
+      "countriesList": "Belgium · France · United States",
+      "locales": "Languages built in",
+      "localesList": "Français · English · Español",
+      "visit": "Visit the site",
+      "all": "All our work"
     },
     "process": {
       "chip": "Method",
