@@ -29,12 +29,21 @@ export async function StudioBento() {
             <Terminal />
           </BentoCard>
 
-          <BentoCard className="lg:col-span-3">
+          <BentoCard className="flex flex-col lg:col-span-3">
             <Icon>
               <Workflow className="size-5" />
             </Icon>
             <h3 className="display-3">{t("card2Title")}</h3>
             <p className="text-body-muted mt-2.5">{t("card2Body")}</p>
+            <ul className="mt-auto flex flex-wrap gap-2 pt-6">
+              {t("card2Tags")
+                .split("|")
+                .map((tag) => (
+                  <li key={tag} className="rounded-full bg-aegean-50 px-3 py-1.5 font-display text-[0.8125rem] font-bold text-aegean-800">
+                    {tag}
+                  </li>
+                ))}
+            </ul>
           </BentoCard>
 
           <BentoCard delay={1} className="lg:col-span-2">
