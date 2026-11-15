@@ -63,7 +63,7 @@ export async function StudioBento() {
             <p className="mt-2.5 text-[0.9375rem] text-white/72">{t("card4Body")}</p>
           </BentoCard>
 
-          <BentoCard delay={3}>
+          <BentoCard delay={3} className="lg:col-span-2">
             <div className="gradient-number pb-1.5 font-display text-[clamp(1.6rem,2vw,2.1rem)] leading-[1.1] font-extrabold tracking-[-0.04em] whitespace-nowrap">
               {t("statScoreValue")}
             </div>
