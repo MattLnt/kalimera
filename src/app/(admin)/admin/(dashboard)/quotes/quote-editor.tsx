@@ -307,7 +307,6 @@ type AiDraft = Extract<Awaited<ReturnType<typeof generateQuoteDraft>>, { ok: tru
 function AiPanel({ clientId, currency, onDraft }: { clientId: string; currency: string; onDraft: (draft: AiDraft) => void }) {
   const [open, setOpen] = useState(false);
   const [brief, setBrief] = useState("");
-  const [budget, setBudget] = useState("");
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
 
@@ -332,7 +331,7 @@ function AiPanel({ clientId, currency, onDraft }: { clientId: string; currency: 
   const run = () => {
     setError("");
     startTransition(async () => {
-      const result = await generateQuoteDraft({ clientId: clientId || undefined, brief, budgetCents: budget.trim() ? amountToCents(budget) : undefined, currency });
+      const result = await generateQuoteDraft({ clientId: clientId || undefined, brief, currency });
       if (result.ok) {
         onDraft(result.draft);
         setOpen(false);
@@ -357,13 +356,7 @@ function AiPanel({ clientId, currency, onDraft }: { clientId: string; currency: 
         className="w-full resize-y rounded-[14px] border border-white/20 bg-white/10 px-4 py-3 text-[0.9375rem] text-white outline-none placeholder:text-white/50 focus:border-white/50"
       />
       <div className="mt-2 flex flex-wrap gap-2">
-        <input
-          value={budget}
-          onChange={(event) => setBudget(event.target.value)}
-          inputMode="decimal"
-          placeholder={`Budget indicatif, facultatif (${currency === "USD" ? "$" : "€"})`}
-          className="min-w-0 flex-1 rounded-full border border-white/20 bg-white/10 px-4 py-2.5 text-white outline-none placeholder:text-white/50 focus:border-white/50"
-        />
+<span className="flex-1" />
         <button
           type="button"
           onClick={run}
@@ -375,7 +368,7 @@ function AiPanel({ clientId, currency, onDraft }: { clientId: string; currency: 
         </button>
       </div>
       <p className="mt-2 text-xs text-white/60">
-        L&apos;IA s&apos;appuie sur vos services et les notes d&apos;appel du client. Elle ne fixe un prix que si vous l&apos;écrivez dans le descriptif (« design : 800 € ») ; sinon les lots restent à chiffrer. Elle remplace le contenu actuel du formulaire.
+        L&apos;IA s&apos;appuie sur vos services et les notes d&apos;appel du client. Elle reprend seulement ce que vous écrivez, sans rien inventer ; un prix n&apos;est repris que s&apos;il figure dans le descriptif (« design : 800 € »). Elle remplace le contenu actuel du formulaire.
       </p>
       {error ? <p className="mt-2 rounded-[12px] bg-red-500/20 px-3 py-2 text-sm">{error}</p> : null}
     </div>

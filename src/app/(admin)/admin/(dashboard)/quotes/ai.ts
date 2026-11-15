@@ -1,124 +1,55 @@
 "use server";
 
 import { generateText, Output } from "ai";
-import { z } from "zod";
 
 import { assertAdmin } from "@/lib/admin";
+import { draftLots, draftSchema, isPlanRefusal, QUOTE_AI_MODELS, QUOTE_AI_SYSTEM, type QuoteDraftOutput } from "@/lib/crm/quote-ai";
 import { prisma } from "@/lib/prisma";
 
-/** Modèle servi par Vercel AI Gateway : authentification OIDC sur Vercel. */
-/**
- * Modèle préféré, puis repli. Sans crédits payés sur AI Gateway, Vercel
- * refuse Claude (« free tier ») mais accepte gpt-5-mini : l'assistant marche
- * donc tout de suite, et repasse sur Claude dès que des crédits sont chargés.
- */
-const MODELS = ["anthropic/claude-sonnet-5.5", "openai/gpt-5-mini"] as const;
-const isPlanRefusal = (error: unknown) => error instanceof Error && /free tier|credits|do not have access/i.test(error.message);
-
-const draftSchema = z.object({
-  title: z.string().describe("Titre du projet, court et concret : « Boutique en ligne avec click & collect »."),
-  context: z.string().describe("2 à 4 phrases : la situation du client et ce qu'il veut obtenir. Pas de superlatifs."),
-  perimeter: z.string().describe("Une phrase qui borne le périmètre, sans majuscule initiale : « site vitrine et boutique, sans application mobile »."),
-  lots: z
-    .array(
-      z.object({
-        title: z.string().describe("« Lot 1 — Cadrage et maquettes »"),
-        items: z
-          .array(z.string().describe("Un livrable concret, en une ligne courte (10 mots environ), sans point final : « Maquettes mobile et desktop des 5 pages »."))
-          .min(2)
-          .max(6)
-          .describe("Contenu du lot : un élément = une puce. Jamais plusieurs idées dans un même élément."),
-        note: z.string().describe("Une précision courte affichée en gris sous la liste, ou une chaîne vide s'il n'y a rien à préciser."),
-        price: z.number().describe("Prix HT du lot UNIQUEMENT s'il est écrit dans le descriptif (en unités, ex. 800). Sinon 0 : ne jamais inventer ni répartir un prix."),
-      }),
-    )
-    .min(2)
-    .max(8),
-  stack: z.array(z.string()).describe("Technologies, une par élément : « Next.js (App Router), hébergement Vercel »."),
-  delay: z.string().describe("« Délai de réalisation estimé : 4 à 6 semaines à compter de la validation du devis et de la réception des éléments nécessaires. »"),
-  outOfScope: z.string().describe("Ce qui est explicitement exclu, en une ou deux phrases."),
-  evolutions: z.array(z.string()).max(5).describe("Pistes d'évolution courtes, pour un devis complémentaire."),
-  paymentNote: z.string().describe("Une phrase grise sous les modalités de paiement."),
-});
+export type QuoteDraftResult =
+  | { ok: true; draft: Omit<QuoteDraftOutput, "lots"> & { lots: { title: string; description: string; amountCents: number }[] } }
+  | { ok: false; error: string };
 
 /**
- * Une puce par élément. Un élément qui en enchaîne plusieurs (« · », « ; »)
- * est redécoupé : le devis garde des lignes courtes même si le modèle
- * n'a pas suivi la consigne.
+ * Met en forme un devis à partir d'un descriptif libre, sans rien inventer :
+ * les règles sont dans src/lib/crm/quote-ai.ts. Les prix restent à saisir,
+ * sauf ceux écrits dans le descriptif.
  */
-function toBullets(items: string[], note?: string) {
-  const lines = items
-    .flatMap((item) => item.split(/\s+[·•;]\s+|\s*;\s*/))
-    .map((item) =>
-      item
-        .replace(/^[-•·*\s]+/, "")
-        .replace(/[.;,\s]+$/, "")
-        .trim(),
-    )
-    .filter(Boolean)
-    .map((item) => `- ${item.charAt(0).toUpperCase()}${item.slice(1)}`);
-  if (note?.trim()) lines.push(`> ${note.trim()}`);
-  return lines.join("\n");
-}
-
-export type QuoteDraftResult = { ok: true; draft: Omit<z.infer<typeof draftSchema>, "lots"> & { lots: { title: string; description: string; amountCents: number }[] } } | { ok: false; error: string };
-
-/**
- * Rédige un devis complet à partir d'un descriptif libre et d'un budget.
- * Le total respecte le budget au centime : l'IA répartit, le code arrondit.
- */
-export async function generateQuoteDraft(input: { clientId?: string; brief: string; budgetCents?: number; currency: string }): Promise<QuoteDraftResult> {
+export async function generateQuoteDraft(input: { clientId?: string; brief: string; currency: string }): Promise<QuoteDraftResult> {
   await assertAdmin();
   if (input.brief.trim().length < 10) return { ok: false, error: "Décrivez le projet en quelques mots." };
 
-  const [client, services] = await Promise.all([
-    input.clientId
-      ? prisma.client.findUnique({
-          where: { id: input.clientId },
-          select: {
-            name: true,
-            summary: true,
-            notes: { orderBy: { occurredAt: "desc" }, take: 3, select: { title: true, body: true } },
-          },
-        })
-      : null,
-    prisma.serviceTranslation.findMany({
-      where: { locale: "FR", service: { published: true } },
-      select: { title: true, summary: true },
-    }),
-  ]);
+  const client = input.clientId
+    ? await prisma.client.findUnique({
+        where: { id: input.clientId },
+        select: {
+          name: true,
+          summary: true,
+          notes: { orderBy: { occurredAt: "desc" }, take: 3, select: { title: true, body: true } },
+        },
+      })
+    : null;
 
   const clientContext = client
-    ? [`Client : ${client.name}`, client.summary ? `Mémo : ${client.summary}` : "", ...client.notes.map((note) => `Note « ${note.title ?? "sans titre"} » : ${note.body.slice(0, 1500)}`)]
+    ? [
+        `Client : ${client.name}`,
+        client.summary ? `Mémo : ${client.summary}` : "",
+        ...client.notes.map((note) => `Note d'appel « ${note.title ?? "sans titre"} » (contexte seulement, n'en tire aucun livrable) : ${note.body.slice(0, 1500)}`),
+      ]
         .filter(Boolean)
         .join("\n")
     : "Client non précisé.";
 
   try {
-    let output: z.infer<typeof draftSchema> | undefined;
+    let output: QuoteDraftOutput | undefined;
     let lastError: unknown;
-    for (const model of MODELS) {
+    for (const model of QUOTE_AI_MODELS) {
       try {
         const result = await generateText({
           model,
           output: Output.object({ schema: draftSchema }),
-          system: [
-            "Tu rédiges des devis pour un studio de développement web et mobile (sites sur mesure, e-commerce, applications, plateformes SaaS), qui code tout sans WordPress ni Shopify.",
-            "Écris en français, ton sobre et précis, vocabulaire concret du métier. Aucune promesse chiffrée de résultat, aucun superlatif.",
-            "Découpe le projet en lots qui suivent l'ordre de réalisation. Chaque lot décrit ce qui est livré, pas des intentions.",
-            "Contenu d'un lot : une liste de 2 à 6 éléments, chacun une ligne simple et courte (une idée, une puce). Jamais de phrase à rallonge, jamais d'éléments enchaînés avec « · », des virgules ou des points-virgules.",
-            "Si le descriptif donne des consignes de forme ou de contenu, applique-les à la lettre.",
-            "Prix : ne mets un prix sur un lot que si le descriptif le donne explicitement ; sinon « price » vaut 0. Ne répartis jamais un budget global entre les lots.",
-            "N'invente ni client, ni référence, ni chiffre d'audience.",
-            `Services du studio : ${services.map((service) => `${service.title} (${service.summary})`).join(" ; ")}.`,
-          ].join("\n"),
-          prompt: [
-            clientContext,
-            `Descriptif du projet : ${input.brief}`,
-            input.budgetCents && input.budgetCents > 0
-              ? `Budget indicatif du client : ${(input.budgetCents / 100).toFixed(0)} ${input.currency}. Sers-t'en seulement pour dimensionner le contenu ; ne répartis pas ce montant entre les lots.`
-              : "Pas de budget indiqué.",
-          ].join("\n\n"),
+          system: QUOTE_AI_SYSTEM,
+          prompt: [clientContext, `Descriptif du projet : ${input.brief}`].join("\n\n"),
         });
         output = result.output;
         break;
@@ -130,15 +61,7 @@ export async function generateQuoteDraft(input: { clientId?: string; brief: stri
     }
     if (!output) throw lastError;
 
-    // Aucun partage automatique : un lot n'a de prix que si le descriptif
-    // le donne ; sinon il reste à 0, à chiffrer à la main.
-    const lots = output.lots.map((item) => ({
-      title: item.title,
-      description: toBullets(item.items, item.note),
-      amountCents: Math.max(0, Math.round((item.price || 0) * 100)),
-    }));
-
-    return { ok: true, draft: { ...output, lots } };
+    return { ok: true, draft: { ...output, lots: draftLots(output, input.brief) } };
   } catch (error) {
     console.error("[quotes] rédaction IA impossible", error);
     const message = error instanceof Error ? error.message : "";
