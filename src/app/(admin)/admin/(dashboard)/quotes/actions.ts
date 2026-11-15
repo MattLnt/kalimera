@@ -63,7 +63,11 @@ async function refresh(quote: { id: string; clientId: string; dealId: string | n
   revalidatePath("/admin");
 }
 
-/** Enregistre un brouillon. Un devis émis ne se modifie plus : on le duplique. */
+/**
+ * Enregistre un devis. Brouillon, envoyé ou accepté (à l'oral, par e-mail…),
+ * il reste modifiable ; seul un devis signé en ligne est figé, car sa
+ * signature porte sur le contenu exact (empreinte SHA-256) : on le duplique.
+ */
 export async function saveQuote(_prev: QuoteActionState, formData: FormData): Promise<QuoteActionState> {
   await assertAdmin();
   let data;
@@ -78,8 +82,9 @@ export async function saveQuote(_prev: QuoteActionState, formData: FormData): Pr
   if (data.id) {
     const existing = await prisma.quote.findUnique({ where: { id: data.id } });
     if (!existing) return { error: "Devis introuvable." };
-    if (existing.status !== "DRAFT") return { error: "Ce devis est déjà émis : dupliquez-le pour le modifier." };
+    if (existing.acceptedVia === "SIGNATURE") return { error: "Ce devis a été signé en ligne : sa signature porte sur ce contenu exact. Dupliquez-le pour le modifier." };
   }
+  const before = data.id ? await prisma.quote.findUnique({ where: { id: data.id }, select: { status: true, number: true, clientId: true, issuerId: true } }) : null;
 
   const total = data.lots.reduce((sum, item) => sum + item.amountCents, 0);
   const fields = {
@@ -122,6 +127,19 @@ export async function saveQuote(_prev: QuoteActionState, formData: FormData): Pr
       prisma.quoteLine.deleteMany({ where: { quoteId: id } }),
       prisma.quote.update({ where: { id }, data: { ...fields, lines: { create: lines } } }),
     ]);
+    if (before && before.status !== "DRAFT") {
+      if (before.clientId !== fields.clientId || before.issuerId !== fields.issuerId) {
+        const fresh = await prisma.quote.findUniqueOrThrow({ where: { id }, include: quoteInclude });
+        await prisma.quote.update({
+          where: { id },
+          data: {
+            ...(fresh.issuer ? { issuerSnapshot: issuerSnapshot(fresh.issuer) } : {}),
+            clientSnapshot: clientSnapshot(fresh.client),
+          },
+        });
+      }
+      await logActivity("quote.edited", `Devis ${before.number ?? data.title} modifié après émission`, { clientId: data.clientId, dealId: fields.dealId, quoteId: id });
+    }
   } else {
     const quote = await prisma.quote.create({
       data: { ...fields, token: randomBytes(18).toString("base64url"), lines: { create: lines } },

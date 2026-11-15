@@ -67,7 +67,7 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
         back={{ href: "/admin/quotes", label: "Devis" }}
         action={
           <div className="flex flex-wrap gap-2">
-            {quote.status === "DRAFT" ? (
+            {quote.acceptedVia !== "SIGNATURE" ? (
               <Link href={`/admin/quotes/${quote.id}/edit`} className={small}>
                 <Pencil className="size-4" />
                 Modifier

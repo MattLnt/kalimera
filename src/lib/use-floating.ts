@@ -14,7 +14,7 @@ export function useFloating(
   anchor: RefObject<HTMLElement | null>,
   open: boolean,
   onClose: () => void,
-  size: { width: number; height: number },
+  size: { width: number; height: number; align?: "center" | "start" },
 ) {
   const [style, setStyle] = useState<React.CSSProperties>({ position: "fixed" });
 
@@ -22,11 +22,12 @@ export function useFloating(
     if (!anchor.current) return;
     const rect = anchor.current.getBoundingClientRect();
     const margin = 8;
-    const left = Math.min(Math.max(margin, rect.left + rect.width / 2 - size.width / 2), window.innerWidth - size.width - margin);
+    const wanted = size.align === "start" ? rect.left : rect.left + rect.width / 2 - size.width / 2;
+    const left = Math.min(Math.max(margin, wanted), window.innerWidth - size.width - margin);
     const below = rect.bottom + 6;
     const top = below + size.height > window.innerHeight - margin ? Math.max(margin, rect.top - 6 - size.height) : below;
     setStyle({ position: "fixed", top, left, width: size.width });
-  }, [anchor, size.width, size.height]);
+  }, [anchor, size.width, size.height, size.align]);
 
   useEffect(() => {
     if (!open) return;

@@ -51,10 +51,13 @@ export function QuoteEditor({
   initialDraft,
   issuers,
   clients,
+  issuedAs,
 }: {
   initialDraft: QuoteDraft;
   issuers: EditorIssuer[];
   clients: EditorClient[];
+  /** Devis déjà émis : son numéro et son statut, pour le bandeau d'avertissement. */
+  issuedAs?: { number: string | null; status: string } | null;
 }) {
   const [draft, setDraft] = useState(initialDraft);
   // Acompte : désactivé = 0 %, le dernier pourcentage est gardé pour le rallumer.
@@ -144,6 +147,15 @@ export function QuoteEditor({
     <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <form action={action} className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
         <input type="hidden" name="payload" value={payload} />
+
+        {issuedAs ? (
+          <div className="rounded-[18px] bg-[#E3EFFC] px-4 py-3 text-[0.8125rem] leading-relaxed text-[#155399]">
+            <span className="font-display font-bold">
+              Devis {issuedAs.number ?? ""} déjà {issuedAs.status === "SIGNED" ? "accepté" : "envoyé"}.
+            </span>{" "}
+            Vos modifications s&apos;appliquent au devis, à son aperçu et à son PDF ; il garde son numéro et son statut. Les factures déjà émises ne changent pas.
+          </div>
+        ) : null}
 
         <AiPanel
           clientId={draft.clientId}
@@ -304,7 +316,7 @@ export function QuoteEditor({
 
         {state.error ? <p role="alert" className="rounded-field bg-[#EEF3FA] px-4 py-3 text-sm text-[#0B3A75]">{state.error}</p> : null}
         <div className="sticky bottom-24 z-10 flex justify-end lg:bottom-4">
-          <SaveButton />
+          <SaveButton issued={Boolean(issuedAs)} />
         </div>
       </form>
 
@@ -322,7 +334,7 @@ export function QuoteEditor({
   );
 }
 
-function SaveButton() {
+function SaveButton({ issued = false }: { issued?: boolean }) {
   const { pending } = useFormStatus();
   return (
     <button
@@ -331,7 +343,7 @@ function SaveButton() {
       className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-aegean-600 px-6 py-3 font-display text-sm font-bold text-white shadow-[0_12px_28px_-12px_rgba(21,98,184,0.9)] hover:bg-aegean-700 disabled:opacity-70"
     >
       {pending ? <Loader2 className="size-4 animate-spin" /> : null}
-      {pending ? "Enregistrement…" : "Enregistrer le brouillon"}
+      {pending ? "Enregistrement…" : issued ? "Enregistrer les modifications" : "Enregistrer le brouillon"}
     </button>
   );
 }

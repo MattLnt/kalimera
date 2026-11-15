@@ -18,14 +18,15 @@ export default async function EditQuotePage({ params }: { params: Promise<{ id: 
     loadEditorData(),
   ]);
   if (!quote) notFound();
-  // Un devis émis ne se modifie plus : il reste tel que le client l'a reçu.
-  if (quote.status !== "DRAFT") redirect(`/admin/quotes/${id}`);
+  // Seul un devis signé en ligne est figé (sa signature porte sur ce contenu).
+  if (quote.acceptedVia === "SIGNATURE") redirect(`/admin/quotes/${id}`);
 
   return (
     <>
       <AdminHeader title={`Modifier « ${quote.title} »`} back={{ href: `/admin/quotes/${id}`, label: "Devis" }} />
       <QuoteEditor
         {...data}
+        issuedAs={quote.status === "DRAFT" ? null : { number: quote.number, status: quote.status }}
         initialDraft={{
           id: quote.id,
           clientId: quote.clientId,

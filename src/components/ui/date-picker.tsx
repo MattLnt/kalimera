@@ -62,7 +62,9 @@ export function DatePicker({
   const gridRef = useRef<HTMLDivElement>(null);
   // Dans une cellule de tableau, le calendrier flotte en position fixe pour
   // ne pas être rogné par le tableau.
-  const floating = useFloating(rootRef, open && Boolean(bare), () => setOpen(false), { width: 296, height: 360 });
+  // Le calendrier flotte en position fixe, gardé dans l'écran : il s'ouvre
+  // vers le haut s'il manque de place en bas, et n'est jamais rogné.
+  const floating = useFloating(rootRef, open, () => setOpen(false), { width: 296, height: 360, align: bare ? "center" : "start" });
 
   const set = (next: string) => {
     if (controlled === undefined) setInner(next);
@@ -153,7 +155,7 @@ export function DatePicker({
         aria-label={ariaLabel}
         onClick={() => {
           setCursor(value || today);
-          if (!open && bare) floating.place();
+          if (!open) floating.place();
           setOpen((current) => !current);
         }}
         className={cn(
@@ -191,10 +193,9 @@ export function DatePicker({
           role="dialog"
           aria-label="Choisir une date"
           data-floating
-          style={bare ? floating.style : undefined}
+          style={floating.style}
           className={cn(
             "z-50 w-[296px] animate-[menu-open_0.18s_var(--ease-out-expo)_both] rounded-[20px] bg-white p-3 text-left shadow-[0_1px_1px_rgba(7,33,63,0.04),0_24px_60px_-20px_rgba(7,33,63,0.35)] ring-1 ring-black/5",
-            !bare && "absolute top-[calc(100%+6px)] left-0",
           )}
         >
           <div className="mb-2 flex items-center gap-1 px-1">
