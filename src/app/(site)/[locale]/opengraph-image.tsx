@@ -39,22 +39,11 @@ export default async function OpengraphImage({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <div
-            style={{
-              width: 64,
-              height: 64,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 20,
-              background: "linear-gradient(135deg, #2A86E8 0%, #07213F 100%)",
-            }}
-          >
-            <svg width="64" height="64" viewBox="0 0 32 32" fill="none">
-              <path d="M5.5 16c2.8-4.3 6.3-6.5 10.5-6.5s7.7 2.2 10.5 6.5c-2.8 4.3-6.3 6.5-10.5 6.5S8.3 20.3 5.5 16Z" stroke="#fff" strokeWidth="1.9" strokeLinejoin="round" />
-              <circle cx="16" cy="16" r="3.2" fill="#7DD3FC" />
-            </svg>
-          </div>
+          <svg width="72" height="72" viewBox="0 0 32 32" fill="none">
+            <path d="M2 16c3.5-5.7 8.2-8.5 14-8.5s10.5 2.8 14 8.5c-3.5 5.7-8.2 8.5-14 8.5S5.5 21.7 2 16Z" fill="#38A3E8" />
+            <circle cx="16" cy="16" r="5.3" fill="#fff" />
+            <circle cx="16" cy="16" r="2.5" fill="#0B3A75" />
+          </svg>
           <div style={{ fontSize: 38, fontWeight: 700, color: "#fff", letterSpacing: -1 }}>
             {siteConfig.name}
           </div>

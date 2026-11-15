@@ -241,7 +241,7 @@ export function SiteHeader({ nav }: { nav: NavData }) {
           onClick={() => setOpen(false)}
           className="mr-auto flex items-center gap-2 font-display text-[1.2rem] font-extrabold tracking-[-0.04em]"
         >
-          <Logo id="logo-header" />
+          <Logo onDark={open} />
           Kalimera
         </Link>
 

@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 
 /**
- * Favicon généré à la construction : l'œil du logo, au trait plus épais
- * pour rester net à 16 et 32 pixels.
+ * Favicon généré à la construction : l'œil du logo, sans fond (PNG
+ * transparent), lisible sur les onglets clairs comme sombres.
  */
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
@@ -10,20 +10,11 @@ export const contentType = "image/png";
 export default function Icon() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 10,
-          background: "linear-gradient(135deg, #2A86E8 0%, #07213F 100%)",
-        }}
-      >
+      <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <path d="M3.8 16c3-4.8 7.1-7.3 12.2-7.3s9.2 2.5 12.2 7.3c-3 4.8-7.1 7.3-12.2 7.3S6.8 20.8 3.8 16Z" stroke="#fff" strokeWidth="2.7" strokeLinejoin="round" />
-          <circle cx="16" cy="16" r="4.2" fill="#7DD3FC" />
+          <path d="M1 16c3.7-6.2 8.7-9.3 15-9.3s11.3 3.1 15 9.3c-3.7 6.2-8.7 9.3-15 9.3S4.7 22.2 1 16Z" fill="#1F7AE0" />
+          <circle cx="16" cy="16" r="5.8" fill="#fff" />
+          <circle cx="16" cy="16" r="2.9" fill="#0B3A75" />
         </svg>
       </div>
     ),

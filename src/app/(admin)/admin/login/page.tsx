@@ -39,7 +39,7 @@ export default async function LoginPage({
         <span aria-hidden className="grain-layer" />
 
         <div className="relative z-2 flex items-center gap-2.5 font-display text-xl font-extrabold tracking-[-0.04em]">
-          <Logo id="logo-login" className="size-8" />
+          <Logo onDark className="size-8" />
           Kalimera
           <span className="rounded-full bg-white/10 px-2.5 py-1 text-[0.625rem] font-bold tracking-[0.1em] uppercase">
             Studio

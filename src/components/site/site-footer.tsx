@@ -24,7 +24,7 @@ export async function SiteFooter({ dbLocale }: { dbLocale: DbLocale }) {
               href="/"
               className="flex items-center gap-2 font-display text-[1.2rem] font-extrabold tracking-[-0.04em]"
             >
-              <Logo id="logo-footer" />
+              <Logo />
               Kalimera
             </Link>
             <p className="my-4 max-w-[32ch] text-[0.9375rem] text-[var(--ink-65)]">

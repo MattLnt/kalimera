@@ -152,7 +152,7 @@ export function AdminSidebar({
             href="/admin"
             className="flex items-center gap-2 px-6 pt-6 pb-5 font-display text-lg font-extrabold tracking-[-0.04em] text-white"
           >
-            <Logo id="logo-admin" />
+            <Logo onDark />
             Kalimera
             <span className="ml-auto rounded-full bg-white/10 px-2 py-0.5 font-display text-[0.625rem] font-bold tracking-[0.08em] text-aegean-200 uppercase">
               Studio
@@ -266,7 +266,7 @@ export function AdminSidebar({
       {/* ------------------------------------------------ téléphone : en-tête */}
       <header className="relative z-1 flex items-center gap-2 px-4 py-3.5 lg:hidden">
         <Link href="/admin" className="relative flex items-center gap-2 font-display text-base font-extrabold tracking-[-0.04em] text-white">
-          <Logo id="logo-admin-mobile" />
+          <Logo onDark />
           Kalimera
           <span className="rounded-full bg-white/10 px-2 py-0.5 text-[0.5625rem] font-bold tracking-[0.08em] text-aegean-200 uppercase">
             Studio
