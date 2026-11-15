@@ -102,9 +102,9 @@ export default async function DealsPage({ searchParams }: { searchParams: Promis
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard color="blue" icon={<Handshake className="size-4" />} label="En négociation" value={formatMoneyShort(pipeline)} hint={`${sales.length} projet${sales.length > 1 ? "s" : ""}`} />
-          <StatCard color="blue" icon={<Scale className="size-4" />} label="Pondéré" value={formatMoneyShort(weighted)} hint="Selon la probabilité de signature" />
-          <StatCard color="blue" icon={<Hammer className="size-4" />} label="En production" value={String(production.length)} hint={formatMoneyShort(production.reduce((s, d) => s + (d.amountCents ?? 0), 0))} />
-          <StatCard color="green" icon={<BadgeCheck className="size-4" />} label={`Signés en ${year}`} value={formatMoneyShort(wonThisYear.reduce((s, d) => s + (d.amountCents ?? 0), 0))} hint={`${wonThisYear.length} projet${wonThisYear.length > 1 ? "s" : ""}`} />
+          <StatCard color="slate" icon={<Scale className="size-4" />} label="Pondéré" value={formatMoneyShort(weighted)} hint="Selon la probabilité de signature" />
+          <StatCard color="teal" icon={<Hammer className="size-4" />} label="En production" value={String(production.length)} hint={formatMoneyShort(production.reduce((s, d) => s + (d.amountCents ?? 0), 0))} />
+          <StatCard color="navy" icon={<BadgeCheck className="size-4" />} label={`Signés en ${year}`} value={formatMoneyShort(wonThisYear.reduce((s, d) => s + (d.amountCents ?? 0), 0))} hint={`${wonThisYear.length} projet${wonThisYear.length > 1 ? "s" : ""}`} />
         </div>
       </AdminHeader>
 

@@ -156,7 +156,7 @@ export default async function AdminHomePage() {
             icon={<FileSignature className="size-4" />}
             href="/admin/quotes"
           />
-          <StatCard color="teal"
+          <StatCard color="slate"
             label="À encaisser"
             value={formatMoneyShort(due)}
             chip={overdue.length ? `${overdue.length} en retard` : undefined}
@@ -164,7 +164,7 @@ export default async function AdminHomePage() {
             icon={<Receipt className="size-4" />}
             href="/admin/invoices"
           />
-          <StatCard color="green"
+          <StatCard color="navy"
             label="Encaissé ce mois"
             value={formatMoneyShort(paymentsThisMonth._sum.amountCents ?? 0)}
             icon={<Wallet className="size-4" />}

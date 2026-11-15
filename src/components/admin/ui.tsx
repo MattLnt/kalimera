@@ -229,15 +229,14 @@ export function Pill({
  * tendance facultative. `tone="dark"` reste disponible pour un fond bleu nuit.
  */
 /**
- * Couleurs des indicateurs, les mêmes que les statuts : bleu = en cours,
- * bleu-vert = en attente, vert = acquis, bleu nuit = urgent, gris = neutre.
+ * Couleurs des cartes d'indicateurs : bleu, turquoise, gris, bleu nuit.
+ * Un même indicateur garde sa couleur d'une page à l'autre.
  */
 const statColors = {
   blue: { tile: "#1F7AE0", soft: "#E3EFFC", ink: "#155399" },
   teal: { tile: "#0E9AA7", soft: "#DDF2F4", ink: "#0A6B74" },
-  green: { tile: "#059669", soft: "#DCF1EA", ink: "#046C4E" },
-  navy: { tile: "#0B3A75", soft: "#DCE5F1", ink: "#0B3A75" },
   slate: { tile: "#64748B", soft: "#ECEFF3", ink: "#475569" },
+  navy: { tile: "#0B3A75", soft: "#DCE5F1", ink: "#0B3A75" },
 } as const;
 export type StatColor = keyof typeof statColors;
 
