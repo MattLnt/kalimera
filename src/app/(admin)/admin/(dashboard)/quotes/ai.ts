@@ -29,7 +29,7 @@ const draftSchema = z.object({
           .max(6)
           .describe("Contenu du lot : un élément = une puce. Jamais plusieurs idées dans un même élément."),
         note: z.string().describe("Une précision courte affichée en gris sous la liste, ou une chaîne vide s'il n'y a rien à préciser."),
-        weight: z.number().describe("Part du budget, en pourcentage ; la somme des lots fait 100."),
+        price: z.number().describe("Prix HT du lot UNIQUEMENT s'il est écrit dans le descriptif (en unités, ex. 800). Sinon 0 : ne jamais inventer ni répartir un prix."),
       }),
     )
     .min(2)
@@ -49,7 +49,12 @@ const draftSchema = z.object({
 function toBullets(items: string[], note?: string) {
   const lines = items
     .flatMap((item) => item.split(/\s+[·•;]\s+|\s*;\s*/))
-    .map((item) => item.replace(/^[-•·*\s]+/, "").replace(/[.;,\s]+$/, "").trim())
+    .map((item) =>
+      item
+        .replace(/^[-•·*\s]+/, "")
+        .replace(/[.;,\s]+$/, "")
+        .trim(),
+    )
     .filter(Boolean)
     .map((item) => `- ${item.charAt(0).toUpperCase()}${item.slice(1)}`);
   if (note?.trim()) lines.push(`> ${note.trim()}`);
@@ -62,10 +67,9 @@ export type QuoteDraftResult = { ok: true; draft: Omit<z.infer<typeof draftSchem
  * Rédige un devis complet à partir d'un descriptif libre et d'un budget.
  * Le total respecte le budget au centime : l'IA répartit, le code arrondit.
  */
-export async function generateQuoteDraft(input: { clientId?: string; brief: string; budgetCents: number; currency: string }): Promise<QuoteDraftResult> {
+export async function generateQuoteDraft(input: { clientId?: string; brief: string; budgetCents?: number; currency: string }): Promise<QuoteDraftResult> {
   await assertAdmin();
   if (input.brief.trim().length < 10) return { ok: false, error: "Décrivez le projet en quelques mots." };
-  if (!Number.isFinite(input.budgetCents) || input.budgetCents <= 0) return { ok: false, error: "Indiquez le tarif total." };
 
   const [client, services] = await Promise.all([
     input.clientId
@@ -102,14 +106,19 @@ export async function generateQuoteDraft(input: { clientId?: string; brief: stri
             "Tu rédiges des devis pour un studio de développement web et mobile (sites sur mesure, e-commerce, applications, plateformes SaaS), qui code tout sans WordPress ni Shopify.",
             "Écris en français, ton sobre et précis, vocabulaire concret du métier. Aucune promesse chiffrée de résultat, aucun superlatif.",
             "Découpe le projet en lots qui suivent l'ordre de réalisation. Chaque lot décrit ce qui est livré, pas des intentions.",
-        "Contenu d'un lot : une liste de 2 à 6 éléments, chacun une ligne simple et courte (une idée, une puce). Jamais de phrase à rallonge, jamais d'éléments enchaînés avec « · », des virgules ou des points-virgules.",
-        "Si le descriptif donne des consignes de forme ou de contenu, applique-les à la lettre.",
+            "Contenu d'un lot : une liste de 2 à 6 éléments, chacun une ligne simple et courte (une idée, une puce). Jamais de phrase à rallonge, jamais d'éléments enchaînés avec « · », des virgules ou des points-virgules.",
+            "Si le descriptif donne des consignes de forme ou de contenu, applique-les à la lettre.",
+            "Prix : ne mets un prix sur un lot que si le descriptif le donne explicitement ; sinon « price » vaut 0. Ne répartis jamais un budget global entre les lots.",
             "N'invente ni client, ni référence, ni chiffre d'audience.",
             `Services du studio : ${services.map((service) => `${service.title} (${service.summary})`).join(" ; ")}.`,
           ].join("\n"),
-          prompt: [clientContext, `Descriptif du projet : ${input.brief}`, `Budget total : ${(input.budgetCents / 100).toFixed(2)} ${input.currency}. Répartis-le entre les lots via « weight ».`].join(
-            "\n\n",
-          ),
+          prompt: [
+            clientContext,
+            `Descriptif du projet : ${input.brief}`,
+            input.budgetCents && input.budgetCents > 0
+              ? `Budget indicatif du client : ${(input.budgetCents / 100).toFixed(0)} ${input.currency}. Sers-t'en seulement pour dimensionner le contenu ; ne répartis pas ce montant entre les lots.`
+              : "Pas de budget indiqué.",
+          ].join("\n\n"),
         });
         output = result.output;
         break;
@@ -121,15 +130,13 @@ export async function generateQuoteDraft(input: { clientId?: string; brief: stri
     }
     if (!output) throw lastError;
 
-    // Répartition exacte du budget : arrondi à l'euro, le reste sur le dernier lot.
-    const totalWeight = output.lots.reduce((sum, item) => sum + Math.max(0, item.weight), 0) || 1;
-    let allocated = 0;
-    const lots = output.lots.map((item, index) => {
-      const isLast = index === output.lots.length - 1;
-      const amount = isLast ? input.budgetCents - allocated : Math.round((input.budgetCents * Math.max(0, item.weight)) / totalWeight / 100) * 100;
-      allocated += amount;
-      return { title: item.title, description: toBullets(item.items, item.note), amountCents: amount };
-    });
+    // Aucun partage automatique : un lot n'a de prix que si le descriptif
+    // le donne ; sinon il reste à 0, à chiffrer à la main.
+    const lots = output.lots.map((item) => ({
+      title: item.title,
+      description: toBullets(item.items, item.note),
+      amountCents: Math.max(0, Math.round((item.price || 0) * 100)),
+    }));
 
     return { ok: true, draft: { ...output, lots } };
   } catch (error) {
