@@ -39,7 +39,19 @@ export async function htmlToPdf(html: string) {
   try {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "load" });
-    const pdf = await page.pdf({ format: "A4", printBackground: true, preferCSSPageSize: true });
+    const pdf = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      preferCSSPageSize: true,
+      // Sur chaque page, dans la marge du bas : la référence du document
+      // (son <title>) et « Page 2 / 3 ».
+      displayHeaderFooter: true,
+      headerTemplate: "<span></span>",
+      footerTemplate: `<div style="width:100%;padding:0 16mm;font-family:Arial,sans-serif;font-size:7.5px;color:#8A8F98;display:flex;justify-content:space-between;">
+        <span class="title"></span>
+        <span>Page <span class="pageNumber"></span> / <span class="totalPages"></span></span>
+      </div>`,
+    });
     return Buffer.from(pdf);
   } finally {
     await browser.close();

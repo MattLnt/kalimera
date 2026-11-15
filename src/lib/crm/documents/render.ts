@@ -171,6 +171,11 @@ const css = `
   .signature-proof { font-size: 9.5px; color: #555; line-height: 1.5; margin-top: 4px; word-break: break-all; }
   .legal { font-size: 10px; color: #555; line-height: 1.6; margin-top: 18px; white-space: pre-line; }
   .block { page-break-inside: avoid; break-inside: avoid; }
+  /* Plusieurs pages : le total reste avec le dernier lot, la phrase de
+     validité avec les signatures, et pas de ligne isolée en haut ou en bas. */
+  .total-row { page-break-before: avoid; break-before: avoid; page-break-inside: avoid; break-inside: avoid; }
+  .closing { page-break-inside: avoid; break-inside: avoid; }
+  p, li { orphans: 2; widows: 2; }
   .footer { font-size: 10px; color: #555; text-align: center; border-top: 1px solid #D9D9D9; padding-top: 14px; margin-top: 26px; line-height: 1.6; }
   .draft-mark { position: fixed; top: 40%; left: 0; right: 0; text-align: center; font-size: 72px; font-weight: 700; color: rgba(13, 13, 18, 0.05); transform: rotate(-24deg); pointer-events: none; }
 
@@ -347,8 +352,10 @@ function quoteBody(doc: QuoteDoc) {
     }
     ${doc.terms ? `<div class="block"><h2>Conditions particulières</h2><p class="out-of-scope">${esc(doc.terms)}</p></div>` : ""}
 
+<div class="closing">
     <div class="validity-block block">Ce devis est valable ${doc.validityDays} jours à compter de sa date d'émission. Il est considéré comme accepté à réception d'un retour écrit (e-mail)${doc.depositPercent > 0 ? " et du versement de l'acompte" : ""}.</div>
     ${signatureRow(doc)}
+    </div>
     ${legal(doc.issuer)}`;
 }
 
