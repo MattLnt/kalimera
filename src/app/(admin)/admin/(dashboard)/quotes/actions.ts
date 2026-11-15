@@ -16,6 +16,8 @@ import { documentFileName, money, renderDocument } from "@/lib/crm/documents/ren
 import { fromDateInput } from "@/lib/crm/format";
 import { claimManualNumber, reserveNumber } from "@/lib/crm/numbering";
 import { syncDealAmounts } from "@/lib/crm/deal-amount";
+import { quoteEmailDefaults, quoteEmailSummary } from "@/lib/crm/documents/email-content";
+import { senderFromIssuer } from "@/lib/crm/documents/email-template";
 import { prisma } from "@/lib/prisma";
 import { getSiteUrl } from "@/lib/site";
 
@@ -184,56 +186,53 @@ async function emit(quoteId: string, manualNumber: string | null) {
   });
 }
 
-/** Paragraphes de l'e-mail d'un devis : les mêmes pour l'envoi réel et le test. */
-function quoteEmailParagraphs(quote: { number: string | null; title: string; totalCents: number; currency: string; requireSignature: boolean; validityDays: number }, message: string | null) {
-  return [
-    "Bonjour,",
-    ...(message ? [message] : []),
-    `Vous trouverez ci-joint notre devis ${quote.number ?? ""} pour « ${quote.title} », d'un montant de ${money(quote.totalCents, quote.currency)}.`.replace("devis  pour", "devis pour"),
-    quote.requireSignature ? "Vous pouvez le consulter et le signer en ligne en un instant, depuis le lien ci-dessous." : "Vous pouvez le consulter en ligne depuis le lien ci-dessous.",
-    `Il est valable ${quote.validityDays} jours.`,
-  ];
+/** Objet et texte saisis dans l'admin, sinon ceux par défaut. */
+function quoteEmailFields(formData: FormData, quote: Parameters<typeof quoteEmailDefaults>[0]) {
+  const defaults = quoteEmailDefaults(quote);
+  return {
+    subject: readOptional(formData, "subject") ?? defaults.subject,
+    body: readOptional(formData, "body") ?? defaults.body,
+  };
 }
 
 /**
- * E-mail de test : exactement l'e-mail que recevra le client (texte, bouton,
- * PDF joint), envoyé à l'adresse de son choix. Rien ne change : pas de
- * numéro attribué, pas de statut « envoyé », le PDF porte « Brouillon » et
- * le bouton ouvre l'aperçu dans l'admin.
+ * E-mail de test : exactement l'e-mail que recevra le client (objet, texte,
+ * récapitulatif, bouton, signature, PDF joint), envoyé à l'adresse de test.
+ * Rien ne change : pas de numéro attribué, pas de statut « envoyé ».
  */
 export async function sendQuoteTest(_prev: QuoteActionState, formData: FormData): Promise<QuoteActionState> {
   await assertAdmin();
   const id = readString(formData, "id");
-  const to = readString(formData, "to").toLowerCase();
-  const message = readOptional(formData, "message");
-  if (!z.string().email().safeParse(to).success) return { error: "Adresse de test invalide." };
+  const to = readString(formData, "testTo").toLowerCase();
+  if (!z.string().email().safeParse(to).success) return { error: "Indiquez l'adresse où recevoir le test." };
   const quote = await prisma.quote.findUnique({ where: { id }, include: quoteInclude });
   if (!quote) return { error: "Devis introuvable." };
 
+  const number = readOptional(formData, "number");
+  const { subject, body } = quoteEmailFields(formData, { ...quote, number: quote.number ?? number });
   const doc = quoteDoc(quote);
   const pdf = await htmlToPdf(renderDocument(doc));
   const result = await sendDocumentEmail({
     to,
     replyTo: quote.issuer?.email,
     issuerName: doc.issuer.name,
-    subject: `[Test] Devis ${quote.number ?? ""} — ${quote.title}`.replace("Devis  —", "Devis —"),
-    paragraphs: [
-      ...quoteEmailParagraphs(quote, message),
-      "— E-mail de test : le devis n'a pas été envoyé au client. Le bouton ouvre l'aperçu dans l'admin (connexion requise).",
-    ],
+    sender: senderFromIssuer(quote.issuer, doc.issuer.name),
+    subject: `[Test] ${subject}`,
+    body,
+    summary: quoteEmailSummary(quote, number),
     button: { href: `${getSiteUrl()}/admin/quotes/${quote.id}/preview`, label: quote.requireSignature ? "Consulter et signer le devis" : "Consulter le devis" },
     pdf,
-    filename: `TEST-${documentFileName(doc)}`,
+    filename: documentFileName(doc),
+    banner: "E-mail de test : rien n'a été envoyé au client et le devis n'a pas changé. Le bouton ouvre l'aperçu dans l'admin.",
   });
   if (!result.sent) return { error: result.error };
-  return { ok: `E-mail de test envoyé à ${to}. Le devis n'a pas bougé.` };
+  return { ok: `Test envoyé à ${to}. Le devis n'a pas changé.` };
 }
 
 export async function sendQuote(_prev: QuoteActionState, formData: FormData): Promise<QuoteActionState> {
   await assertAdmin();
   const id = readString(formData, "id");
   const to = readString(formData, "to").toLowerCase();
-  const message = readOptional(formData, "message");
   if (!z.string().email().safeParse(to).success) return { error: "Adresse e-mail du destinataire invalide." };
 
   let quote;
@@ -247,12 +246,15 @@ export async function sendQuote(_prev: QuoteActionState, formData: FormData): Pr
   const doc = quoteDoc({ ...quote, status: "SENT" });
   const pdf = await htmlToPdf(renderDocument(doc));
   const link = `${getSiteUrl()}/documents/${quote.token}`;
+  const { subject, body } = quoteEmailFields(formData, quote);
   const result = await sendDocumentEmail({
     to,
     replyTo: quote.issuer?.email,
     issuerName: doc.issuer.name,
-    subject: `Devis ${quote.number} — ${quote.title}`,
-    paragraphs: quoteEmailParagraphs(quote, message),
+    sender: senderFromIssuer(quote.issuer, doc.issuer.name),
+    subject,
+    body,
+    summary: quoteEmailSummary(quote),
     button: { href: link, label: quote.requireSignature ? "Consulter et signer le devis" : "Consulter le devis" },
     pdf,
     filename: documentFileName(doc),
@@ -329,6 +331,7 @@ export async function acceptQuote(_prev: QuoteActionState, formData: FormData): 
       to: recapTo,
       replyTo: updated.issuer?.email,
       issuerName: doc.issuer.name,
+      sender: senderFromIssuer(updated.issuer, doc.issuer.name),
       subject: `Récapitulatif de votre accord — devis ${updated.number}`,
       paragraphs: [
         "Bonjour,",

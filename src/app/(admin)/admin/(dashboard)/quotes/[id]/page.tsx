@@ -2,11 +2,14 @@ import { Copy, Download, ExternalLink, Pencil, Receipt, Trash2 } from "lucide-re
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { deleteQuote, duplicateQuote, invoiceFromQuote, setQuoteStatus } from "../actions";
+import { deleteQuote, duplicateQuote, invoiceFromQuote, sendQuote, sendQuoteTest, setQuoteStatus } from "../actions";
 import { DepositForm } from "./deposit-form";
-import { AcceptQuoteForm, ActionTabs, SendQuoteForm, TestQuoteEmail } from "./quote-actions";
+import { AcceptQuoteForm, ActionTabs } from "./quote-actions";
 
+import { EmailComposer } from "@/components/admin/crm/email-composer";
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
+import { quoteEmailDefaults } from "@/lib/crm/documents/email-content";
+import { senderFromIssuer } from "@/lib/crm/documents/email-template";
 import { quoteDoc } from "@/lib/crm/documents/build";
 import { money, renderDocument } from "@/lib/crm/documents/render";
 import { formatDate, formatDateTime, formatRelative, toDateInput } from "@/lib/crm/format";
@@ -50,6 +53,7 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
   const status = quoteStatus[quote.status];
   const suggested = !quote.number && quote.issuerId ? await peekNumber(prisma, quote.issuerId, "QUOTE") : null;
   const defaultTo = quote.client.contacts[0]?.email ?? quote.client.email ?? "";
+  const emailDefaults = quoteEmailDefaults(quote, { firstName: quote.client.contacts[0]?.firstName, number: suggested });
   const open = ["DRAFT", "SENT", "VIEWED", "EXPIRED"].includes(quote.status);
   const link = `${getSiteUrl()}/documents/${quote.token}`;
 
@@ -161,16 +165,25 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
               canSend={quote.status !== "EXPIRED"}
               canAccept
               send={
-                <>
-                <SendQuoteForm
-                    id={quote.id}
-                    defaultTo={defaultTo}
-                    suggestedNumber={suggested}
-                    hasNumber={Boolean(quote.number)}
-                    resend={quote.status !== "DRAFT"}
-                  />
-                  <TestQuoteEmail id={quote.id} />
-                </>
+                <EmailComposer
+                  id={quote.id}
+                  defaultTo={defaultTo}
+                  defaultSubject={emailDefaults.subject}
+                  defaultBody={emailDefaults.body}
+                  sender={senderFromIssuer(quote.issuer, quote.issuer?.name ?? "Kalimera")}
+                  sendAction={sendQuote}
+                  testAction={sendQuoteTest}
+                  sendLabel={quote.status !== "DRAFT" ? "Renvoyer le devis" : "Envoyer le devis"}
+                  extraFields={
+                    quote.number ? null : (
+                      <label className="block">
+                        <span className="field-label">Numéro</span>
+                        <input name="number" defaultValue={suggested ?? ""} className="field-input font-mono" />
+                        <span className="mt-1 block text-xs text-[var(--ink-45)]">Proposé automatiquement ; attribué à l&apos;envoi.</span>
+                      </label>
+                    )
+                  }
+                />
               }
               accept={
                 <AcceptQuoteForm

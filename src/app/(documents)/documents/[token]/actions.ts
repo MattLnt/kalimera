@@ -12,6 +12,7 @@ import { sendDocumentEmail, studioEmail } from "@/lib/crm/documents/mail";
 import { htmlToPdf } from "@/lib/crm/documents/pdf";
 import { documentFileName, money, renderDocument } from "@/lib/crm/documents/render";
 import { syncDealAmount } from "@/lib/crm/deal-amount";
+import { senderFromIssuer } from "@/lib/crm/documents/email-template";
 import { prisma } from "@/lib/prisma";
 
 export type SignState = { error?: string; signed?: boolean };
@@ -90,6 +91,7 @@ export async function signQuote(_prev: SignState, formData: FormData): Promise<S
         to: data.email,
         replyTo: signed.issuer?.email,
         issuerName: doc.issuer.name,
+        sender: senderFromIssuer(signed.issuer, doc.issuer.name),
         subject: `Devis ${signed.number} signé — merci`,
         paragraphs: [
           `Bonjour ${data.name},`,
@@ -102,6 +104,7 @@ export async function signQuote(_prev: SignState, formData: FormData): Promise<S
       sendDocumentEmail({
         to: signed.issuer?.email ?? studioEmail,
         issuerName: doc.issuer.name,
+        sender: senderFromIssuer(signed.issuer, doc.issuer.name),
         subject: `Devis ${signed.number} signé par ${data.name}`,
         paragraphs: [
           `${data.name} (${data.email}) vient de signer le devis ${signed.number} « ${signed.title} » pour ${signed.client.name}.`,

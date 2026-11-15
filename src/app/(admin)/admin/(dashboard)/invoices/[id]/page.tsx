@@ -2,9 +2,12 @@ import { Download, ExternalLink, FileMinus, Pencil, Trash2, X } from "lucide-rea
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { createCreditNote, deleteInvoice, deletePayment } from "../actions";
-import { IssueForm, PaymentForm, SendForm } from "./invoice-actions";
+import { createCreditNote, deleteInvoice, deletePayment, sendInvoice, sendInvoiceTest } from "../actions";
+import { IssueForm, PaymentForm } from "./invoice-actions";
 
+import { EmailComposer } from "@/components/admin/crm/email-composer";
+import { invoiceEmailDefaults } from "@/lib/crm/documents/email-content";
+import { senderFromIssuer } from "@/lib/crm/documents/email-template";
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
 import { invoiceDoc } from "@/lib/crm/documents/build";
 import { money, renderDocument } from "@/lib/crm/documents/render";
@@ -36,6 +39,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
     },
   });
   if (!invoice) notFound();
+  const emailDefaults = invoiceEmailDefaults(invoice, { firstName: invoice.client.contacts[0]?.firstName });
 
   const credited = invoice.creditedInvoiceId
     ? await prisma.invoice.findUnique({ where: { id: invoice.creditedInvoiceId }, select: { id: true, number: true } })
@@ -157,9 +161,20 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
             </Panel>
           ) : null}
 
-          {invoice.number && invoice.status !== "CANCELLED" ? (
-            <Panel title="Envoyer au client">
-              <SendForm id={invoice.id} defaultTo={invoice.client.contacts[0]?.email ?? invoice.client.email ?? ""} />
+          {invoice.status !== "CANCELLED" ? (
+            <Panel title="Envoyer au client" description={invoice.number ? undefined : "Rédigez l'e-mail et recevez un test dès maintenant ; l'envoi au client se fait une fois la facture émise."}>
+              <EmailComposer
+                id={invoice.id}
+                defaultTo={invoice.client.contacts[0]?.email ?? invoice.client.email ?? ""}
+                defaultSubject={emailDefaults.subject}
+                defaultBody={emailDefaults.body}
+                sender={senderFromIssuer(invoice.issuer, invoice.issuer?.name ?? "Kalimera")}
+                sendAction={sendInvoice}
+                testAction={sendInvoiceTest}
+                sendLabel={invoice.sentAt ? "Renvoyer par e-mail" : "Envoyer par e-mail"}
+                canSend={Boolean(invoice.number)}
+                sendHint="Émettez la facture pour pouvoir l'envoyer au client."
+              />
             </Panel>
           ) : null}
 

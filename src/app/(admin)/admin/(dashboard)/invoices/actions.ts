@@ -14,6 +14,8 @@ import { htmlToPdf } from "@/lib/crm/documents/pdf";
 import { documentFileName, money, renderDocument } from "@/lib/crm/documents/render";
 import { fromDateInput, parseMoney } from "@/lib/crm/format";
 import { claimManualNumber, reserveNumber } from "@/lib/crm/numbering";
+import { invoiceEmailDefaults, invoiceEmailSummary } from "@/lib/crm/documents/email-content";
+import { senderFromIssuer } from "@/lib/crm/documents/email-template";
 import { prisma } from "@/lib/prisma";
 import { getSiteUrl } from "@/lib/site";
 
@@ -155,11 +157,18 @@ export async function issueInvoice(_prev: InvoiceActionState, formData: FormData
   }
 }
 
+function invoiceEmailFields(formData: FormData, invoice: Parameters<typeof invoiceEmailDefaults>[0]) {
+  const defaults = invoiceEmailDefaults(invoice);
+  return {
+    subject: readOptional(formData, "subject") ?? defaults.subject,
+    body: readOptional(formData, "body") ?? defaults.body,
+  };
+}
+
 export async function sendInvoice(_prev: InvoiceActionState, formData: FormData): Promise<InvoiceActionState> {
   await assertAdmin();
   const id = readString(formData, "id");
   const to = readString(formData, "to").toLowerCase();
-  const message = readOptional(formData, "message");
   if (!z.string().email().safeParse(to).success) return { error: "Adresse e-mail invalide." };
 
   const invoice = await prisma.invoice.findUnique({ where: { id }, include });
@@ -167,19 +176,17 @@ export async function sendInvoice(_prev: InvoiceActionState, formData: FormData)
 
   const doc = invoiceDoc(invoice);
   const pdf = await htmlToPdf(renderDocument(doc));
-  const label = invoice.kind === "CREDIT_NOTE" ? "avoir" : "facture";
+  const label = invoice.kind === "CREDIT_NOTE" ? "l'avoir" : "la facture";
+  const { subject, body } = invoiceEmailFields(formData, invoice);
   const result = await sendDocumentEmail({
     to,
     replyTo: invoice.issuer?.email,
     issuerName: doc.issuer.name,
-    subject: `${invoice.kind === "CREDIT_NOTE" ? "Avoir" : "Facture"} ${invoice.number} — ${invoice.title}`,
-    paragraphs: [
-      "Bonjour,",
-      ...(message ? [message] : []),
-      `Vous trouverez ci-joint notre ${label} ${invoice.number} d'un montant de ${money(invoice.totalCents, invoice.currency)}.`,
-      invoice.kind === "CREDIT_NOTE" ? "" : "Les coordonnées bancaires pour le virement figurent sur le document.",
-    ].filter(Boolean),
-    button: { href: `${getSiteUrl()}/documents/${invoice.token}`, label: `Consulter la ${label}` },
+    sender: senderFromIssuer(invoice.issuer, doc.issuer.name),
+    subject,
+    body,
+    summary: invoiceEmailSummary(invoice),
+    button: { href: `${getSiteUrl()}/documents/${invoice.token}`, label: `Consulter ${label}` },
     pdf,
     filename: documentFileName(doc),
   });
@@ -189,6 +196,36 @@ export async function sendInvoice(_prev: InvoiceActionState, formData: FormData)
   await logActivity("invoice.sent", `Facture ${invoice.number} envoyée à ${to}`, { clientId: invoice.clientId, dealId: invoice.dealId, invoiceId: id });
   refresh(invoice);
   return { ok: `Envoyée à ${to}.` };
+}
+
+/** E-mail de test d'une facture : même e-mail, envoyé à l'adresse de test, sans rien changer. */
+export async function sendInvoiceTest(_prev: InvoiceActionState, formData: FormData): Promise<InvoiceActionState> {
+  await assertAdmin();
+  const id = readString(formData, "id");
+  const to = readString(formData, "testTo").toLowerCase();
+  if (!z.string().email().safeParse(to).success) return { error: "Indiquez l'adresse où recevoir le test." };
+  const invoice = await prisma.invoice.findUnique({ where: { id }, include });
+  if (!invoice) return { error: "Facture introuvable." };
+
+  const doc = invoiceDoc(invoice);
+  const pdf = await htmlToPdf(renderDocument(doc));
+  const label = invoice.kind === "CREDIT_NOTE" ? "l'avoir" : "la facture";
+  const { subject, body } = invoiceEmailFields(formData, invoice);
+  const result = await sendDocumentEmail({
+    to,
+    replyTo: invoice.issuer?.email,
+    issuerName: doc.issuer.name,
+    sender: senderFromIssuer(invoice.issuer, doc.issuer.name),
+    subject: `[Test] ${subject}`,
+    body,
+    summary: invoiceEmailSummary(invoice),
+    button: { href: `${getSiteUrl()}/admin/invoices/${invoice.id}/preview`, label: `Consulter ${label}` },
+    pdf,
+    filename: documentFileName(doc),
+    banner: "E-mail de test : rien n'a été envoyé au client et la facture n'a pas changé. Le bouton ouvre l'aperçu dans l'admin.",
+  });
+  if (!result.sent) return { error: result.error };
+  return { ok: `Test envoyé à ${to}. La facture n'a pas changé.` };
 }
 
 /** Recalcule l'état payé à partir des virements enregistrés. */
