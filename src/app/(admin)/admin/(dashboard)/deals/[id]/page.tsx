@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { addDefaultMilestones, addMilestone, deleteMilestone, setDealStage, toggleMilestone } from "../actions";
 import { createNote } from "../../notes/actions";
 
-import { Pill as VividPill, readableOn } from "@/components/admin/board/pill";
+import { Pill as VividPill } from "@/components/admin/board/pill";
+import { readableOn } from "@/lib/crm/pill-colors";
 import { QuickTaskForm, TaskList } from "@/components/admin/crm/task-list";
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
 import { DatePicker } from "@/components/ui/date-picker";

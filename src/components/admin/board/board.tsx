@@ -7,7 +7,8 @@ import { useEffect, useState, useTransition } from "react";
 import { DatePicker } from "@/components/ui/date-picker";
 import type { VividOption } from "@/lib/crm/vivid";
 import { cn } from "@/lib/utils";
-import { PillSelect, isLight, pillColors } from "@/components/admin/board/pill";
+import { PillSelect } from "@/components/admin/board/pill";
+import { isLight, pillColors } from "@/lib/crm/pill-colors";
 
 /* -------------------------------------------------------------------------- */
 /*  Tableau groupé, à la manière des outils de gestion de projet modernes :    */
