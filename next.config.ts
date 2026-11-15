@@ -59,6 +59,22 @@ const nextConfig: NextConfig = {
     "/admin/invoices/**": ["./node_modules/@sparticuz/chromium/bin/**/*"],
   },
   poweredByHeader: false,
+  async redirects() {
+    return [
+      // Une seule adresse pour les moteurs : www renvoie définitivement vers
+      // le domaine principal.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.kalimera.agency" }],
+        destination: "https://kalimera.agency/:path*",
+        permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    // Navigateurs et moteurs demandent /favicon.ico : on sert l'icône générée.
+    return [{ source: "/favicon.ico", destination: "/icon" }];
+  },
   async headers() {
     return [
       {

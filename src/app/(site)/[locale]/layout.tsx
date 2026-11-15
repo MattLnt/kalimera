@@ -69,6 +69,12 @@ export async function generateMetadata({
       description: t("defaultDescription"),
     },
     robots: { index: true, follow: true },
+    // Codes de vérification des outils pour webmasters, réglés dans les
+    // variables d'environnement Vercel (Google Search Console, Bing).
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+      other: process.env.BING_SITE_VERIFICATION ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION } : undefined,
+    },
   };
 }
 

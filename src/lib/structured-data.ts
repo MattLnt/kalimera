@@ -33,8 +33,9 @@ export function organizationSchema(base: string, description: string): Json {
     description,
     email: siteConfig.email,
     telephone: siteConfig.phone,
-    logo: `${base}/icon.png`,
-    image: `${base}/opengraph-image.png`,
+    // Icône d'écran d'accueil : PNG 180 × 180 (Google demande au moins 112 px).
+    logo: `${base}/apple-icon`,
+    image: `${base}/apple-icon`,
     areaServed,
     sameAs: [
       siteConfig.social.linkedin,
@@ -59,7 +60,7 @@ export function localBusinessSchema(base: string, description: string): Json {
     description,
     email: siteConfig.email,
     telephone: siteConfig.phone,
-    image: `${base}/opengraph-image.png`,
+    image: `${base}/apple-icon`,
     parentOrganization: { "@id": organizationId(base) },
     address: {
       "@type": "PostalAddress",

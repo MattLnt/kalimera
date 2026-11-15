@@ -1,9 +1,17 @@
 import { Locale as DbLocale } from "@/generated/prisma/enums";
+import { notFound } from "next/navigation";
+
 import type { AppLocale } from "@/i18n/routing";
 
-/** Le site parle en "fr" / "en" / "es", la base en FR / EN / ES. */
+/**
+ * Le site parle en "fr" / "en" / "es", la base en FR / EN / ES. Une langue
+ * inconnue (une adresse comme /favicon.ico ou /logo.png prise pour une
+ * langue) donne une page introuvable plutôt qu'une erreur serveur.
+ */
 export function toDbLocale(locale: AppLocale): DbLocale {
-  return locale.toUpperCase() as DbLocale;
+  const db = String(locale).toUpperCase();
+  if (db !== "FR" && db !== "EN" && db !== "ES") notFound();
+  return db as DbLocale;
 }
 
 export function toAppLocale(locale: DbLocale): AppLocale {
