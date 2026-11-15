@@ -3,6 +3,7 @@ import { BadgeCheck, Hourglass, Percent, Plus } from "lucide-react";
 import { DocumentsBoard, type DocumentRow } from "@/components/admin/board/documents-board";
 import { ActionLink, AdminHeader, EmptyState, StatCard } from "@/components/admin/ui";
 import { formatDate, formatMoneyShort } from "@/lib/crm/format";
+import { syncDealAmounts } from "@/lib/crm/deal-amount";
 import { prisma } from "@/lib/prisma";
 
 export const metadata = { title: "Devis" };
@@ -11,7 +12,11 @@ export const dynamic = "force-dynamic";
 export default async function QuotesPage() {
   const now = new Date();
   // Un devis envoyé dont la validité est dépassée passe en « Expiré ».
-  await prisma.quote.updateMany({ where: { status: { in: ["SENT", "VIEWED"] }, validUntil: { lt: now } }, data: { status: "EXPIRED" } });
+  const expiring = await prisma.quote.findMany({ where: { status: { in: ["SENT", "VIEWED"] }, validUntil: { lt: now } }, select: { id: true, dealId: true } });
+  if (expiring.length) {
+    await prisma.quote.updateMany({ where: { id: { in: expiring.map((q) => q.id) } }, data: { status: "EXPIRED" } });
+    await syncDealAmounts(expiring.map((q) => q.dealId));
+  }
 
   const quotes = await prisma.quote.findMany({
     orderBy: { updatedAt: "desc" },

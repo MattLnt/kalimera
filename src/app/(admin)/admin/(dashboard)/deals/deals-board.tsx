@@ -41,6 +41,15 @@ export type BoardDealRow = {
 const euro = (cents: number) =>
   new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(cents / 100).replace(/ /g, " ");
 
+/** Suivi financier d'un projet : signé, facturé, encaissé, reste à facturer (EUR). */
+function tracking(deal: BoardDealRow) {
+  const signed = deal.quotes.filter((quote) => quote.status === "SIGNED").reduce((sum, quote) => sum + quote.totalCents, 0);
+  const live = deal.invoices.filter((invoice) => invoice.state !== "DRAFT" && invoice.state !== "CANCELLED");
+  const billed = live.reduce((sum, invoice) => sum + invoice.totalCents, 0);
+  const paid = live.reduce((sum, invoice) => sum + invoice.paidCents, 0);
+  return { signed, billed, paid, toBill: Math.max(0, signed - billed) };
+}
+
 /** Toujours visibles, même vides : on y ajoute des projets. Les autres seulement s'ils ont du contenu. */
 const ALWAYS = ["LEAD", "DISCOVERY", "PROPOSAL", "NEGOTIATION", "WON", "IN_PROGRESS", "REVIEW"];
 
@@ -92,7 +101,19 @@ export function DealsBoard({ deals, clients, today }: { deals: BoardDealRow[]; c
       label: "Montant",
       width: "110px",
       align: "right",
-      render: (deal) => <MoneyCell cents={deal.amountCents} onChange={(value) => update(deal.id, "amountCents", value)} />,
+      render: (deal) => {
+        const live = deal.quotes.filter((quote) => !["DECLINED", "CANCELLED", "EXPIRED"].includes(quote.status));
+        if (live.length === 0) return <MoneyCell cents={deal.amountCents} onChange={(value) => update(deal.id, "amountCents", value)} />;
+        const signed = live.filter((quote) => quote.status === "SIGNED").length;
+        return (
+          <button type="button" onClick={() => setOpenId(deal.id)} title="Calculé d'après les devis du projet" className="w-full cursor-pointer px-3 text-right leading-tight">
+            <span className="block font-display text-[0.875rem] font-bold tabular-nums">{euro(deal.amountCents ?? 0)}</span>
+            <span className="block text-[0.6875rem] text-[var(--ink-45)]">
+              {signed ? `${signed} devis signé${signed > 1 ? "s" : ""}` : `d'après ${live.length} devis`}
+            </span>
+          </button>
+        );
+      },
       summary: (rows) => euro(rows.reduce((sum, row) => sum + (row.amountCents ?? 0), 0)),
     },
     {
@@ -116,25 +137,38 @@ export function DealsBoard({ deals, clients, today }: { deals: BoardDealRow[]; c
     },
     {
       key: "billing",
-      label: "Facturé · encaissé",
-      width: "140px",
-      align: "right",
+      label: "Facturation",
+      width: "160px",
       render: (deal) => {
-        const live = deal.invoices.filter((invoice) => invoice.state !== "DRAFT" && invoice.state !== "CANCELLED");
-        if (live.length === 0) return <span className="px-3 text-[var(--ink-45)]">—</span>;
-        const billed = live.reduce((sum, invoice) => sum + invoice.totalCents, 0);
-        const paid = live.reduce((sum, invoice) => sum + invoice.paidCents, 0);
+        const t = tracking(deal);
+        if (t.billed === 0 && t.signed === 0) return <span className="px-3 text-[0.75rem] text-[var(--ink-45)]">Rien à facturer</span>;
+        const base = Math.max(t.signed, t.billed, 1);
         return (
-          <div className="w-full px-3 text-right leading-tight">
-            <span className="block font-display text-[0.875rem] font-bold tabular-nums">{euro(billed)}</span>
-            <span className={paid >= billed ? "block text-[0.6875rem] font-semibold text-emerald-700" : "block text-[0.6875rem] text-[var(--ink-45)]"}>
-              {paid >= billed ? "soldé" : `${euro(paid)} reçus`}
+          <button type="button" onClick={() => setOpenId(deal.id)} className="w-full cursor-pointer px-3 text-left leading-tight" title="Facturé et encaissé, sur le montant signé">
+            <span className="relative block h-1.5 overflow-hidden rounded-full bg-black/[0.07]">
+              <span className="absolute inset-y-0 left-0 rounded-full bg-[#7DD3FC]" style={{ width: `${Math.min(100, (t.billed / base) * 100)}%` }} />
+              <span className="absolute inset-y-0 left-0 rounded-full bg-[#1F6FD1]" style={{ width: `${Math.min(100, (t.paid / base) * 100)}%` }} />
             </span>
-          </div>
+            <span className="mt-1 block text-[0.6875rem] text-[var(--ink-65)]">
+              {t.toBill > 0 ? (
+                <>
+                  Reste <span className="font-bold text-ink">{euro(t.toBill)}</span> à facturer
+                </>
+              ) : t.paid >= t.billed ? (
+                <span className="font-bold text-[#0D9488]">Tout est encaissé</span>
+              ) : (
+                <>
+                  <span className="font-bold text-ink">{euro(t.billed - t.paid)}</span> à encaisser
+                </>
+              )}
+            </span>
+          </button>
         );
       },
-      summary: (rows) =>
-        euro(rows.flatMap((row) => row.invoices).filter((i) => i.state !== "DRAFT" && i.state !== "CANCELLED").reduce((sum, i) => sum + i.paidCents, 0)) + " reçus",
+      summary: (rows) => {
+        const sum = rows.map(tracking).reduce((acc, t) => ({ toBill: acc.toBill + t.toBill, paid: acc.paid + t.paid }), { toBill: 0, paid: 0 });
+        return `${euro(sum.toBill)} à facturer`;
+      },
     },
     {
       key: "progress",

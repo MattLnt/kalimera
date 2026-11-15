@@ -8,6 +8,7 @@ import { assertAdmin, readOptional, readString } from "@/lib/admin";
 import { logActivity } from "@/lib/crm/activity";
 import { fromDateInput, parseMoney } from "@/lib/crm/format";
 import { dealStage, dealStages } from "@/lib/crm/labels";
+import { syncDealAmount } from "@/lib/crm/deal-amount";
 import { prisma } from "@/lib/prisma";
 
 export type FormState = { error?: string };
@@ -68,6 +69,8 @@ export async function saveDeal(_prev: FormState, formData: FormData): Promise<Fo
     await logActivity("deal.created", `Projet créé : « ${title} »`, { clientId, dealId });
   }
   await promoteClient(clientId, data.stage);
+  // Avec des devis, le montant vient d'eux : on le recalcule.
+  await syncDealAmount(dealId);
   refresh({ id: dealId, clientId });
   redirect(`/admin/deals/${dealId}`);
 }

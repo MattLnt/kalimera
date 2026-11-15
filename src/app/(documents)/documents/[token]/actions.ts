@@ -11,6 +11,7 @@ import { quoteDoc, quoteFingerprintPayload } from "@/lib/crm/documents/build";
 import { sendDocumentEmail, studioEmail } from "@/lib/crm/documents/mail";
 import { htmlToPdf } from "@/lib/crm/documents/pdf";
 import { documentFileName, money, renderDocument } from "@/lib/crm/documents/render";
+import { syncDealAmount } from "@/lib/crm/deal-amount";
 import { prisma } from "@/lib/prisma";
 
 export type SignState = { error?: string; signed?: boolean };
@@ -68,8 +69,9 @@ export async function signQuote(_prev: SignState, formData: FormData): Promise<S
   if (signed.dealId) {
     await prisma.deal.updateMany({
       where: { id: signed.dealId, stage: { in: ["LEAD", "DISCOVERY", "PROPOSAL", "NEGOTIATION"] } },
-      data: { stage: "WON", amountCents: signed.totalCents },
+      data: { stage: "WON" },
     });
+    await syncDealAmount(signed.dealId);
   }
   await prisma.client.updateMany({ where: { id: signed.clientId, status: { in: ["LEAD", "PROSPECT", "PAST"] } }, data: { status: "ACTIVE" } });
   await logActivity("quote.signed", `Devis ${signed.number} signé en ligne par ${data.name}`, {

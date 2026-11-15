@@ -15,6 +15,7 @@ import { htmlToPdf } from "@/lib/crm/documents/pdf";
 import { documentFileName, money, renderDocument } from "@/lib/crm/documents/render";
 import { fromDateInput } from "@/lib/crm/format";
 import { claimManualNumber, reserveNumber } from "@/lib/crm/numbering";
+import { syncDealAmounts } from "@/lib/crm/deal-amount";
 import { prisma } from "@/lib/prisma";
 import { getSiteUrl } from "@/lib/site";
 
@@ -51,11 +52,14 @@ export type QuotePayload = z.input<typeof payload>;
 
 const quoteInclude = { lines: true, client: true, issuer: true } as const;
 
-function refresh(quote: { id: string; clientId: string; dealId: string | null }) {
+async function refresh(quote: { id: string; clientId: string; dealId: string | null }, previousDealId?: string | null) {
+  await syncDealAmounts([quote.dealId, previousDealId]);
   revalidatePath("/admin/quotes");
+  revalidatePath("/admin/deals");
   revalidatePath(`/admin/quotes/${quote.id}`);
   revalidatePath(`/admin/clients/${quote.clientId}`);
   if (quote.dealId) revalidatePath(`/admin/deals/${quote.dealId}`);
+  if (previousDealId && previousDealId !== quote.dealId) revalidatePath(`/admin/deals/${previousDealId}`);
   revalidatePath("/admin");
 }
 
@@ -111,6 +115,8 @@ export async function saveQuote(_prev: QuoteActionState, formData: FormData): Pr
   }));
 
   let id = data.id;
+  // Si le devis change de projet, l'ancien projet est recalculé aussi.
+  const previousDealId = id ? ((await prisma.quote.findUnique({ where: { id }, select: { dealId: true } }))?.dealId ?? null) : null;
   if (id) {
     await prisma.$transaction([
       prisma.quoteLine.deleteMany({ where: { quoteId: id } }),
@@ -123,7 +129,7 @@ export async function saveQuote(_prev: QuoteActionState, formData: FormData): Pr
     id = quote.id;
     await logActivity("quote.created", `Devis créé : ${data.title}`, { clientId: data.clientId, dealId: fields.dealId, quoteId: id });
   }
-  refresh({ id, clientId: data.clientId, dealId: fields.dealId });
+  await refresh({ id, clientId: data.clientId, dealId: fields.dealId }, previousDealId);
   redirect(`/admin/quotes/${id}`);
 }
 
@@ -207,7 +213,7 @@ export async function sendQuote(_prev: QuoteActionState, formData: FormData): Pr
   }
   await prisma.client.updateMany({ where: { id: quote.clientId, status: "LEAD" }, data: { status: "PROSPECT" } });
   await logActivity("quote.sent", `Devis ${quote.number} envoyé à ${to}`, { clientId: quote.clientId, dealId: quote.dealId, quoteId: id });
-  refresh(quote);
+  await refresh(quote);
   return { ok: `Devis ${quote.number} envoyé à ${to}.` };
 }
 
@@ -216,7 +222,7 @@ async function markWon(quote: { id: string; clientId: string; dealId: string | n
   if (quote.dealId) {
     await prisma.deal.updateMany({
       where: { id: quote.dealId, stage: { in: ["LEAD", "DISCOVERY", "PROPOSAL", "NEGOTIATION"] } },
-      data: { stage: "WON", amountCents: quote.totalCents },
+      data: { stage: "WON" },
     });
   }
   await prisma.client.updateMany({ where: { id: quote.clientId, status: { in: ["LEAD", "PROSPECT", "PAST"] } }, data: { status: "ACTIVE" } });
@@ -279,7 +285,7 @@ export async function acceptQuote(_prev: QuoteActionState, formData: FormData): 
     });
     info = result.sent ? `${info} Récapitulatif envoyé à ${recapTo}.` : `${info} ${result.error}`;
   }
-  refresh(updated);
+  await refresh(updated);
   return { ok: info };
 }
 
@@ -296,7 +302,7 @@ export async function setQuoteStatus(formData: FormData) {
   });
   const label = status === "DECLINED" ? "refusé" : status === "CANCELLED" ? "annulé" : "rouvert";
   await logActivity("quote.status", `Devis ${quote.number ?? quote.title} ${label}`, { clientId: quote.clientId, dealId: quote.dealId, quoteId: id });
-  refresh(quote);
+  await refresh(quote);
 }
 
 export async function duplicateQuote(formData: FormData) {
@@ -340,7 +346,7 @@ export async function duplicateQuote(formData: FormData) {
       },
     },
   });
-  revalidatePath("/admin/quotes");
+  await refresh(copy);
   redirect(`/admin/quotes/${copy.id}/edit`);
 }
 
@@ -350,7 +356,7 @@ export async function deleteQuote(formData: FormData) {
   const quote = await prisma.quote.findUnique({ where: { id } });
   if (!quote || quote.status !== "DRAFT") return;
   await prisma.quote.delete({ where: { id } });
-  refresh(quote);
+  await refresh(quote);
   redirect("/admin/quotes");
 }
 
