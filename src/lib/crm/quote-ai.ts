@@ -15,24 +15,24 @@ export const QUOTE_AI_MODELS = ["anthropic/claude-sonnet-5.5", "openai/gpt-5-min
 export const isPlanRefusal = (error: unknown) => error instanceof Error && /free tier|credits|do not have access/i.test(error.message);
 
 export const draftSchema = z.object({
-  title: z.string().describe("Titre du projet, court et concret, tiré du descriptif."),
-  context: z.string().describe("1 à 3 phrases qui reformulent la demande du descriptif, sans rien ajouter."),
-  perimeter: z.string().describe("Une phrase qui borne le périmètre d'après le descriptif, sans majuscule initiale ; chaîne vide si le descriptif ne le précise pas."),
+  title: z.string().describe("Titre du projet, court et concret : « Refonte du site sous WordPress et Elementor »."),
+  context: z.string().describe("Contexte du devis : la situation et la demande, en 2 phrases courtes au plus (ou la longueur demandée dans le descriptif)."),
+  perimeter: z.string().describe("Une phrase qui borne le périmètre, sans majuscule initiale ; chaîne vide si rien d'utile à préciser."),
   lots: z
     .array(
       z.object({
-        title: z.string().describe("« Lot 1 — Refonte des pages »"),
+        title: z.string().describe("Intitulé du lot : « Refonte complète du site sous WordPress et Elementor »."),
         items: z
-          .array(z.string().describe("Une ligne courte (10 mots environ), sans point final, qui reprend un élément DU DESCRIPTIF."))
+          .array(z.string().describe("Une prestation concrète, sur une ligne : « Intitulé court — précision en quelques mots », sans point final."))
           .min(1)
-          .max(6)
-          .describe("Contenu du lot : un élément = une puce. Seulement ce que le descriptif demande ou implique directement."),
-        price: z.number().describe("Prix HT du lot s'il est écrit tel quel dans le descriptif (ex. 800), sinon 0."),
+          .max(8)
+          .describe("Une puce par prestation, sans regrouper plusieurs prestations dans la même puce."),
+        price: z.number().describe("Prix HT du lot s'il est donné dans le descriptif (ex. 350), sinon 0."),
       }),
     )
     .min(1)
     .max(6),
-  stack: z.array(z.string()).describe("Technologies que le studio utilisera pour ce projet, seulement si le descriptif les nomme ; jamais les outils actuels du client (son WordPress, son Elementor…). Tableau vide sinon."),
+  stack: z.array(z.string()).describe("Technologies de la solution livrée si le descriptif les nomme (ex. « WordPress », « Elementor ») ; tableau vide sinon."),
   delay: z.string().describe("Délai s'il est donné dans le descriptif ; sinon chaîne vide."),
   outOfScope: z.string().describe("Exclusions si le descriptif en mentionne ; sinon chaîne vide."),
   evolutions: z.array(z.string()).max(5).describe("Évolutions si le descriptif en mentionne ; sinon tableau vide."),
@@ -41,17 +41,34 @@ export const draftSchema = z.object({
 
 export type QuoteDraftOutput = z.infer<typeof draftSchema>;
 
+/** Un exemple réel validé par le studio : le niveau de détail et le ton attendus. */
+const EXAMPLE = [
+  "EXEMPLE",
+  "Descriptif : « Pierre Berger a un site sur WordPress sur-mesure, la demande est une refonte complète sur WordPress avec Elementor, détaille bien le descriptif, je veux un contexte très court, 2 lignes suffisent. Montant 350. »",
+  "Contexte attendu : « Le site de Pierre Berger, développé sur mesure sous WordPress, fait l'objet d'une refonte complète sous WordPress avec Elementor. »",
+  "Un seul lot, « Refonte complète du site sous WordPress et Elementor », prix 350, avec les puces :",
+  "- Refonte graphique complète — nouvelle direction visuelle : couleurs, typographies, boutons et composants",
+  "- Reconstruction des pages sous Elementor — pages et modèles modifiables depuis WordPress",
+  "- En-tête, menus et pied de page — navigation retravaillée sur tout le site",
+  "- Reprise des contenus — textes, images et références dans la nouvelle structure",
+  "- Adaptation responsive — affichage soigné sur ordinateur, tablette et mobile",
+  "- Mise en ligne et recette — tests, corrections et ajustements avant et après publication",
+  "FIN DE L'EXEMPLE",
+].join("\n");
+
 export const QUOTE_AI_SYSTEM = [
-  "Tu mets en forme des devis pour un studio de développement web et mobile qui code sur mesure.",
-  "RÈGLE ABSOLUE : tu reprends uniquement ce que dit le descriptif. Tu n'ajoutes AUCUN livrable, atelier, audit, cahier des charges, document, réunion, formation, test, technologie, outil, chiffre ou délai qui n'y figure pas.",
-  "Un descriptif court donne un devis court : 1 à 3 lots, quelques puces. Mieux vaut un devis bref et fidèle qu'un devis complet et inventé.",
-  "Tu peux regrouper et reformuler ce qui est demandé en lots dans l'ordre logique, en restant au plus près des mots du descriptif.",
-  "Pas de nom de technologie (langage, framework, CMS précis) sauf s'il est cité dans le descriptif.",
-  "Contenu d'un lot : une puce = une ligne courte, une seule idée. Jamais de phrase à rallonge ni d'éléments enchaînés avec « · », des virgules ou des points-virgules.",
-  "Prix : seulement un montant écrit dans le descriptif pour ce lot ; sinon 0. Jamais de répartition d'un budget.",
-  "Sections facultatives (stack, délai, hors périmètre, évolutions, note de paiement) : vides si le descriptif n'en parle pas.",
-  "Si le descriptif donne des consignes de forme ou de contenu, applique-les à la lettre.",
-  "Français, ton sobre et direct, sans superlatif ni promesse de résultat.",
+  "Tu rédiges des devis pour un studio web : clairs, concrets, prêts à envoyer.",
+  "1. Les consignes écrites dans le descriptif priment sur tout : niveau de détail, longueur du contexte, nombre de lots, technologies, prix.",
+  "2. Technologies : utilise celles que demande le descriptif (WordPress, Elementor, Shopify, Next.js…), sans les remettre en cause ni en proposer d'autres. Si aucune n'est citée, n'en nomme pas.",
+  "3. Contenu : développe les prestations réellement nécessaires à CE projet (pour une refonte : graphisme, pages, navigation, reprise des contenus, responsive, mise en ligne…). N'ajoute pas de prestations de gestion de projet (audit, cahier des charges, ateliers, réunions, comités) sauf si le descriptif les demande.",
+  "4. Lots : un seul lot si le projet forme un tout ou si un seul prix est donné ; plusieurs lots seulement si le descriptif découpe le projet ou donne plusieurs prix.",
+  "5. Puces : une prestation par puce, au format « Intitulé court — précision en quelques mots », sur une seule ligne.",
+  "6. Contexte : 2 phrases courtes au plus, sauf autre consigne ; il dit la situation et la demande, sans promesse.",
+  "7. Prix : uniquement les montants donnés dans le descriptif ; sinon 0. Jamais de prix inventé ni de répartition d'un budget.",
+  "8. Sections facultatives (délai, hors périmètre, évolutions, note de paiement) : vides si le descriptif n'en parle pas.",
+  "9. Français, ton sobre et direct, sans superlatif.",
+  "",
+  EXAMPLE,
 ].join("\n");
 
 /**
