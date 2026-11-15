@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { Chip } from "@/components/ui/chip";
+import { Flag } from "@/components/ui/flag";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -74,11 +75,19 @@ export async function StatsPanel() {
             <dl className="mt-8 grid gap-4 border-t border-black/[0.06] pt-6 sm:grid-cols-2">
               <div>
                 <dt className="font-display text-[0.75rem] font-bold tracking-[0.08em] text-[var(--ink-45)] uppercase">{t("countries")}</dt>
-                <dd className="mt-1.5 font-display text-[1rem] font-bold">{t("countriesList")}</dd>
+                <dd className="mt-2.5 flex gap-2.5">
+                  <Flag code="be" label={t("countryBe")} className="h-6 w-9" />
+                  <Flag code="fr" label={t("countryFr")} className="h-6 w-9" />
+                  <Flag code="us" label={t("countryUs")} className="h-6 w-9" />
+                </dd>
               </div>
               <div>
                 <dt className="font-display text-[0.75rem] font-bold tracking-[0.08em] text-[var(--ink-45)] uppercase">{t("locales")}</dt>
-                <dd className="mt-1.5 font-display text-[1rem] font-bold">{t("localesList")}</dd>
+                <dd className="mt-2.5 flex gap-2.5">
+                  <Flag code="fr" label={t("langFr")} className="h-6 w-9" />
+                  <Flag code="gb" label={t("langEn")} className="h-6 w-9" />
+                  <Flag code="es" label={t("langEs")} className="h-6 w-9" />
+                </dd>
               </div>
             </dl>
           </div>
