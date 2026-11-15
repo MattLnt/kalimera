@@ -65,7 +65,7 @@ export function DealForm({ deal, clients }: { deal: DealDraft; clients: { id: st
               />
             </Field>
             <div className="grid grid-cols-2 gap-4">
-              <Field label="Montant estimé HT">
+              <Field label="Montant estimé HT" hint="Remplacé automatiquement par le total des devis dès qu'il y en a.">
                 <div className="relative">
                   <input name="amount" inputMode="decimal" defaultValue={deal.amount} placeholder="15 000" className="field-input pr-9" />
                   <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[var(--ink-45)]">€</span>
