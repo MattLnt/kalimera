@@ -48,7 +48,7 @@ export async function StatsPanel() {
           <div className="flex flex-col">
             <Chip className="self-start">{t("chip")}</Chip>
             <h2 className="display-2 mt-4">
-              {t("titleTop", { count: live.length })}
+              {t("titleTop")}
               <br />
               <span className="gradient-dark">{t("titleBottom")}</span>
             </h2>
@@ -62,11 +62,10 @@ export async function StatsPanel() {
                 ))}
               </div>
               <ul className="mt-4 grid gap-2.5">
-                {kinds.map(([kind, count]) => (
+                {kinds.map(([kind]) => (
                   <li key={kind} className="flex items-center gap-3 text-[0.9375rem]">
                     <span className="size-2.5 shrink-0 rounded-full" style={{ background: KIND_COLORS[kind] ?? "#94A3B8" }} />
                     <span className="flex-1 text-[var(--ink-74)]">{tKind(kind)}</span>
-                    <span className="font-display text-[1.125rem] font-extrabold tabular-nums">{count}</span>
                   </li>
                 ))}
               </ul>

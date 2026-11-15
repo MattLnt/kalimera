@@ -4,7 +4,6 @@ import { Arches, Orbs } from "@/components/ui/decor";
 import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
 import { Link } from "@/i18n/navigation";
-import { siteConfig } from "@/lib/site";
 
 export async function Hero() {
   const t = await getTranslations("home.hero");
@@ -66,10 +65,10 @@ export async function Hero() {
             </div>
             <div>
               <b className="block font-display text-[0.9375rem] font-bold tracking-[-0.02em] text-white">
-                {t("proofTitle", { count: siteConfig.stats.projects })}
+                {t("proofTitle")}
               </b>
               <small className="block text-xs text-white/60">
-                {t("proofSubtitle", { count: siteConfig.stats.platforms })}
+                {t("proofSubtitle")}
               </small>
             </div>
           </div>

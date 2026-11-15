@@ -43,8 +43,8 @@
       "description": "A development studio specialising in business platforms: B2B marketplaces, subscription SaaS products and bespoke websites. Everything is coded — no theme, no page builder, no outsourcing.",
       "primary": "Start a project",
       "secondary": "See our work",
-      "proofTitle": "{count} projects in production",
-      "proofSubtitle": "including {count} B2B platforms with accounts and subscriptions"
+      "proofTitle": "Platforms, shops and websites in production",
+      "proofSubtitle": "in Belgium, France and the United States"
     },
     "studio": {
       "chip": "The studio",
@@ -54,13 +54,15 @@
       "card1Title": "100% code, zero proprietary platform",
       "card1Body": "No WordPress, no Shopify, no page builder. Your product is written in TypeScript, documented and version-controlled — the repository is yours from day one, and you are locked in to nobody.",
       "card2Title": "Products, not brochures",
-      "card2Body": "User accounts, recurring subscriptions, messaging, gated access, payments: we have shipped three platforms running with real paying customers behind them.",
+      "card2Body": "User accounts, recurring subscriptions, messaging, gated access, payments: our platforms run with real paying customers behind them.",
       "card3Title": "Regulated sectors",
       "card3Body": "Insurance broking, accountancy firms, real estate, financial recruitment. We know the data confidentiality, role-based access and domain constraints these professions carry.",
       "card4Title": "Multilingual by default",
       "card4Body": "FR · EN · ES. Internationalisation is built into the architecture, not bolted on as a plugin six months later — essential in Belgium, Luxembourg and Switzerland.",
-      "statProjectsCaption": "Projects designed, built and shipped to production.",
-      "statScoreCaption": "B2B platforms in production, with accounts and subscriptions."
+      "statProjectsCaption": "Every project shown is in production, not a mock-up: go and visit them.",
+      "statProjectsValue": "Live",
+      "statScoreCaption": "B2B platforms in production, with accounts and subscriptions.",
+      "statScoreValue": "B2B"
     },
     "services": {
       "chip": "Our services",
@@ -77,9 +79,9 @@
     },
     "stats": {
       "chip": "At a glance",
-      "titleTop": "{count} projects live.",
+      "titleTop": "Our projects, live.",
       "titleBottom": "Go and see them.",
-      "intro": "No mock-ups, no demos: platforms, shops and websites their customers use every day.",
+      "intro": "A selection of our work, with no mock-ups or demos: platforms, shops and websites their customers use every day.",
       "breakdown": "Breakdown",
       "countries": "Shipped in",
       "countryBe": "Belgium",

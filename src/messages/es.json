@@ -43,8 +43,8 @@
       "description": "Estudio de desarrollo especializado en plataformas de negocio: marketplaces B2B, productos SaaS por suscripción y webs a medida. Todo está programado: sin plantillas, sin maquetadores, sin subcontratación.",
       "primary": "Empezar un proyecto",
       "secondary": "Ver nuestros proyectos",
-      "proofTitle": "{count} proyectos en producción",
-      "proofSubtitle": "de los cuales {count} plataformas B2B con cuentas y suscripciones"
+      "proofTitle": "Plataformas, tiendas y sitios en producción",
+      "proofSubtitle": "en Bélgica, Francia y Estados Unidos"
     },
     "studio": {
       "chip": "El estudio",
@@ -54,13 +54,15 @@
       "card1Title": "100 % código, cero plataforma propietaria",
       "card1Body": "Ni WordPress, ni Shopify, ni maquetadores. Tu producto está escrito en TypeScript, documentado y versionado: el repositorio es tuyo desde el primer día y no dependes de nadie.",
       "card2Title": "Productos, no folletos",
-      "card2Body": "Cuentas de usuario, suscripciones recurrentes, mensajería, accesos restringidos, pagos: hemos entregado tres plataformas que funcionan con clientes reales que pagan.",
+      "card2Body": "Cuentas de usuario, suscripciones recurrentes, mensajería, accesos condicionados, pagos: nuestras plataformas funcionan con clientes reales que pagan.",
       "card3Title": "Sectores regulados",
       "card3Body": "Corretaje, asesorías, inmobiliaria, selección financiera. Conocemos la confidencialidad de los datos, los accesos por rol y las exigencias de estas profesiones.",
       "card4Title": "Multilingüe de serie",
       "card4Body": "FR · EN · ES. La internacionalización está integrada en la arquitectura, no añadida como plugin seis meses después: imprescindible en Bélgica, Luxemburgo y Suiza.",
-      "statProjectsCaption": "Proyectos diseñados, desarrollados y puestos en producción.",
-      "statScoreCaption": "Plataformas B2B en producción, con cuentas y suscripciones."
+      "statProjectsCaption": "Cada proyecto presentado está en producción, no es una maqueta: visítelos.",
+      "statProjectsValue": "En línea",
+      "statScoreCaption": "Plataformas B2B en producción, con cuentas y suscripciones.",
+      "statScoreValue": "B2B"
     },
     "services": {
       "chip": "Nuestros servicios",
@@ -77,9 +79,9 @@
     },
     "stats": {
       "chip": "En resumen",
-      "titleTop": "{count} proyectos en línea.",
+      "titleTop": "Nuestros proyectos en línea.",
       "titleBottom": "Vaya a verlos.",
-      "intro": "Ni maquetas ni demos: plataformas, tiendas y sitios que sus clientes usan todos los días.",
+      "intro": "Una selección de nuestros proyectos, sin maquetas ni demos: plataformas, tiendas y sitios que sus clientes usan todos los días.",
       "breakdown": "Reparto",
       "countries": "Entregados en",
       "countryBe": "Bélgica",

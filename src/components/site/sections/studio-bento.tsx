@@ -2,9 +2,7 @@ import { Blocks, Gauge, Languages, Workflow } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { SectionHead } from "@/components/site/sections/section-head";
-import { Counter } from "@/components/ui/counter";
 import { Reveal } from "@/components/ui/reveal";
-import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export async function StudioBento() {
@@ -41,7 +39,7 @@ export async function StudioBento() {
 
           <BentoCard delay={2}>
             <div className="gradient-number font-display text-[clamp(2.6rem,4.4vw,3.8rem)] leading-none font-extrabold tracking-[-0.05em]">
-              <Counter value={siteConfig.stats.projects} suffix="+" />
+              {t("statProjectsValue")}
             </div>
             <p className="mt-3 max-w-[26ch] text-base leading-[1.5] text-[var(--ink-74)]">
               {t("statProjectsCaption")}
@@ -67,7 +65,7 @@ export async function StudioBento() {
 
           <BentoCard delay={3}>
             <div className="gradient-number font-display text-[clamp(2.6rem,4.4vw,3.8rem)] leading-none font-extrabold tracking-[-0.05em]">
-              <Counter value={siteConfig.stats.platforms} />
+              {t("statScoreValue")}
             </div>
             <p className="mt-3 max-w-[26ch] text-base leading-[1.5] text-[var(--ink-74)]">
               {t("statScoreCaption")}
