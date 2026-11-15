@@ -51,12 +51,8 @@ export default async function OpengraphImage({
             }}
           >
             <svg width="64" height="64" viewBox="0 0 32 32" fill="none">
-              <path
-                d="M10 23V15a6 6 0 0 1 12 0v8"
-                stroke="#fff"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-              />
+              <path d="M5.5 16c2.8-4.3 6.3-6.5 10.5-6.5s7.7 2.2 10.5 6.5c-2.8 4.3-6.3 6.5-10.5 6.5S8.3 20.3 5.5 16Z" stroke="#fff" strokeWidth="1.9" strokeLinejoin="round" />
+              <circle cx="16" cy="16" r="3.2" fill="#7DD3FC" />
             </svg>
           </div>
           <div style={{ fontSize: 38, fontWeight: 700, color: "#fff", letterSpacing: -1 }}>
