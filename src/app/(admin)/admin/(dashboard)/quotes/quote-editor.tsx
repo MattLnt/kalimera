@@ -57,6 +57,9 @@ export function QuoteEditor({
   clients: EditorClient[];
 }) {
   const [draft, setDraft] = useState(initialDraft);
+  // Acompte : désactivé = 0 %, le dernier pourcentage est gardé pour le rallumer.
+  const depositOn = Number(draft.depositPercent) > 0;
+  const [lastDeposit, setLastDeposit] = useState(() => Number(draft.depositPercent) || 50);
   const [state, action] = useActionState(saveQuote, initial);
   const set = (patch: Partial<QuoteDraft>) => setDraft((current) => ({ ...current, ...patch }));
 
@@ -226,8 +229,39 @@ export function QuoteEditor({
 
         <Panel title="Paiement et validité" description="Acompte, durée de validité et mode d'accord." icon={<Wallet className="size-4" />}>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Acompte (%)" hint="0 : paiement à la livraison.">
-              <input type="number" min={0} max={100} value={draft.depositPercent} onChange={(event) => set({ depositPercent: event.target.value })} className="field-input" />
+            <Field label="Acompte" hint={depositOn ? "Pourcentage du total, demandé à la commande." : "Désactivé : aucune mention d'acompte sur le devis ni sur les factures."}>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={depositOn}
+                  aria-label="Demander un acompte"
+                  onClick={() => set({ depositPercent: depositOn ? "0" : String(lastDeposit || 50) })}
+                  className={cn("field-input flex w-auto shrink-0 cursor-pointer items-center gap-2.5 font-display font-bold", depositOn ? "text-aegean-700" : "text-[var(--ink-45)]")}
+                >
+                  <span className={cn("relative h-5 w-9 shrink-0 rounded-full transition-colors", depositOn ? "bg-aegean-600" : "bg-black/15")}>
+                    <span className={cn("absolute top-0.5 size-4 rounded-full bg-white transition-[left]", depositOn ? "left-[18px]" : "left-0.5")} />
+                  </span>
+                  {depositOn ? null : "Aucun"}
+                </button>
+                {depositOn ? (
+                  <div className="relative min-w-0 flex-1">
+                    <input
+                      type="number"
+                      min={1}
+                      max={100}
+                      value={draft.depositPercent}
+                      onChange={(event) => {
+                        set({ depositPercent: event.target.value });
+                        if (Number(event.target.value) > 0) setLastDeposit(Number(event.target.value));
+                      }}
+                      aria-label="Pourcentage d'acompte"
+                      className="field-input pr-8"
+                    />
+                    <span className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-[var(--ink-45)]">%</span>
+                  </div>
+                ) : null}
+              </div>
             </Field>
             <Field label="Validité (jours)">
               <input type="number" min={1} value={draft.validityDays} onChange={(event) => set({ validityDays: event.target.value })} className="field-input" />

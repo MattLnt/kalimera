@@ -192,7 +192,7 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
                     </span>
                   </Link>
                 ))}
-                {balance.length === 0 ? (
+                {balance.length === 0 && (quote.depositPercent > 0 || deposit.length > 0) ? (
                   <DepositForm
                     quoteId={quote.id}
                     totalCents={quote.totalCents}

@@ -347,7 +347,7 @@ function quoteBody(doc: QuoteDoc) {
     }
     ${doc.terms ? `<div class="block"><h2>Conditions particulières</h2><p class="out-of-scope">${esc(doc.terms)}</p></div>` : ""}
 
-    <div class="validity-block block">Ce devis est valable ${doc.validityDays} jours à compter de sa date d'émission. Il est considéré comme accepté à réception d'un retour écrit (e-mail) et du versement de l'acompte.</div>
+    <div class="validity-block block">Ce devis est valable ${doc.validityDays} jours à compter de sa date d'émission. Il est considéré comme accepté à réception d'un retour écrit (e-mail)${doc.depositPercent > 0 ? " et du versement de l'acompte" : ""}.</div>
     ${signatureRow(doc)}
     ${legal(doc.issuer)}`;
 }
