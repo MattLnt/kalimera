@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle2, FlaskConical, Loader2, Send } from "lucide-react";
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useState, useSyncExternalStore } from "react";
 import { useFormStatus } from "react-dom";
 
 import type { EmailSender } from "@/lib/crm/documents/email-template";
@@ -11,6 +11,18 @@ type ActionState = { ok?: string; error?: string };
 type Action = (prev: ActionState, formData: FormData) => Promise<ActionState>;
 
 const TEST_KEY = "kalimera:test-email";
+
+function subscribeStorage(callback: () => void) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+function readTestTo() {
+  try {
+    return window.localStorage.getItem(TEST_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
 
 function SubmitButton({ label, busy, icon, variant = "primary", formAction }: { label: string; busy: string; icon: React.ReactNode; variant?: "primary" | "ghost"; formAction?: (formData: FormData) => void }) {
   const { pending } = useFormStatus();
@@ -76,31 +88,30 @@ export function EmailComposer({
 }) {
   const [sendState, send] = useActionState(sendAction, {});
   const [testState, test] = useActionState(testAction, {});
-  const testRef = useRef<HTMLInputElement>(null);
-
+  // Champs contrôlés : un envoi (ou un test) ne remet pas le texte à zéro.
+  const [to, setTo] = useState(defaultTo);
+  const [subject, setSubject] = useState(defaultSubject);
+  const [body, setBody] = useState(defaultBody);
   // L'adresse de test est retenue dans ce navigateur.
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(TEST_KEY);
-      if (saved && testRef.current && !testRef.current.value) testRef.current.value = saved;
-    } catch {}
-  }, []);
+  const savedTestTo = useSyncExternalStore(subscribeStorage, readTestTo, () => "");
+  const [typedTestTo, setTypedTestTo] = useState<string | null>(null);
+  const testTo = typedTestTo ?? savedTestTo;
 
   return (
     <form action={send} className="grid gap-3">
       <input type="hidden" name="id" value={id} />
       <label className="block">
         <span className="field-label">Destinataire</span>
-        <input name="to" type="email" defaultValue={defaultTo} className="field-input" />
+        <input name="to" type="email" value={to} onChange={(event) => setTo(event.target.value)} className="field-input" />
       </label>
       {extraFields}
       <label className="block">
         <span className="field-label">Objet</span>
-        <input name="subject" defaultValue={defaultSubject} className="field-input" />
+        <input name="subject" value={subject} onChange={(event) => setSubject(event.target.value)} className="field-input" />
       </label>
       <label className="block">
         <span className="field-label">Message</span>
-        <textarea name="body" defaultValue={defaultBody} rows={9} className="field-input min-h-[12rem] resize-y leading-relaxed [field-sizing:content]" />
+        <textarea name="body" value={body} onChange={(event) => setBody(event.target.value)} rows={9} className="field-input min-h-[12rem] resize-y leading-relaxed [field-sizing:content]" />
         <span className="mt-1 block text-xs text-[var(--ink-45)]">Une ligne vide sépare deux paragraphes. Le récapitulatif, le bouton et le PDF sont ajoutés sous le texte.</span>
       </label>
 
@@ -140,8 +151,9 @@ export function EmailComposer({
           <input
             name="testTo"
             type="email"
-            ref={testRef}
+            value={testTo}
             onChange={(event) => {
+              setTypedTestTo(event.target.value);
               try {
                 window.localStorage.setItem(TEST_KEY, event.target.value);
               } catch {}
