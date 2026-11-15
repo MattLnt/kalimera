@@ -82,7 +82,7 @@ export function DatePicker({
 
   // Le focus suit le jour actif, pour que le clavier reste dans la grille.
   useEffect(() => {
-    if (open) gridRef.current?.querySelector<HTMLButtonElement>(`[data-date="${cursor}"]`)?.focus();
+    if (open) gridRef.current?.querySelector<HTMLButtonElement>(`[data-date="${cursor}"]`)?.focus({ preventScroll: true });
   }, [cursor, open]);
 
   const cursorDate = parse(cursor) ?? new Date();
@@ -105,7 +105,7 @@ export function DatePicker({
   const choose = (next: string) => {
     set(next);
     setOpen(false);
-    buttonRef.current?.focus();
+    buttonRef.current?.focus({ preventScroll: true });
   };
 
   const onGridKey = (event: React.KeyboardEvent) => {
@@ -125,7 +125,7 @@ export function DatePicker({
     } else if (event.key === "Escape") {
       event.preventDefault();
       setOpen(false);
-      buttonRef.current?.focus();
+      buttonRef.current?.focus({ preventScroll: true });
     }
   };
 

@@ -85,7 +85,7 @@ export function Select({
     setValue(option.value);
     onValueChange?.(option.value);
     setOpen(false);
-    buttonRef.current?.focus();
+    buttonRef.current?.focus({ preventScroll: true });
   };
 
   const onKeyDown = (event: React.KeyboardEvent) => {

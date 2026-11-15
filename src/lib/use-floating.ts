@@ -23,9 +23,12 @@ export function useFloating(
     const rect = anchor.current.getBoundingClientRect();
     const margin = 8;
     const wanted = size.align === "start" ? rect.left : rect.left + rect.width / 2 - size.width / 2;
-    const left = Math.min(Math.max(margin, wanted), window.innerWidth - size.width - margin);
+    // Largeur et hauteur visibles, sans la barre de défilement.
+    const viewW = document.documentElement.clientWidth;
+    const viewH = document.documentElement.clientHeight;
+    const left = Math.min(Math.max(margin, wanted), viewW - size.width - margin);
     const below = rect.bottom + 6;
-    const top = below + size.height > window.innerHeight - margin ? Math.max(margin, rect.top - 6 - size.height) : below;
+    const top = below + size.height > viewH - margin ? Math.max(margin, rect.top - 6 - size.height) : below;
     setStyle({ position: "fixed", top, left, width: size.width });
   }, [anchor, size.width, size.height, size.align]);
 
