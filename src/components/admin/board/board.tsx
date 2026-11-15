@@ -7,7 +7,7 @@ import { useEffect, useState, useTransition } from "react";
 import { DatePicker } from "@/components/ui/date-picker";
 import type { VividOption } from "@/lib/crm/vivid";
 import { cn } from "@/lib/utils";
-import { PillSelect, pillColors } from "@/components/admin/board/pill";
+import { PillSelect, isLight, pillColors } from "@/components/admin/board/pill";
 
 /* -------------------------------------------------------------------------- */
 /*  Tableau groupé, à la manière des outils de gestion de projet modernes :    */
@@ -77,7 +77,7 @@ function BoardGroupView<T extends { id: string }>({
         type="button"
         onClick={() => setCollapsed((value) => !value)}
         className="mb-2 flex cursor-pointer items-center gap-2 font-display text-[1rem] font-bold tracking-[-0.02em]"
-        style={{ color: group.color }}
+        style={{ color: isLight(group.color) ? `color-mix(in srgb, ${group.color} 45%, #0B1B2E)` : group.color }}
       >
         {collapsed ? <ChevronRight className="size-4" /> : <ChevronDown className="size-4" />}
         {group.label}

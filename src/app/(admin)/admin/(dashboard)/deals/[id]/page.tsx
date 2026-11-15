@@ -5,13 +5,13 @@ import { notFound } from "next/navigation";
 import { addDefaultMilestones, addMilestone, deleteMilestone, setDealStage, toggleMilestone } from "../actions";
 import { createNote } from "../../notes/actions";
 
-import { Pill as VividPill } from "@/components/admin/board/pill";
+import { Pill as VividPill, readableOn } from "@/components/admin/board/pill";
 import { QuickTaskForm, TaskList } from "@/components/admin/crm/task-list";
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
 import { DatePicker } from "@/components/ui/date-picker";
 import { formatDate, formatDateTime, formatMoney, formatRelative } from "@/lib/crm/format";
-import { dealStage, dealStages, noteKind, toneClasses } from "@/lib/crm/labels";
-import { invoiceStateOptions, optionOf, quoteStatusOptions } from "@/lib/crm/vivid";
+import { dealStages, noteKind, toneClasses } from "@/lib/crm/labels";
+import { dealStageOptions, invoiceStateOptions, optionOf, quoteStatusOptions } from "@/lib/crm/vivid";
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +42,6 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
   });
   if (!deal) notFound();
 
-  const stage = dealStage[deal.stage];
   const currentIndex = track.findIndex((item) => item.value === deal.stage);
   const done = deal.milestones.filter((milestone) => milestone.doneAt).length;
   const progress = deal.milestones.length ? Math.round((done / deal.milestones.length) * 100) : 0;
@@ -75,7 +74,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
         <Link href={`/admin/clients/${deal.client.id}`} className="font-display font-bold text-aegean-700 hover:underline">
           {deal.client.name}
         </Link>
-        <Pill className={toneClasses[stage.tone]}>{stage.label}</Pill>
+        <VividPill option={optionOf(dealStageOptions, deal.stage)} />
         {deal.amountCents ? <span>· {formatMoney(deal.amountCents)} HT</span> : null}
       </p>
 
@@ -85,6 +84,7 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
           {track.map((item, index) => {
             const reached = currentIndex >= index && deal.stage !== "LOST";
             const isCurrent = item.value === deal.stage;
+            const color = optionOf(dealStageOptions, item.value).color;
             return (
               <li key={item.value} className="flex-1">
                 <form action={setDealStage}>
@@ -92,16 +92,17 @@ export default async function DealPage({ params }: { params: Promise<{ id: strin
                   <input type="hidden" name="stage" value={item.value} />
                   <button
                     type="submit"
+                    style={isCurrent ? { background: color, color: readableOn(color) } : undefined}
                     className={cn(
                       "flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-[12px] px-3 py-2.5 font-display text-[0.8125rem] font-bold whitespace-nowrap transition-colors",
                       isCurrent
-                        ? "bg-aegean-600 text-white"
+                        ? "shadow-[0_8px_16px_-10px_rgba(7,33,63,0.6)]"
                         : reached
                           ? "bg-aegean-50 text-aegean-700 hover:bg-aegean-100"
                           : "text-[var(--ink-45)] hover:bg-black/5",
                     )}
                   >
-                    {reached && !isCurrent ? <Check className="size-3.5" /> : null}
+                    {reached && !isCurrent ? <Check className="size-3.5" style={{ color }} /> : null}
                     {item.label}
                   </button>
                 </form>

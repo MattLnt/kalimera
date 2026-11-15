@@ -1,3 +1,4 @@
+import { Pill as VividPill } from "@/components/admin/board/pill";
 import {
   BriefcaseBusiness,
   CalendarDays,
@@ -27,7 +28,6 @@ import { Select } from "@/components/ui/select";
 import { daysAgo, formatDate, formatDateTime, formatMoney, formatMoneyShort, formatRelative, initials } from "@/lib/crm/format";
 import {
   clientStatus,
-  dealStage,
   invoiceKind,
   invoiceStatus,
   noteKind,
@@ -35,6 +35,7 @@ import {
   toneClasses,
   toneDots,
 } from "@/lib/crm/labels";
+import { dealStageOptions, optionOf } from "@/lib/crm/vivid";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -397,12 +398,11 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
             ) : (
               <ul className="grid gap-1.5">
                 {client.deals.map((deal) => {
-                  const stage = dealStage[deal.stage];
                   return (
                     <li key={deal.id}>
                       <Link href={`/admin/deals/${deal.id}`} className="flex items-center gap-2 rounded-field px-2 py-2 hover:bg-aegean-50">
                         <span className="min-w-0 flex-1 truncate font-display text-[0.875rem] font-bold">{deal.title}</span>
-                        <Pill className={toneClasses[stage.tone]}>{stage.label}</Pill>
+                        <VividPill option={optionOf(dealStageOptions, deal.stage)} />
                       </Link>
                     </li>
                   );

@@ -1,3 +1,4 @@
+import { Pill as VividPill } from "@/components/admin/board/pill";
 import {
   Activity,
   ArrowRight,
@@ -22,6 +23,7 @@ import { ActionLink, AdminHeader, Panel, Pill, StatCard } from "@/components/adm
 import { requireUser } from "@/lib/auth";
 import { formatDate, formatDateTime, formatMoneyShort, formatRelative, formatTime } from "@/lib/crm/format";
 import { dealStage, quoteStatus, toneClasses } from "@/lib/crm/labels";
+import { dealStageOptions, optionOf } from "@/lib/crm/vivid";
 import { prisma } from "@/lib/prisma";
 
 export const metadata = { title: "Tableau de bord" };
@@ -116,7 +118,7 @@ export default async function AdminHomePage() {
   });
   const funnel = (["LEAD", "DISCOVERY", "PROPOSAL", "NEGOTIATION", "WON"] as const).map((stage) => {
     const row = stageTotals.find((item) => item.stage === stage);
-    return { key: stage, label: dealStage[stage].label, count: row?._count ?? 0, cents: row?._sum.amountCents ?? 0 };
+    return { key: stage, label: dealStage[stage].label, count: row?._count ?? 0, cents: row?._sum.amountCents ?? 0, color: optionOf(dealStageOptions, stage).color };
   });
 
   const firstName = (user?.name ?? "").split(" ")[0];
@@ -205,7 +207,7 @@ export default async function AdminHomePage() {
                       <Link href={`/admin/deals/${deal.id}`} className="block rounded-[14px] px-3 py-2.5 hover:bg-aegean-50">
                         <div className="flex items-center gap-2">
                           <span className="min-w-0 flex-1 truncate font-display text-[0.9375rem] font-bold">{deal.title}</span>
-                          <Pill className={toneClasses[dealStage[deal.stage].tone]}>{dealStage[deal.stage].label}</Pill>
+                          <VividPill option={optionOf(dealStageOptions, deal.stage)} />
                         </div>
                         <div className="mt-1.5 flex items-center gap-3 text-xs text-[var(--ink-45)]">
                           <span className="truncate">{deal.client.name}</span>

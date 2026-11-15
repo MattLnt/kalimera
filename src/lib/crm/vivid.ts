@@ -9,7 +9,7 @@
  * - bleu nuit   : en retard, urgent (le plus foncé, donc le plus visible)
  */
 
-export type VividOption = { value: string; label: string; color: string };
+export type VividOption = { value: string; label: string; color: string; /** Pastille pleine plutôt que teintée. */ solid?: boolean };
 
 export const statusColors = {
   muted: "#94A3B8",
@@ -22,17 +22,22 @@ export const statusColors = {
 
 const { muted, neutral, active, waiting, done, urgent } = statusColors;
 
+/**
+ * Étapes d'un projet : pastilles pleines, une teinte bien distincte par
+ * étape (clair / foncé, bleu / turquoise / vert / gris), dans l'ordre du
+ * parcours. Le texte passe en foncé sur les teintes claires.
+ */
 export const dealStageOptions: VividOption[] = [
-  { value: "LEAD", label: "Piste", color: neutral },
-  { value: "DISCOVERY", label: "Découverte", color: active },
-  { value: "PROPOSAL", label: "Devis envoyé", color: waiting },
-  { value: "NEGOTIATION", label: "Négociation", color: waiting },
-  { value: "WON", label: "Signé", color: done },
-  { value: "IN_PROGRESS", label: "En production", color: active },
-  { value: "REVIEW", label: "Recette", color: waiting },
-  { value: "DELIVERED", label: "Livré", color: done },
-  { value: "MAINTENANCE", label: "Maintenance", color: done },
-  { value: "LOST", label: "Perdu", color: muted },
+  { value: "LEAD", label: "Piste", color: "#CBD5E1", solid: true },
+  { value: "DISCOVERY", label: "Découverte", color: "#7DD3FC", solid: true },
+  { value: "PROPOSAL", label: "Devis envoyé", color: "#2563EB", solid: true },
+  { value: "NEGOTIATION", label: "Négociation", color: "#1E3A8A", solid: true },
+  { value: "WON", label: "Signé", color: "#5EEAD4", solid: true },
+  { value: "IN_PROGRESS", label: "En production", color: "#0D9488", solid: true },
+  { value: "REVIEW", label: "Recette", color: "#86EFAC", solid: true },
+  { value: "DELIVERED", label: "Livré", color: "#15803D", solid: true },
+  { value: "MAINTENANCE", label: "Maintenance", color: "#475569", solid: true },
+  { value: "LOST", label: "Perdu", color: "#94A3B8", solid: true },
 ];
 
 export const taskStatusOptions: VividOption[] = [

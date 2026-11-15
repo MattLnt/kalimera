@@ -106,10 +106,10 @@ function niceStep(raw: number) {
 }
 
 /**
- * Prospection par étape : barres horizontales d'une seule teinte, longueur =
- * montant cumulé ; nombre de projets et montant en texte, jamais en couleur.
+ * Prospection par étape : barres horizontales dans la teinte de l'étape,
+ * longueur = montant cumulé ; nombre de projets et montant en texte.
  */
-export function PipelineFunnel({ stages }: { stages: { key: string; label: string; count: number; cents: number }[] }) {
+export function PipelineFunnel({ stages }: { stages: { key: string; label: string; count: number; cents: number; color?: string }[] }) {
   const max = Math.max(...stages.map((stage) => stage.cents), 1);
   return (
     <ul className="grid gap-3.5">
@@ -123,8 +123,8 @@ export function PipelineFunnel({ stages }: { stages: { key: string; label: strin
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-black/[0.05]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-aegean-400 to-aegean-600"
-              style={{ width: stage.cents > 0 ? `max(${(stage.cents / max) * 100}%, 6px)` : 0 }}
+              className="h-full rounded-full bg-aegean-500"
+              style={{ width: stage.cents > 0 ? `max(${(stage.cents / max) * 100}%, 6px)` : 0, background: stage.color }}
             />
           </div>
         </li>

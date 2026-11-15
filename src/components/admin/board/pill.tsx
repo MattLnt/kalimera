@@ -7,8 +7,22 @@ import type { VividOption } from "@/lib/crm/vivid";
 import { useFloating } from "@/lib/use-floating";
 import { cn } from "@/lib/utils";
 
-/** Fond clair et texte foncé tirés de la couleur du statut. */
-export function pillColors(color: string) {
+/** Vrai si la teinte est claire : on écrit alors en foncé dessus. */
+export function isLight(hex: string) {
+  const value = hex.replace("#", "");
+  if (value.length !== 6) return false;
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(value.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.3;
+}
+
+/** Texte lisible posé sur une teinte pleine. */
+export function readableOn(hex: string) {
+  return isLight(hex) ? "#0B1B2E" : "#FFFFFF";
+}
+
+/** Couleurs d'une pastille : pleine (étapes de projet) ou teintée (le reste). */
+export function pillColors(color: string, solid = false) {
+  if (solid) return { background: color, color: readableOn(color) };
   return {
     background: `color-mix(in srgb, ${color} 13%, white)`,
     color: `color-mix(in srgb, ${color} 72%, black)`,
@@ -16,13 +30,13 @@ export function pillColors(color: string) {
 }
 
 /** Pastille de statut : point de couleur et libellé. */
-export function Pill({ option, className }: { option: Pick<VividOption, "label" | "color">; className?: string }) {
+export function Pill({ option, className }: { option: Pick<VividOption, "label" | "color" | "solid">; className?: string }) {
   return (
     <span
-      className={cn("inline-flex max-w-full items-center gap-1.5 rounded-full py-1 pr-2.5 pl-2 font-display text-[0.75rem] font-bold whitespace-nowrap", className)}
-      style={pillColors(option.color)}
+      className={cn("inline-flex max-w-full items-center gap-1.5 rounded-full py-1 pr-2.5 pl-2 font-display text-[0.75rem] font-bold whitespace-nowrap", option.solid && "px-2.5", className)}
+      style={pillColors(option.color, option.solid)}
     >
-      <span className="size-[7px] shrink-0 rounded-full" style={{ background: option.color }} />
+      {option.solid ? null : <span className="size-[7px] shrink-0 rounded-full" style={{ background: option.color }} />}
       <span className="truncate">{option.label}</span>
     </span>
   );
@@ -45,7 +59,7 @@ export function PillSelect({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const current = options.find((option) => option.value === value) ?? { label: value, color: "#9CA3AF", value };
+  const current: VividOption = options.find((option) => option.value === value) ?? { label: value, color: "#9CA3AF", value };
   const floating = useFloating(ref, open, () => setOpen(false), { width: 220, height: options.length * 38 + 16 });
 
   useEffect(() => {
@@ -74,9 +88,9 @@ export function PillSelect({
           setOpen((v) => !v);
         }}
         className="inline-flex max-w-full cursor-pointer items-center gap-1.5 rounded-full py-1 pr-2 pl-2 font-display text-[0.75rem] font-bold whitespace-nowrap transition-[filter,box-shadow] hover:brightness-[0.97] hover:shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
-        style={pillColors(current.color)}
+        style={pillColors(current.color, current.solid)}
       >
-        <span className="size-[7px] shrink-0 rounded-full" style={{ background: current.color }} />
+        {current.solid ? null : <span className="size-[7px] shrink-0 rounded-full" style={{ background: current.color }} />}
         <span className="truncate">{current.label}</span>
         <ChevronDown className={cn("size-3 shrink-0 opacity-70 transition-transform", open && "rotate-180")} />
       </button>
