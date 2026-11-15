@@ -23,7 +23,12 @@ const draftSchema = z.object({
     .array(
       z.object({
         title: z.string().describe("« Lot 1 — Cadrage et maquettes »"),
-        description: z.string().describe("Contenu du lot : éléments séparés par « · » sur une ligne, ou une liste avec des lignes commençant par « - »."),
+        items: z
+          .array(z.string().describe("Un livrable concret, en une ligne courte (10 mots environ), sans point final : « Maquettes mobile et desktop des 5 pages »."))
+          .min(2)
+          .max(6)
+          .describe("Contenu du lot : un élément = une puce. Jamais plusieurs idées dans un même élément."),
+        note: z.string().describe("Une précision courte affichée en gris sous la liste, ou une chaîne vide s'il n'y a rien à préciser."),
         weight: z.number().describe("Part du budget, en pourcentage ; la somme des lots fait 100."),
       }),
     )
@@ -35,6 +40,21 @@ const draftSchema = z.object({
   evolutions: z.array(z.string()).max(5).describe("Pistes d'évolution courtes, pour un devis complémentaire."),
   paymentNote: z.string().describe("Une phrase grise sous les modalités de paiement."),
 });
+
+/**
+ * Une puce par élément. Un élément qui en enchaîne plusieurs (« · », « ; »)
+ * est redécoupé : le devis garde des lignes courtes même si le modèle
+ * n'a pas suivi la consigne.
+ */
+function toBullets(items: string[], note?: string) {
+  const lines = items
+    .flatMap((item) => item.split(/\s+[·•;]\s+|\s*;\s*/))
+    .map((item) => item.replace(/^[-•·*\s]+/, "").replace(/[.;,\s]+$/, "").trim())
+    .filter(Boolean)
+    .map((item) => `- ${item.charAt(0).toUpperCase()}${item.slice(1)}`);
+  if (note?.trim()) lines.push(`> ${note.trim()}`);
+  return lines.join("\n");
+}
 
 export type QuoteDraftResult = { ok: true; draft: Omit<z.infer<typeof draftSchema>, "lots"> & { lots: { title: string; description: string; amountCents: number }[] } } | { ok: false; error: string };
 
@@ -82,6 +102,8 @@ export async function generateQuoteDraft(input: { clientId?: string; brief: stri
             "Tu rédiges des devis pour un studio de développement web et mobile (sites sur mesure, e-commerce, applications, plateformes SaaS), qui code tout sans WordPress ni Shopify.",
             "Écris en français, ton sobre et précis, vocabulaire concret du métier. Aucune promesse chiffrée de résultat, aucun superlatif.",
             "Découpe le projet en lots qui suivent l'ordre de réalisation. Chaque lot décrit ce qui est livré, pas des intentions.",
+        "Contenu d'un lot : une liste de 2 à 6 éléments, chacun une ligne simple et courte (une idée, une puce). Jamais de phrase à rallonge, jamais d'éléments enchaînés avec « · », des virgules ou des points-virgules.",
+        "Si le descriptif donne des consignes de forme ou de contenu, applique-les à la lettre.",
             "N'invente ni client, ni référence, ni chiffre d'audience.",
             `Services du studio : ${services.map((service) => `${service.title} (${service.summary})`).join(" ; ")}.`,
           ].join("\n"),
@@ -106,7 +128,7 @@ export async function generateQuoteDraft(input: { clientId?: string; brief: stri
       const isLast = index === output.lots.length - 1;
       const amount = isLast ? input.budgetCents - allocated : Math.round((input.budgetCents * Math.max(0, item.weight)) / totalWeight / 100) * 100;
       allocated += amount;
-      return { title: item.title, description: item.description, amountCents: amount };
+      return { title: item.title, description: toBullets(item.items, item.note), amountCents: amount };
     });
 
     return { ok: true, draft: { ...output, lots } };
