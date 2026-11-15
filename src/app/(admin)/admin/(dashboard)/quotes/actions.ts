@@ -184,6 +184,51 @@ async function emit(quoteId: string, manualNumber: string | null) {
   });
 }
 
+/** Paragraphes de l'e-mail d'un devis : les mêmes pour l'envoi réel et le test. */
+function quoteEmailParagraphs(quote: { number: string | null; title: string; totalCents: number; currency: string; requireSignature: boolean; validityDays: number }, message: string | null) {
+  return [
+    "Bonjour,",
+    ...(message ? [message] : []),
+    `Vous trouverez ci-joint notre devis ${quote.number ?? ""} pour « ${quote.title} », d'un montant de ${money(quote.totalCents, quote.currency)}.`.replace("devis  pour", "devis pour"),
+    quote.requireSignature ? "Vous pouvez le consulter et le signer en ligne en un instant, depuis le lien ci-dessous." : "Vous pouvez le consulter en ligne depuis le lien ci-dessous.",
+    `Il est valable ${quote.validityDays} jours.`,
+  ];
+}
+
+/**
+ * E-mail de test : exactement l'e-mail que recevra le client (texte, bouton,
+ * PDF joint), envoyé à l'adresse de son choix. Rien ne change : pas de
+ * numéro attribué, pas de statut « envoyé », le PDF porte « Brouillon » et
+ * le bouton ouvre l'aperçu dans l'admin.
+ */
+export async function sendQuoteTest(_prev: QuoteActionState, formData: FormData): Promise<QuoteActionState> {
+  await assertAdmin();
+  const id = readString(formData, "id");
+  const to = readString(formData, "to").toLowerCase();
+  const message = readOptional(formData, "message");
+  if (!z.string().email().safeParse(to).success) return { error: "Adresse de test invalide." };
+  const quote = await prisma.quote.findUnique({ where: { id }, include: quoteInclude });
+  if (!quote) return { error: "Devis introuvable." };
+
+  const doc = quoteDoc(quote);
+  const pdf = await htmlToPdf(renderDocument(doc));
+  const result = await sendDocumentEmail({
+    to,
+    replyTo: quote.issuer?.email,
+    issuerName: doc.issuer.name,
+    subject: `[Test] Devis ${quote.number ?? ""} — ${quote.title}`.replace("Devis  —", "Devis —"),
+    paragraphs: [
+      ...quoteEmailParagraphs(quote, message),
+      "— E-mail de test : le devis n'a pas été envoyé au client. Le bouton ouvre l'aperçu dans l'admin (connexion requise).",
+    ],
+    button: { href: `${getSiteUrl()}/admin/quotes/${quote.id}/preview`, label: quote.requireSignature ? "Consulter et signer le devis" : "Consulter le devis" },
+    pdf,
+    filename: `TEST-${documentFileName(doc)}`,
+  });
+  if (!result.sent) return { error: result.error };
+  return { ok: `E-mail de test envoyé à ${to}. Le devis n'a pas bougé.` };
+}
+
 export async function sendQuote(_prev: QuoteActionState, formData: FormData): Promise<QuoteActionState> {
   await assertAdmin();
   const id = readString(formData, "id");
@@ -207,15 +252,7 @@ export async function sendQuote(_prev: QuoteActionState, formData: FormData): Pr
     replyTo: quote.issuer?.email,
     issuerName: doc.issuer.name,
     subject: `Devis ${quote.number} — ${quote.title}`,
-    paragraphs: [
-      "Bonjour,",
-      ...(message ? [message] : []),
-      `Vous trouverez ci-joint notre devis ${quote.number} pour « ${quote.title} », d'un montant de ${money(quote.totalCents, quote.currency)}.`,
-      quote.requireSignature
-        ? "Vous pouvez le consulter et le signer en ligne en un instant, depuis le lien ci-dessous."
-        : "Vous pouvez le consulter en ligne depuis le lien ci-dessous.",
-      `Il est valable ${quote.validityDays} jours.`,
-    ],
+    paragraphs: quoteEmailParagraphs(quote, message),
     button: { href: link, label: quote.requireSignature ? "Consulter et signer le devis" : "Consulter le devis" },
     pdf,
     filename: documentFileName(doc),

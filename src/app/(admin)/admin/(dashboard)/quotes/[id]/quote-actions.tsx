@@ -1,10 +1,10 @@
 "use client";
 
-import { CheckCircle2, Handshake, Loader2, Send } from "lucide-react";
+import { CheckCircle2, FlaskConical, Handshake, Loader2, Send } from "lucide-react";
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { acceptQuote, sendQuote, type QuoteActionState } from "../actions";
+import { acceptQuote, sendQuote, sendQuoteTest, type QuoteActionState } from "../actions";
 
 import { DatePicker } from "@/components/ui/date-picker";
 import { Select } from "@/components/ui/select";
@@ -75,6 +75,34 @@ export function SendQuoteForm({
         <textarea name="message" rows={3} className="field-input resize-y" placeholder="Suite à notre échange de mardi, voici notre proposition." />
       </label>
       <Submit label={resend ? "Renvoyer le devis" : "Envoyer le devis"} busy="Envoi…" />
+      <Feedback state={state} />
+    </form>
+  );
+}
+
+/**
+ * Recevoir l'e-mail du devis sur sa propre adresse, pour voir ce que le
+ * client recevra. Rien ne change sur le devis.
+ */
+export function TestQuoteEmail({ id }: { id: string }) {
+  const [state, action] = useActionState(sendQuoteTest, initial);
+  const [open, setOpen] = useState(false);
+  if (!open) {
+    return (
+      <button type="button" onClick={() => setOpen(true)} className="mt-3 inline-flex cursor-pointer items-center gap-1.5 font-display text-[0.8125rem] font-bold text-aegean-700 hover:underline">
+        <FlaskConical className="size-4" />
+        M&apos;envoyer un e-mail de test
+      </button>
+    );
+  }
+  return (
+    <form action={action} className="mt-4 grid gap-2 rounded-[16px] bg-[#F5F8FC] p-3.5">
+      <input type="hidden" name="id" value={id} />
+      <p className="font-display text-[0.8125rem] font-bold">E-mail de test</p>
+      <p className="text-[0.75rem] leading-relaxed text-[var(--ink-65)]">Le même e-mail que le client, PDF joint, envoyé à votre adresse. Le devis n&apos;est ni numéroté ni marqué envoyé.</p>
+      <input name="to" type="email" required placeholder="vous@exemple.fr" aria-label="Adresse de test" className="field-input" />
+      <textarea name="message" rows={2} className="field-input resize-y" placeholder="Message personnel (facultatif), pour voir le rendu" aria-label="Message de test" />
+      <Submit label="Envoyer le test" busy="Envoi…" />
       <Feedback state={state} />
     </form>
   );

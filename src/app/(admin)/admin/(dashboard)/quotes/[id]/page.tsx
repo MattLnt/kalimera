@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { deleteQuote, duplicateQuote, invoiceFromQuote, setQuoteStatus } from "../actions";
 import { DepositForm } from "./deposit-form";
-import { AcceptQuoteForm, ActionTabs, SendQuoteForm } from "./quote-actions";
+import { AcceptQuoteForm, ActionTabs, SendQuoteForm, TestQuoteEmail } from "./quote-actions";
 
 import { AdminHeader, Panel, Pill } from "@/components/admin/ui";
 import { quoteDoc } from "@/lib/crm/documents/build";
@@ -161,13 +161,16 @@ export default async function QuotePage({ params }: { params: Promise<{ id: stri
               canSend={quote.status !== "EXPIRED"}
               canAccept
               send={
+                <>
                 <SendQuoteForm
-                  id={quote.id}
-                  defaultTo={defaultTo}
-                  suggestedNumber={suggested}
-                  hasNumber={Boolean(quote.number)}
-                  resend={quote.status !== "DRAFT"}
-                />
+                    id={quote.id}
+                    defaultTo={defaultTo}
+                    suggestedNumber={suggested}
+                    hasNumber={Boolean(quote.number)}
+                    resend={quote.status !== "DRAFT"}
+                  />
+                  <TestQuoteEmail id={quote.id} />
+                </>
               }
               accept={
                 <AcceptQuoteForm
