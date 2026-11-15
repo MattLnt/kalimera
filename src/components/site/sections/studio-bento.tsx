@@ -29,21 +29,12 @@ export async function StudioBento() {
             <Terminal />
           </BentoCard>
 
-          <BentoCard className="lg:col-span-2">
+          <BentoCard className="lg:col-span-3">
             <Icon>
               <Workflow className="size-5" />
             </Icon>
             <h3 className="display-3">{t("card2Title")}</h3>
             <p className="text-body-muted mt-2.5">{t("card2Body")}</p>
-          </BentoCard>
-
-          <BentoCard delay={2}>
-            <div className="gradient-number pb-1.5 font-display text-[clamp(1.6rem,2vw,2.1rem)] leading-[1.1] font-extrabold tracking-[-0.04em] whitespace-nowrap">
-              {t("statProjectsValue")}
-            </div>
-            <p className="mt-3 max-w-[26ch] text-base leading-[1.5] text-[var(--ink-74)]">
-              {t("statProjectsCaption")}
-            </p>
           </BentoCard>
 
           <BentoCard delay={1} className="lg:col-span-2">
@@ -63,8 +54,8 @@ export async function StudioBento() {
             <p className="mt-2.5 text-[0.9375rem] text-white/72">{t("card4Body")}</p>
           </BentoCard>
 
-          <BentoCard delay={3} className="lg:col-span-2">
-            <div className="gradient-number pb-1.5 font-display text-[clamp(1.6rem,2vw,2.1rem)] leading-[1.1] font-extrabold tracking-[-0.04em] whitespace-nowrap">
+          <BentoCard delay={3} className="flex flex-col justify-center lg:col-span-2">
+            <div className="gradient-number pb-1.5 font-display text-[clamp(2.6rem,4vw,3.6rem)] leading-[1.05] font-extrabold tracking-[-0.05em] whitespace-nowrap">
               {t("statScoreValue")}
             </div>
             <p className="mt-3 max-w-[26ch] text-base leading-[1.5] text-[var(--ink-74)]">
